@@ -1,0 +1,152 @@
+.sidebar {
+    width: 250px;
+    color: white;
+    padding: 20px;
+    height: 100vh;
+    transition: width 0.3s ease;
+    /* border-radius: 15px; */
+  }
+
+  .sidebar.collapsed{
+    width: 80px;
+    color: white;
+  }
+
+  .sidebar.collapsed.icon{
+    margin-right: 0;
+    color: white;
+  }
+  
+  .sidebar-items {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .sidebar-item-group {
+    margin-bottom: 20px;
+  }
+  
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+ /* Pindahkan Chevron ke ujung kanan */
+  }
+
+  .sidebar-item .icon {
+    margin-right: 10px;
+    font-size: 1.5rem;
+    transition: opacity 0.3s ease;
+  }
+  .menu-title{
+    flex-grow: 1;
+    margin-right: 60px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sidebar-item .menu-text {
+    flex-grow: 1;
+    transition: opacity 0.3s ease;
+  }
+  
+  .sidebar-item .icon-chevron {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+  }
+  
+
+  /*
+  coba
+  */
+
+  .sidebar.collapsed .sidebar-item .icon-chevron {
+    opacity: 0; /* Sembunyikan Chevron saat sidebar diperkecil */
+    margin-left: 0; /* Hilangkan margin agar tidak ada jarak */
+  }
+  
+  .sidebar.collapsed .sidebar-item {
+    justify-content: center; /* Tempatkan item di tengah */
+  }
+  
+  .sidebar.collapsed .sidebar-item .icon {
+    margin-right: 0;
+  }
+  
+  .sidebar-item:hover {
+    /* background-color: #444; */
+    color: white;
+    /* border-radius: 10px; */
+    border-bottom: 3px solid #97271C;
+  }
+  
+  .sidebar-collapse {
+    margin-top: 10px;
+  }
+  
+  .sidebar-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 10px;
+  }
+  
+  .sidebar-collapse-items {
+    margin-left: 20px;
+    
+  }
+  
+  .icon {
+    margin-right: 10px;
+  }
+
+  .sidebar.collapsed .sidebar-item {
+    justify-content: center;
+  }
+  
+  .sidebar.collapsed .sidebar-item-group,
+  .sidebar.collapsed .sidebar-label,
+  .sidebar.collapsed .sidebar-collapse-items {
+    display: block;
+  }
+  
+  .sidebar.collapsed .sidebar-item a {
+    display: block;
+    text-align: center;
+  }
+  
+  .sidebar-item-group2{
+    margin-top: 5vh;
+    padding-top: 5vh;
+    border-top: 0.5px solid grey;
+  }
+
+  .sidebar-item-group2 button.addWorkspace{
+    background-color: #333;
+    color: white;
+    border: 1px solid #333;
+    border-radius: 15px;
+    width: 80%;
+    height: 5vh;
+    font-weight: bold;
+    margin-top: 2vh;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    /* transition: ease-in-out; */
+  }
+
+  button.addWorkspace:hover{
+    background-color: white;
+    color: #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* transform: translateY(5px) */
+  }

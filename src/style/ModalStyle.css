@@ -1,0 +1,61 @@
+.modal-overlay {
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color:#dbdbdb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    padding-top: 20vh;
+  }
+
+  .form-modal{
+    /* background-color: white; */
+    width: 80%;
+    height: 100vh;
+  }
+
+.input-modal{
+    display: grid;
+    grid-template-rows: auto;
+    height: 100%;
+    /* border: 1px solid black; */
+    gap: 20px;
+}
+.form-input{
+    display: grid;
+    grid-template-rows: auto;
+    /* background-color: blue; */
+    width: 100%;
+    height: 100%;
+    text-align: start;
+    margin-bottom: 1vh;
+    align-items: center;
+    justify-content: center;
+}
+.form-input label{
+    width: 20vw;
+    color: grey;
+}
+
+.form-input input{
+    /* background-color: green; */
+    width: 40vw;
+    height: 100%;
+    border-radius: 5px;
+    border: 0.5px solid grey;
+    margin-top: 1vh;
+    padding-left:1vw ;
+}
+
+.input-modal button{
+    height: 4vh;
+    background-color: blue;
+    color: white;
+    width: 10vw;
+    border-radius: 1px solid blue;
+}

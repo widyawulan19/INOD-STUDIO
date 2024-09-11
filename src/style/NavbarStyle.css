@@ -1,0 +1,204 @@
+.navbar{
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* background-color: white; */
+    background-image: linear-gradient(to right, #000000, #1f0c10, #341118, #4b141c, #62161e, #76161f, #8a171e, #9e191b, #b51519, #cc1015, #e4080d, #fb0000);
+    padding: 10px;
+    color: white;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    height: 5vh;
+}
+
+.navbar.scrolled{
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-left, .navbar-center, .navbar-right{
+    display: flex;
+    align-items: center;
+}
+
+.navbar-item{
+    margin: 0 10px;
+    cursor: pointer;
+    position: relative;
+    padding: 5px 0;
+    transition: color 0.3s ease-in-out;
+}
+
+.navbar-item::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0%;
+    background-color: #1d2125b9; /* Warna underline */
+    transition: width 0.3s ease-in-out;
+}
+
+.navbar-item:hover {
+    color: #1d2125;
+}
+
+.navbar-item:hover::after {
+    width: 100%;
+}
+
+.navbar-center.logo{
+    padding-left: 20%;
+    transition: color 0.3s ease-in-out;
+}
+.navbar-center.logo:hover{
+    transition: width 0.3s ease-in-out;
+}
+ 
+.search-input{
+    padding: 5px;
+    border: none;
+    border-radius: 3px;
+    outline: none;
+    background-color: white;
+    font-size: 1em;
+    border: 1px solid #dde0e4;
+}
+
+/*Dropdown style*/
+.dropdownMenu{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid #dde0e4;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-top: 5px;
+    z-index: 1000;
+    width: 200px;
+}
+.dropdown-item{
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdownWorkspace{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #f4f5f7;
+    border: 1px solid #dde0e4;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-top: 5px;
+    z-index: 1000;
+    width: 35vh;
+    max-height: 60vh; /*agar tingginya dapat menyesuaikan secara otomatis*/
+    padding: 10px;
+    overflow-y: auto;
+    transition: max-height 0.3s ease-in-out;
+}
+.dropdown-item-workspace{
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* border: 0.1px solid rgb(210, 206, 206); */
+    background-color: white;
+    border-radius: 5px;
+    height: auto;
+    margin-bottom: 0.5vh;
+    padding: 5px;
+    text-align: left;
+}
+.dropdown-item-workspace:hover{
+    background-color: #dde0e4;
+    
+}
+.workspace-form {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #dde0e4;
+    border-radius: 5px;
+  }
+  
+  .workspace-form .input-workspace {
+    width: 90%;
+    margin-bottom: 5px;
+    padding: 8px;
+    border: 1px solid #dde0e4;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: "Roboto Serif", serif;
+  }
+
+  .btn-add1{
+    background-color: #f4f5f7;
+    width: 100%;
+    height: 5vh;
+    font-size: 15px;
+    text-align: left;
+    border: 1px solid #f4f5f7;
+    border-radius: 5px;
+    font-family: "Roboto Serif", serif;
+  }
+  .btn-add1:hover{
+    background-color: #dbdbdb;
+  }
+  
+  .workspace-form .btn-add2 {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .workspace-form button:hover {
+    background-color: #0056b3;
+  }
+
+.dropdown-item:hover{
+    background-color: #f0f0f0;
+}
+
+/*Media require untuk interaktive */
+@media (max-width: 700px){
+    .navbar{
+        padding: 10px;
+    }
+    .navbar-left .navbar-left{
+        width: 100%;
+        justify-content: space-between;
+    }
+    .navbar-item{
+        font-size: 0.6em;
+        margin: 5px 5px; 
+    }
+    .search-input{
+        width: 100%;
+        margin-top: 10px;
+    }
+    .dropdownMenu{
+        width: 100%;
+    }
+}
+/* Media Queries untuk perangkat sangat kecil (ponsel) */
+@media (max-width: 500px) {
+    .navbar-item.logo {
+        font-size: 1em;
+    }
+
+    .navbar-item {
+        font-size: 0.5em;
+        margin: 10px 5px;
+    }
+
+    .search-input {
+        font-size: 0.9em;
+        padding: 5px;
+    }
+}
