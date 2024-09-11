@@ -26,7 +26,7 @@
   }
   
   .sidebar-item-group {
-    margin-bottom: 20px;
+    margin-bottom: 0px;
   }
   
   .sidebar-item {
@@ -38,6 +38,9 @@
     transition: all 0.3s ease;
   white-space: nowrap;
   overflow: hidden;
+  width: 100%;
+  font-size: 15px;
+  /* background-color: #333; */
  /* Pindahkan Chevron ke ujung kanan */
   }
 
@@ -98,16 +101,28 @@
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
-    padding: 10px;
+    padding: 2px;
   }
   
   .sidebar-collapse-items {
-    margin-left: 20px;
-    
+    margin-left: 20px; 
+  }
+  .sidebar-collapse-items:hover{
+    border-bottom: 3px solid #97271C;
   }
   
   .icon {
     margin-right: 10px;
+  }
+
+  .dropdown-menu h5{
+    font-size: 15px;
+    text-align: Left;
+    margin-left: 20px;
+    font-weight: 50;
+  }
+  .dropdown-menu h5:hover{
+    border-bottom: 3px solid #97271C;
   }
 
   .sidebar.collapsed .sidebar-item {
@@ -150,3 +165,8 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     /* transform: translateY(5px) */
   }
+
+  /*Marketing*/
+.sidebar-marketing .sidebar-label{
+  margin-bottom: 10px;
+}
