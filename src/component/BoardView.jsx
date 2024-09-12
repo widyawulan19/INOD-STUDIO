@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { getLists, createList } from '../services/Api'
+import { getLists, createList, getBoardById } from '../services/Api'
 import List from './List'
 import { useNavigate, useParams } from 'react-router-dom'
-import { HiChevronRight, HiChevronDown, HiPlus, } from 'react-icons/hi'
-import { FaCross } from 'react-icons/fa'
+import { HiChevronRight, HiPlus, } from 'react-icons/hi'
 import '../style/BoardViewStyle.css'
 import { LuUsers } from "react-icons/lu";
 
@@ -14,6 +13,28 @@ const BoardView=()=> {
     const [isFormVisible, setIsFormVisible] = useState(false)
     const navigasi = useNavigate()
     const currentDate = new Date();
+    const [boardName, setBoardName] = useState('');
+
+
+    //boards
+    const loadBoards = useCallback(async () => {
+        try{
+            const response = await getBoardById(boardId) //memanggil api berdasar id nya
+            console.log('Receive data:', response.data);
+
+            if(response.data.length > 0) {
+                setBoardName(response.data[0].name)//simpan nama board dalam state
+            }else{
+                console.error('Data not found')
+            }
+        }catch(error){
+            console.error('Failed to load Boards', error)
+        }
+    }, [boardId])
+
+    useEffect(()=>{
+        loadBoards();
+    }, [loadBoards])
 
 
     //date
@@ -56,7 +77,7 @@ const BoardView=()=> {
 
     //const handle form submission
     const handleCreateList = async (e) =>{
-        e.prevetDefault();
+        e.preventDefault();
         if(!newListName.trim()){
             alert('List name cannot be empty');
             return;
@@ -83,7 +104,7 @@ const BoardView=()=> {
 
   return (
     <div className="board-view-container">
-        <h3>
+        <h3 style={{marginBottom:'0', marginTop:'0'}}>
             <button  
                 onClick={handleBackToWorkspace} 
                 className='btn-nav'
@@ -102,14 +123,14 @@ const BoardView=()=> {
         </h3>
 
         {/* Form for date */} 
-        <div className='form-container'>
+        <div className='form-container' style={{marginTop:'0'}}>
             <div className='date'>
                 <h4 style={{margin:'0'}}>{monthName}</h4>
                 <p style={{margin:'0', fontSize:'13px'}}>Hari ini adalah hari {dayName}, {date} {monthName} {year}</p>
             </div>
             <div className='board'>
                 <h4 style={{marginRight:'5px'}}>Board -</h4>
-                <p style={{display:'flex', alignItems:'center'}}>another board name <HiChevronDown style={{marginLeft:'5px'}}/> </p>
+                <p style={{display:'flex', alignItems:'center'}}>{boardName} </p>
             </div>
             <div className='member'>
                 <p><LuUsers/> : 10 member</p>
@@ -117,42 +138,37 @@ const BoardView=()=> {
         </div>
 
         <div className="lists-container">
-            {lists.map((list)=>(
-                <div>
-                    <div  key={list.id} className="list-wrapper">
-                    <List listId={list.id} listName={list.name}/>
-                </div>
-                </div>
-            ))}
+        {lists.map((list) => (
+           //wrap list heigh
             <div>
-                <button  className='btn-list' onClick={()=> setIsFormVisible(true)}>
-                    <HiPlus size={15} style={{marginRight:'1vw'}}/>Create List
-                </button>
-                {isFormVisible && (
-                    <form onSubmit={handleCreateList} className='create-list-form'>
-                        <input 
-                            type="text"
-                            value={newListName}
-                            onChange={(e)=> setNewListName(e.target.value)}
-                            placeholder='Enter list name'
-                            required
-                        />
-                        <div className='form-btn'>
-                            <button type='submit'>Add List</button>
-                            <button type='submit' onClick={handleButtonCancle}>Cancle</button>
-                        </div>
-                    </form>
-                )}
+                <div key={list.id} className="list-wrapper">
+                    <List listId={list.id} listName={list.name} />
+                </div>
             </div>
-        </div> 
+        ))}
+        <div className="create-list-container">
+            <button className='btn-list' onClick={() => setIsFormVisible(true)}>
+                {isFormVisible ? 'Add new list' : (<><HiPlus size={15} style={{ marginRight: '1vw' }} />Create List</>)}
+            </button>
+            {isFormVisible && (
+                <form onSubmit={handleCreateList} className='create-list-form'>
+                    <input
+                        type="text"
+                        value={newListName}
+                        onChange={(e) => setNewListName(e.target.value)}
+                        placeholder='Enter list name'
+                        required
+                    />
+                    <div className='form-btn'>
+                        <button className='btn-form' type='submit'>Add List</button>
+                        <button className='btn-form' type='button' onClick={handleButtonCancle}>Cancel</button>
+                    </div>
+                </form>
+            )}
+        </div>
+    </div>
     </div>
   )
 }
 
 export default BoardView
-
-/*
-<h5>{monthName} || Today is {dayName}, {monthName}{date},{year}</h5>
-            <h5>tangal</h5>
-
-*/

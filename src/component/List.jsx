@@ -76,10 +76,8 @@ const List=({listId, listName})=> {
                   {/* <h4>Cover</h4> */}
                 </div>
                 {/* COVER  */}
-                <p style={{fontSize:'13px', marginTop:'0'}}>{card.description}</p>
-                {/* <button onClick={(event)=>handleToCardModal(card.id, event)}style={{backgroundColor:'rgb(176, 176, 244)', border:'1px solid grey', color:'white', marginBottom:'2vh'}}>
-                  EDIT CARD
-                </button> */}
+                <p style={{fontSize:'12px', paddingRight:'10px'}}>{card.description}</p>
+            
 
                 
                 <div style={{display:'flex'}}>
@@ -120,28 +118,28 @@ const List=({listId, listName})=> {
             </button>
               {showForm && (
                   <div className='card-form'>
-                  <input
-                    className='card-form-input'
-                    type='text'
-                    placeholder='Card Title'
-                    value={newCard.title}
-                    onChange={(e) => setNewCard({ ...newCard, title: e.target.value })}
-                  />
-                  <input
-                    className='card-form-input'
-                    type='text'
-                    placeholder='Description'
-                    value={newCard.description}
-                    onChange={(e) => setNewCard({ ...newCard, description: e.target.value })}
-                  />
-                  <input
-                    className='card-form-input'
-                    type='text'
-                    placeholder='Position'
-                    value={newCard.position}
-                    onChange={(e) => setNewCard({ ...newCard, position: e.target.value })}
-                  />
-                  <button onClick={handleCreateCard}>Add Card</button>
+                    <input
+                      className='card-form-input'
+                      type='text'
+                      placeholder='Card Title'
+                      value={newCard.title}
+                      onChange={(e) => setNewCard({ ...newCard, title: e.target.value })}
+                    />
+                    <input
+                      className='card-form-input'
+                      type='text'
+                      placeholder='Description'
+                      value={newCard.description}
+                      onChange={(e) => setNewCard({ ...newCard, description: e.target.value })}
+                    />
+                    <input
+                      className='card-form-input'
+                      type='text'
+                      placeholder='Position'
+                      value={newCard.position}
+                      onChange={(e) => setNewCard({ ...newCard, position: e.target.value })}
+                    />
+                    <button className='add-btn' onClick={handleCreateCard}>Add Card</button>
                 </div>
               )}
           </div>

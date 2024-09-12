@@ -81,55 +81,51 @@ const Workspace=()=> {
             </div>
 
             {/* WORKSPACE CARD */}
-            <div className='workspace-grid' style={{textAlign:'left'}}>
-                {workspaces.map((workspace) =>(
-                    <div onClick={()=>handleNavigateToBoard(workspace.id)} key={workspace.id} className='workspace-card' >
-                        {/* <h3 style={{textAlign:'right'}} onClick={toggleActionVisibility}></h3> */}
-                        <h3 style={{display:'flex', justifyContent:'space-between'}}>{workspace.name} <HiDotsHorizontal/></h3>
-                        <p style={{fontSize:'13px'}}>{workspace.description}</p>
-                        <h5>Create by USERNAME</h5>
-                        <div  className='action-workspace'>
-                            <p style={{display:'flex', alignItems:'center', justifyContent:'center', fontSize:'10px'}}><FaTags size={13} style={{marginRight:'0.5vw'}}/> {workspace.boardCount} Boards</p>
-                            <p style={{display:'flex', alignItems:'center', justifyContent:'center', fontSize:'10px'}}><BiSolidCalendarEdit size={15} style={{marginLeft:'1vw', marginRight:'0.5vw'}}/>
-                                {moment(workspace.create_at).format('D MMMM YYYY')}
-                            </p>
-                            <button className='btn-workspace'><HiChevronRight size={20}/></button>
+                <div className='workspace-grid' style={{textAlign:'left'}}>
+                    {workspaces.map((workspace) =>(
+                        <div onClick={()=>handleNavigateToBoard(workspace.id)} key={workspace.id} className='workspace-card' >
+                            {/* <h3 style={{textAlign:'right'}} onClick={toggleActionVisibility}></h3> */}
+                            <h3 style={{display:'flex', justifyContent:'space-between'}}>{workspace.name} <HiDotsHorizontal/></h3>
+                            <p style={{fontSize:'13px'}}>{workspace.description}</p>
+                            <h5>Create by USERNAME</h5>
+                            <div  className='action-workspace'>
+                                <p style={{display:'flex', alignItems:'center', justifyContent:'center', fontSize:'10px'}}><FaTags size={13} style={{marginRight:'0.5vw'}}/> {workspace.boardCount} Boards</p>
+                                <p style={{display:'flex', alignItems:'center', justifyContent:'center', fontSize:'10px'}}><BiSolidCalendarEdit size={15} style={{marginLeft:'1vw', marginRight:'0.5vw'}}/>
+                                    {moment(workspace.create_at).format('D MMMM YYYY')}
+                                </p>
+                                <button className='btn-workspace'><HiChevronRight size={20}/></button>
+                            </div>
+                            {/* <LuUsers/> 8 Members */}
                         </div>
-                        {/* <LuUsers/> 8 Members */}
+                    ))}
+                    <div className='workspace-card-input'>
+                        {/* Create your new workspace here! */}
+                        <button className='new' onClick={toggleFormVisibility}>
+                            {showForm ?
+                        (<><HiOutlineX size={13} style={{marginRight:'1vh'}}/>Cancle</>): (<><HiPlus size={13} style={{marginRight:'1vh'}}/> NEW WORKSPACE</>)    
+                        }
+                        </button>
+                        {showForm && (
+                            <div className='workspace-form'>
+                            <input 
+                                type="text"
+                                placeholder='Workspace name'
+                                value={newWorkspace.name}
+                                onChange={(e) => setNewWorkspace({ ...newWorkspace, name: e.target.value})}
+                            />
+                            <input 
+                                type="text"
+                                placeholder='Description'
+                                value={newWorkspace.description}
+                                onChange={(e)=> setNewWorkspace({ ...newWorkspace, description: e.target.value})}
+                            />
+                            <button onClick={handleCreateWorkspace}>Add Workspace</button>
+                        </div>
+                        )}
                     </div>
-                ))}
-                <div className='workspace-card-input'>
-                    Create your new workspace here!
-                    <button className='new' onClick={toggleFormVisibility}>
-                        {showForm ?
-                       (<><HiOutlineX size={13} style={{marginRight:'1vh'}}/>Cancle</>): (<><HiPlus size={13} style={{marginRight:'1vh'}}/> NEW WORKSPACE</>)    
-                    }
-                    </button>
-                    {showForm && (
-                        <div className='workspace-form'>
-                        <input 
-                            type="text"
-                            placeholder='Workspace name'
-                            value={newWorkspace.name}
-                            onChange={(e) => setNewWorkspace({ ...newWorkspace, name: e.target.value})}
-                        />
-                        <input 
-                            type="text"
-                            placeholder='Description'
-                            value={newWorkspace.description}
-                            onChange={(e)=> setNewWorkspace({ ...newWorkspace, description: e.target.value})}
-                        />
-                        <button onClick={handleCreateWorkspace}>Add Workspace</button>
-                    </div>
-                    )}
                 </div>
-                <div style={{display:'flex', alignItems:'flex-end', justifyContent:'flex-end'}}>
-                    <button className='question-btn'><FaQuestion size={20}/></button>
-                </div>
-            </div>
         </div>
   )
 }
  
 export default Workspace
-

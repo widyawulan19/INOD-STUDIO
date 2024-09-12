@@ -1,5 +1,5 @@
 .board-container {
-  padding: 20px;
+  padding: 10px;
   background-color: #f4f5f717;
   width: 100%;
   overflow-x: hidden;
@@ -14,14 +14,16 @@
   align-items: center;
 }
 
-.board-list {
+.board-list-container {
   display: flex;
   flex-wrap: nowrap;
   gap: 16px; 
   overflow-x: auto;
   overflow-y: hidden;
-  padding-bottom: 10px;
+  padding-bottom: 50px;
   white-space: nowrap;
+  padding-right: 50px;
+  width: 100%;
 }
 
 .board-card { 
@@ -29,12 +31,20 @@
   padding: 10px;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  width: 250px;
+  width: 270px;
   min-width: 200px;
   text-align: left;
   cursor: pointer;
   flex-shrink: 0;
   display: inline-block;
+  margin-right: 1vw;
+}
+
+.board-card2{
+  background-color: white;
+  /* width: 100%; */
+  height: 100%;
+  border-radius: 8px;
 }
 
 .board-card2 button.newBoard{
@@ -42,6 +52,7 @@
   background-color: #731e17;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   color: white;
+  width: 200px;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -72,6 +83,9 @@
   margin-top: 20px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 10px;
 }
 
 .board-input {
@@ -79,7 +93,7 @@
   border-radius: 3px;
   border: 1px solid #ddd;
   margin-bottom: 10px;
-  width: 100%;
+  width: 80%;
 }
 
 .board-input:focus {
@@ -89,17 +103,22 @@
 
 .board-form button {
   padding: 10px;
-  font-size: 16px;
-  background-color: white;
-  color: #051937;
-  border: 1px solid #051937;
-  border-radius: 10px;
+  /* font-size: 16px; */
+  background-color: #731e17;
+  color: white;
+  font-weight: bold;
+  border: 1px solid #731e17;
+  border-radius: 5px;
   cursor: pointer;
+  height: 4vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-shadow: 0 4px 8px rgba(0,0,0,0.5);
 }
 
 .board-form button:hover {
-  background-color: #051937;
+  background-color: #491510;
   color: white;
 }
 

@@ -1,3 +1,8 @@
+.list-container button{
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
 
 .list-container .title{
   display: flex;
@@ -12,7 +17,7 @@
   height: 20px;
   border: 1px solid grey;
   border-radius: 5px;
-  margin-bottom: 1vh;
+  margin: 0vh;
   background-color: #B67444;
 }
 
@@ -20,18 +25,21 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
   border-radius: 5px;
   /* background-color: red; */
 }
 .card-item-lists{
     background-color: #fff;
-    padding-left: 10px;
+    /* border: 1px solid grey; */
+    padding: 10px;
     border-radius: 5px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     cursor: pointer;
     transition: background-color 0.3s ease;
     text-align: left;
+    width: 90%;
 }
 
 .dot-icon{
@@ -135,7 +143,16 @@
 }
 
 .card-form .card-form-input{
-  max-width: 95%;
+  max-width: 90%;
+}
+.card-form button.add-btn{
+  background-color: #951A1A;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.card-form button.add-btn:hover{
+  background-color: #731e17;
 }
 
 .addButton{
@@ -153,5 +170,5 @@
   border-radius: 5px;
 }
 .addButton:hover{
-  background-color: #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }

@@ -1,12 +1,17 @@
 .App {
   text-align: center;
   background-image: linear-gradient(to right, #000000, #1f0c10, #341118, #4b141c, #62161e, #76161f, #8a171e, #9e191b, #b51519, #cc1015, #e4080d, #fb0000);
-  font-family: "Roboto Serif", serif;
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 .App2{
   display: flex;
   height: 100%;
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 .sidebar{
@@ -14,4 +19,12 @@
   /* background-color: white; */
   color: white;
   height: 100vh;
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+.routes{
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }

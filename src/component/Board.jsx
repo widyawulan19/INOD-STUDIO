@@ -5,6 +5,7 @@ import { HiPlus,HiOutlineX,HiDotsHorizontal, HiOutlineServer, HiOutlineCalendar,
 import '../style/BoardStyle.css'
 import moment from 'moment'
 import { LuUsers } from "react-icons/lu";
+import Background from './Background';
 
 const Board = () => {
     const {workspaceId} = useParams();
@@ -13,6 +14,7 @@ const Board = () => {
     const navigate = useNavigate();
     const [showForm, setShowForm] = useState(false);
     const [listCount, setListCount] = useState({});
+    const [backgroundImage, setBackgroundImage] = useState('');
 
     const toggleFormVisibility = () => {
         setShowForm(!showForm)
@@ -63,9 +65,13 @@ const Board = () => {
     const handleBackToWorkspace = () =>{
         navigate('/')
     }
+
+    const handleBackgroundChange = (newBackground) => {
+      setBackgroundImage(newBackground);
+    }
  
     return (
-        <div className='board-container'>
+        <div className='board-container' style={{backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover' }}>
           <h3 style={{textAlign:'left', color:'white'}}>
             <button onClick={handleBackToWorkspace} className='btn-nav'>Workspace</button> 
             <HiChevronRight/>
@@ -73,21 +79,26 @@ const Board = () => {
           </h3>
           <h5 style={{textAlign:'left', color:'white'}}>Happy days, here your boards!</h5>
       
+          {/* Background selector */}
+          <Background onChangeBackground={handleBackgroundChange}/>
+
           {/* Boards */}
-          <div className='board-list'>
-            {boards.map((board) => (
-              <div key={board.id} className='board-card' onClick={() => handleNavigateToBoardView(board.id)}>
-                <h4 style={{display:'flex', fontSize:'15px', fontWeight:'bold', justifyContent:'space-between', margin:'5px 0'}}>
-                  {board.name} <HiDotsHorizontal/>
-                </h4>
-                <p style={{margin:'5px 0', color:'#333', fontSize:'13px'}}>{board.description}</p>
-                <div className='board-icons'>
-                  <p><HiOutlineServer style={{marginRight:'2px'}}/>{listCount[board.id] || 0} lists</p>
-                  <p><HiOutlineCalendar style={{marginRight:'2px'}}/>{moment(board.create_at).format(('D MMMM YYYY'))}</p>
-                  <p><LuUsers style={{marginRight:'2px'}}/>0 member</p>
+          <div className='board-list-container'>
+            <div className='board-list'>
+              {boards.map((board) => (
+                <div key={board.id} className='board-card' onClick={() => handleNavigateToBoardView(board.id)}>
+                  <h4 style={{display:'flex', fontSize:'15px', fontWeight:'bold', justifyContent:'space-between', margin:'5px 0'}}>
+                    {board.name} <HiDotsHorizontal/>
+                  </h4>
+                  <p style={{margin:'5px 0', color:'#333', fontSize:'13px'}}>{board.description}</p>
+                  <div className='board-icons'>
+                    <p><HiOutlineServer size={15} style={{marginRight:'2px', color:'black'}}/>{listCount[board.id] || 0} lists</p>
+                    <p><HiOutlineCalendar size={15} style={{marginRight:'2px', color:'black'}}/>{moment(board.create_at).format(('D MMMM YYYY'))}</p>
+                    <p><LuUsers size={15} style={{marginRight:'2px', color:'black'}}/>0 member</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
             <div className="board-card2" style={{textAlign:'center'}}>
               {/* <p>Create Your Board here</p> */}
               <button className='newBoard' onClick={toggleFormVisibility}>
@@ -117,6 +128,7 @@ const Board = () => {
               )}
             </div>
           </div>
+         
         </div>
       )      
 }
