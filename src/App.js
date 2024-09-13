@@ -7,9 +7,9 @@ import AppRoutes from './routes/Routes';
 function App() {
   return (
     <div className="App">
-      <Navbar/>
+      <Sidebar className='sidebar'/>
         <div className='App2'>
-          <Sidebar className='sidebar'/>
+          {/* <Navbar/> */}
           <AppRoutes className='routes'/>
         </div>  
     </div>
@@ -17,3 +17,14 @@ function App() {
 }
 
 export default App;
+
+/*
+<div className="App">
+      <Navbar/>
+        <div className='App2'>
+          <Sidebar className='sidebar'/>
+          <AppRoutes className='routes'/>
+        </div>  
+    </div>
+
+*/

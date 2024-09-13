@@ -1,27 +1,36 @@
-.board-view-container {
-    padding: 20px;
-    display: flex;
+.boardView-container{
+  display: flex;
+    flex-direction: column; /* Mengatur elemen dalam kolom */
+    width: 100%; /* Memastikan kontainer menggunakan seluruh lebar layar */
+    height: 110vh; /* Memastikan kontainer mengambil tinggi penuh layar */
+    overflow-y: auto; /* Mengizinkan pengguliran jika konten lebih tinggi dari viewport */
+    padding: 10px;
+    box-sizing: border-box;
+} 
+
+ .nav-date{
+  display: flex;
     flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    background-color: #ffffff14;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    /* overflow-x: auto; */
-    overflow-y: auto;
-    white-space: nowrap;
-  }
+    position: sticky;
+    top: 0; /* Menjadikan elemen sticky di bagian atas halaman */
+    z-index: 2000; /* Pastikan elemen ini berada di atas elemen lainnya */
+    padding: 10px;
+    /* border-bottom: 1px solid #731e17; */
+    background-image: linear-gradient(to right, #000000, #1f0c10, #341118, #4b141c, #62161e, #76161f, #8a171e, #9e191b, #b51519, #cc1015, #e4080d, #fb0000);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Menambahkan bayangan untuk mempertegas */
+ }
 
-  .board-view-container h3{
-    margin-bottom: 0;
-  margin-top: 0; /* Background untuk memastikan visibilitas */
-  padding: 10px;
-  position: sticky; /* Mengunci posisi saat di-scroll */
-  top: 0; /* Mengunci elemen di bagian atas */
-  z-index: 1; /* Pastikan elemen ini berada di atas konten lain */
-  }
+ .nav-date .nav-icon{
+  color: white;
+ }
 
-  .board-view-container .form-container{
+.nav-date h3{
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  /* border: 1px solid black; */
+}
+  .boardView-container .form-container{
     background-color: #fff;
     /* color: white; */
     width: 100%;
@@ -31,12 +40,10 @@
     padding: 5px;
     display: flex;
     align-items: center;
-    /* justify-content: left; */
-    justify-content: space-between;
+    padding-left: 0;
+    justify-content: space-around;
     gap: 15px;
     margin-top: 0;
-    position: sticky;
-    z-index: 1;
   }
 
 
@@ -97,6 +104,20 @@
   .form-container button:hover{
     background-color: #731e17;
   }
+  .board-view-container {
+    padding: 10px 20px 20px;
+    /* flex: 1; */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    height: 150vh;
+    background-color: #ffffff14;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    overflow-y: auto;
+    /* box-sizing: border-box; */
+  }
 
   .board-view-container h3{
     text-align: left;
@@ -113,19 +134,20 @@
     padding-bottom: 20px;
     overflow-x: auto;
     white-space: nowrap;
-    max-height: 100vh;
+    max-height: 150vh;
   }
 
 
   .list-wrapper{
-    width: 275px;
+    min-width: 280px;
     background-color: #fff;
     border-radius: 8px;
     padding: 5px;
     display: inline-block;
     vertical-align: top;
     box-sizing: border-box;
-    overflow-x: auto;
+    /* overflow-x: auto; */
+    overflow: auto;
     white-space: nowrap;
     max-height: 100%;
   }

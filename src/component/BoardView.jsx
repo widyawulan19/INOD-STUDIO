@@ -103,71 +103,145 @@ const BoardView=()=> {
     }
 
   return (
-    <div className="board-view-container">
-        <h3 style={{marginBottom:'0', marginTop:'0'}}>
+    <div className='boardView-container'>
+        <div className='nav-date'>
+            <h3 style={{marginBottom:'0', marginTop:'0'}}>
             <button  
                 onClick={handleBackToWorkspace} 
                 className='btn-nav'
             >
                 Workspace
-            </button> <HiChevronRight/> 
+            </button> <HiChevronRight className='nav-icon'/> 
             <button 
                 onClick={handleBackToBoard}
                 className='btn-nav' 
                 style={{textAlign:'left', width:'5vw'}}
             >
                 Board
-            </button><HiChevronRight/>
+            </button><HiChevronRight className='nav-icon'/>
             <button className='btn-nav' style={{textAlign:'left'}}>Lists</button>
                 
-        </h3>
+            </h3>
 
-        {/* Form for date */} 
-        <div className='form-container' style={{marginTop:'0'}}>
-            <div className='date'>
-                <h4 style={{margin:'0'}}>{monthName}</h4>
-                <p style={{margin:'0', fontSize:'13px'}}>Hari ini adalah hari {dayName}, {date} {monthName} {year}</p>
-            </div>
-            <div className='board'>
-                <h4 style={{marginRight:'5px'}}>Board -</h4>
-                <p style={{display:'flex', alignItems:'center'}}>{boardName} </p>
-            </div>
-            <div className='member'>
-                <p><LuUsers/> : 10 member</p>
-            </div>
+            {/* Form for date  */}
+            <div className='form-container' style={{marginTop:'0'}}>
+                <div className='date'>
+                    <h4 style={{margin:'0'}}>{monthName}</h4>
+                    <p style={{margin:'0', fontSize:'13px'}}>Hari ini adalah hari {dayName}, {date} {monthName} {year}</p>
+                </div>
+                <div className='board'>
+                    <h4 style={{marginRight:'5px'}}>Board -</h4>
+                    <p style={{display:'flex', alignItems:'center'}}>{boardName} </p>
+                </div>
+                <div className='member'>
+                    <p><LuUsers/> : 10 member</p>
+                </div>
+            </div> 
         </div>
-
-        <div className="lists-container">
-        {lists.map((list) => (
-           //wrap list heigh
-            <div>
-                <div key={list.id} className="list-wrapper">
-                    <List listId={list.id} listName={list.name} />
+        
+        <div className="board-view-container">
+            <div className="lists-container">
+                {lists.map((list) => (
+                //wrap list heigh
+                    <div>
+                        <div key={list.id} className="list-wrapper">
+                            <List listId={list.id} listName={list.name} />
+                        </div>
+                    </div>
+                ))}
+                <div className="create-list-container">
+                    <button className='btn-list' onClick={() => setIsFormVisible(true)}>
+                        {isFormVisible ? 'Add new list' : (<><HiPlus size={15} style={{ marginRight: '1vw' }} />Create List</>)}
+                    </button>
+                    {isFormVisible && (
+                        <form onSubmit={handleCreateList} className='create-list-form'>
+                            <input
+                                type="text"
+                                value={newListName}
+                                onChange={(e) => setNewListName(e.target.value)}
+                                placeholder='Enter list name'
+                                required
+                            />
+                            <div className='form-btn'>
+                                <button className='btn-form' type='submit'>Add List</button>
+                                <button className='btn-form' type='button' onClick={handleButtonCancle}>Cancel</button>
+                            </div>
+                        </form>
+                    )}
                 </div>
             </div>
-        ))}
-        <div className="create-list-container">
-            <button className='btn-list' onClick={() => setIsFormVisible(true)}>
-                {isFormVisible ? 'Add new list' : (<><HiPlus size={15} style={{ marginRight: '1vw' }} />Create List</>)}
-            </button>
-            {isFormVisible && (
-                <form onSubmit={handleCreateList} className='create-list-form'>
-                    <input
-                        type="text"
-                        value={newListName}
-                        onChange={(e) => setNewListName(e.target.value)}
-                        placeholder='Enter list name'
-                        required
-                    />
-                    <div className='form-btn'>
-                        <button className='btn-form' type='submit'>Add List</button>
-                        <button className='btn-form' type='button' onClick={handleButtonCancle}>Cancel</button>
-                    </div>
-                </form>
-            )}
         </div>
     </div>
-    </div>
+    
+    // <div className='boardView-container'>
+        // <div className='nav-date'>
+        //     <h3 style={{marginBottom:'0', marginTop:'0'}}>
+        //     <button  
+        //         onClick={handleBackToWorkspace} 
+        //         className='btn-nav'
+        //     >
+        //         Workspace
+        //     </button> <HiChevronRight/> 
+        //     <button 
+        //         onClick={handleBackToBoard}
+        //         className='btn-nav' 
+        //         style={{textAlign:'left', width:'5vw'}}
+        //     >
+        //         Board
+        //     </button><HiChevronRight/>
+        //     <button className='btn-nav' style={{textAlign:'left'}}>Lists</button>
+                
+        //     </h3>
+
+        //     {/* Form for date  */}
+        //     <div className='form-container' style={{marginTop:'0'}}>
+        //         <div className='date'>
+        //             <h4 style={{margin:'0'}}>{monthName}</h4>
+        //             <p style={{margin:'0', fontSize:'13px'}}>Hari ini adalah hari {dayName}, {date} {monthName} {year}</p>
+        //         </div>
+        //         <div className='board'>
+        //             <h4 style={{marginRight:'5px'}}>Board -</h4>
+        //             <p style={{display:'flex', alignItems:'center'}}>{boardName} </p>
+        //         </div>
+        //         <div className='member'>
+        //             <p><LuUsers/> : 10 member</p>
+        //         </div>
+        //     </div> 
+        // </div>
+
+        // <div className="board-view-container">
+        //     <div className="lists-container">
+        //     {lists.map((list) => (
+        //     //wrap list heigh
+        //         <div>
+        //             <div key={list.id} className="list-wrapper">
+        //                 <List listId={list.id} listName={list.name} />
+        //             </div>
+        //         </div>
+        //     ))}
+        //     <div className="create-list-container">
+        //         <button className='btn-list' onClick={() => setIsFormVisible(true)}>
+        //             {isFormVisible ? 'Add new list' : (<><HiPlus size={15} style={{ marginRight: '1vw' }} />Create List</>)}
+        //         </button>
+        //         {isFormVisible && (
+        //             <form onSubmit={handleCreateList} className='create-list-form'>
+        //                 <input
+        //                     type="text"
+        //                     value={newListName}
+        //                     onChange={(e) => setNewListName(e.target.value)}
+        //                     placeholder='Enter list name'
+        //                     required
+        //                 />
+        //                 <div className='form-btn'>
+        //                     <button className='btn-form' type='submit'>Add List</button>
+        //                     <button className='btn-form' type='button' onClick={handleButtonCancle}>Cancel</button>
+        //                 </div>
+        //             </form>
+        //         )}
+        //     </div>
+        // </div>
+    // </div>
+    // </div>
   )
 }
 

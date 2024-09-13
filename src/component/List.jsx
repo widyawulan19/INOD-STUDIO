@@ -76,7 +76,7 @@ const List=({listId, listName})=> {
                   {/* <h4>Cover</h4> */}
                 </div>
                 {/* COVER  */}
-                <p style={{fontSize:'12px', paddingRight:'10px'}}>{card.description}</p>
+                <p className='card-description'>{card.description}</p>
             
 
                 

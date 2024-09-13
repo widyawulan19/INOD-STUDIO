@@ -83,17 +83,9 @@ const Navbar=()=> {
         }
     }, [])
 
-    // const loadWorkspace = async () => {
-    //     const response = await getWorkspaces();
-    //     setWorkspace
-    // }
-
-    //useEffect for workspace
     const [ workspace, setWorkspace] = useState([]);
     const [ newWorkspace, setNewWorkspace] = useState({name:'',description:''})
-    //const [dropdown, setDropdown] = useState({workspace:false});
-    //const workspaceRef = useRef(null);
-    //cont untuk button add workspace
+
     const [showForm, setShowForm] = useState(false)
 
     //membuat data workspace saat pertama kali dirender

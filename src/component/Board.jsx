@@ -72,25 +72,33 @@ const Board = () => {
  
     return (
         <div className='board-container' style={{backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover' }}>
-          <h3 style={{textAlign:'left', color:'white'}}>
-            <button onClick={handleBackToWorkspace} className='btn-nav'>Workspace</button> 
-            <HiChevronRight/>
-            <button className='btn-nav' style={{textAlign:'left'}}>Board</button>
-          </h3>
-          <h5 style={{textAlign:'left', color:'white'}}>Happy days, here your boards!</h5>
-      
-          {/* Background selector */}
-          <Background onChangeBackground={handleBackgroundChange}/>
+        <div className='nav-board'>
+          <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', paddingLeft:'10px', paddingRight:'10px', margin:'0', padding:'0'}}>
+            <h3 style={{textAlign:'left', color:'white', marginBottom:'0', margin:'0'}}>
+              <button onClick={handleBackToWorkspace} className='btn-nav'>Workspace</button> 
+              <HiChevronRight/>
+              <button className='btn-nav' style={{textAlign:'left'}}>Board</button>
+            </h3>
+            <Background onChangeBackground={handleBackgroundChange}/>
+          </div>
+          <h5 style={{textAlign:'left', color:'white',paddingLeft:'10px', margin:'0'}}>Happy days, here your boards!</h5>
+        </div>
 
-          {/* Boards */}
-          <div className='board-list-container'>
-            <div className='board-list'>
-              {boards.map((board) => (
+         {/* Background selector */}
+        {/* <div className='bg-select'>
+          <Background onChangeBackground={handleBackgroundChange}/>
+        </div> */}
+
+        <div className='board-list-container'>
+          <div className='board-list'>
+            {boards.map((board) => (
                 <div key={board.id} className='board-card' onClick={() => handleNavigateToBoardView(board.id)}>
                   <h4 style={{display:'flex', fontSize:'15px', fontWeight:'bold', justifyContent:'space-between', margin:'5px 0'}}>
                     {board.name} <HiDotsHorizontal/>
                   </h4>
-                  <p style={{margin:'5px 0', color:'#333', fontSize:'13px'}}>{board.description}</p>
+                  <div style={{paddingRight:'5px', height:'4vh'}}>
+                    <p className='board-description'>{board.description}</p>
+                  </div>
                   <div className='board-icons'>
                     <p><HiOutlineServer size={15} style={{marginRight:'2px', color:'black'}}/>{listCount[board.id] || 0} lists</p>
                     <p><HiOutlineCalendar size={15} style={{marginRight:'2px', color:'black'}}/>{moment(board.create_at).format(('D MMMM YYYY'))}</p>
@@ -98,39 +106,44 @@ const Board = () => {
                   </div>
                 </div>
               ))}
-            </div>
-            <div className="board-card2" style={{textAlign:'center'}}>
-              {/* <p>Create Your Board here</p> */}
-              <button className='newBoard' onClick={toggleFormVisibility}>
-                {showForm ? 
-                  (<><HiOutlineX size={13} style={{marginRight:'1vw'}}/>Cancel</>) : 
-                  (<><HiPlus size={13} style={{marginRight:'1vw'}}/>NEW BOARD</>)
-                }
-              </button>
-              {showForm && (
-                <div className='board-form'>
-                  <input 
-                    type="text" 
-                    placeholder='board name'
-                    value={newBoard.name}
-                    onChange={(e) => setNewBoard({ ...newBoard, name: e.target.value })}
-                    className='board-input'
-                  />
-                  <input 
-                    type="text" 
-                    placeholder='Description'
-                    value={newBoard.description}
-                    onChange={(e) => setNewBoard({ ...newBoard, description: e.target.value })}
-                    className='board-input'
-                  />
-                  <button className='board-button' onClick={handleCreateBoard}>Add Board</button>
-                </div>
-              )}
-            </div>
-          </div>
-         
+              <div className="board-card2">
+                <button className='newBoard' onClick={toggleFormVisibility}>
+                  {showForm ? 
+                    (<><HiOutlineX size={13} style={{marginRight:'1vw'}}/>Cancel</>) : 
+                    (<><HiPlus size={13} style={{marginRight:'1vw'}}/>NEW BOARD</>)
+                  }
+                </button>
+                {showForm && (
+                  <div className='board-form'>
+                    <input 
+                      type="text" 
+                      placeholder='board name'
+                      value={newBoard.name}
+                      onChange={(e) => setNewBoard({ ...newBoard, name: e.target.value })}
+                      className='board-input'
+                    />
+                    <input 
+                      type="text" 
+                      placeholder='Description'
+                      value={newBoard.description}
+                      onChange={(e) => setNewBoard({ ...newBoard, description: e.target.value })}
+                      className='board-input'
+                    />
+                    <input 
+                      type="text" 
+                      placeholder='user id (manual)'
+                      value={newBoard.user_id}
+                      onChange={(e)=> setNewBoard({ ...newBoard, user_id: e.target.value})}
+                      className='board-input'
+                    />
+                    <button className='board-button' onClick={handleCreateBoard}>Add Board</button>
+                  </div>
+                )}
+              </div>
         </div>
-      )      
+      </div>
+    </div>
+  )      
 }
 
 export default Board

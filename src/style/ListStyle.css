@@ -21,6 +21,17 @@
   background-color: #B67444;
 }
 
+.list-container .card-description {
+  color: #333;
+  font-size: 13px;
+  /* border: 1px solid black; */
+  padding: 5px; /* Agar teks tidak terlalu rapat dengan border */
+  word-wrap: break-word; /* Memastikan kata-kata yang terlalu panjang membungkus ke baris berikutnya */
+  overflow-wrap: break-word; /* Memastikan kata-kata yang terlalu panjang membungkus ke baris berikutnya (alternatif) */
+  white-space: normal; /* Mengizinkan teks untuk membungkus secara otomatis */
+  height: auto; /* Mengatur tinggi secara otomatis sesuai dengan konten */
+}
+
 .card-list-lists{
   flex-grow: 1;
   display: flex;

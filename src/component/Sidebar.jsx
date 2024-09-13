@@ -5,6 +5,7 @@ import '../style/SidebarStyle.css'
 import { LuUsers, LuLayers } from "react-icons/lu";
 import { getWorkspaces } from '../services/Api';
 import { AiOutlineDatabase } from "react-icons/ai"
+import logo from '../assets/LOGO1.png'
 
 const Sidebar = ()=> {
   const [showSidebarMenu, setShowSidebarMenu] = useState(false)
@@ -58,6 +59,7 @@ const Sidebar = ()=> {
     <div className={`sidebar ${showSidebarMenu ? 'collapsed': ''}`} aria-label="Sidebar with multi-level dropdown example">
       <div className="sidebar-items">
         <div className="sidebar-item-group">
+          <img src={logo} style={{width:'100%'}} alt="" />
           <a href="#" className='sidebar-item' style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
             <div style={{fontWeight:'bold'}}>
               {!showSidebarMenu && 'INOD DASHBOARD'}

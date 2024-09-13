@@ -18,15 +18,9 @@ const BACKGROUND = [
 ]
 
 const Background =({onChangeBackground})=> {
-    // const [backgroundImage, setBackgroundImage] = useState(BACKGROUND[0]);
-
-    // const handleBagroundChange = (event) => {
-    //     setBackgroundImage(event.target.value); 
-    // };
 
   return (
-    <div style={{marginBottom:'10px'}}>
-        <h4>Select Background</h4>
+    <div style={{}}>
         <select onChange={(e) => onChangeBackground(e.target.value)}>
         {BACKGROUND.map((bg, index) => (
           <option key={index} value={bg}>
@@ -35,20 +29,7 @@ const Background =({onChangeBackground})=> {
         ))}
       </select>
     </div>
-    // <div style={{backgroundImage:`url(${backgroundImage})`, height:'100vh', backgroundSize:'cover'}}>
-    //     <div style={{padding:'20px'}}>
-    //         <h2>Select Background</h2>
-    //         <select 
-    //         style={{padding:'5px', fontSize:'16px'}}
-    //         onChange={handleBagroundChange}>
-    //             {BACKGROUND.map((bg, index)=>(
-    //                 <option key={index} value={bg}>
-    //                     Background {index + 1}
-    //                 </option>
-    //             ))}
-    //         </select>
-    //     </div>
-    // </div>
+
   )
 }
 
