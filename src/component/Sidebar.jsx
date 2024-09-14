@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 // import { Sidebar } from 'flowbite-react'
-import { HiArrowSmRight,HiOutlineCog,HiArchive, HiInbox, HiShoppingBag, HiTable, HiUser, HiChevronDown, HiChevronUp,HiArrowCircleRight, HiArrowCircleLeft, HiPlus,HiDesktopComputer } from "react-icons/hi";
+import { HiArrowSmRight,HiOutlineCog,HiArchive, HiInbox, HiShoppingBag, HiTable, HiUser, HiChevronDown, HiChevronUp,HiArrowCircleRight, HiArrowCircleLeft, HiPlus,HiDesktopComputer, HiOutlineServer } from "react-icons/hi";
+import { HiOutlineCreditCard } from "react-icons/hi2";
+import { MdOutlineDashboardCustomize } from "react-icons/md";
 import '../style/SidebarStyle.css'
 import { LuUsers, LuLayers } from "react-icons/lu";
 import { getWorkspaces } from '../services/Api';
@@ -14,6 +16,7 @@ const Sidebar = ()=> {
   const [showArchiveMenu, setShowArchiveMenu] = useState(false) //archive
   const [showMarketingData, setShowMarketingData ] = useState(false) //marketing
   const [showMarketingAction, setShowMarketingAction] = useState(false)//marketing archive
+  const [showAction, setShowAction] = useState(false)//toggle action
 
   const toggleFormVisibility = () =>{
     setShowSidebar(!showSidebar);
@@ -42,6 +45,11 @@ const Sidebar = ()=> {
     setShowMarketingAction(!showMarketingAction);
   }
 
+  //action
+  const toggleAction = () => {
+    setShowAction(!showAction)
+  }
+
   //workspace
   const [workspace, setWorkspace] = useState([]);
   //const [newWorkspace, setNewWorkspace] = useState({name:'', description:''})
@@ -65,7 +73,7 @@ const Sidebar = ()=> {
               {!showSidebarMenu && 'INOD DASHBOARD'}
             </div>
             {showSidebarMenu ? (
-              <HiArrowCircleRight onClick={toggleSidebarMenu} size={25}/>
+              <HiArrowCircleRight onClick={toggleSidebarMenu} size={25} className='icon-dash'/>
             ):(
               <HiArrowCircleLeft onClick={toggleSidebarMenu} size={25}/>
             )}
@@ -140,7 +148,10 @@ const Sidebar = ()=> {
           {/* MARKETING */}
 
           <div className='sidebar-marketing'>
-            <h5 style={{textAlign:'left'}}>MARKETING</h5>
+            {/* <h5 style={{textAlign:'left'}}>MARKETING</h5> */}
+            <h5 style={{textAlign:'left'}}>
+              {!showSidebarMenu ? 'MARKETING':''}
+            </h5>
               <div className='sidebar-label' onClick={toggleMarketingData}>
                 <div className='sidebar-item' style={{textAlign:'left', padding:'0'}}>
                   <AiOutlineDatabase className='icon'/>
@@ -184,17 +195,50 @@ const Sidebar = ()=> {
             )}
           </div>
           {/* ACTION */}
-          <div className="sidebar-item-group2">
-            <h5 style={{textAlign:'left'}}>ACTIONS</h5>
-            <a href="" className='sidebar-item'>
-              <HiOutlineCog className='icon'/>
-              {!showSidebarMenu && 'Setting'}
-            </a>
-            <a href="" className='sidebar-item'>
-              <HiArchive className='icon'/>
-              {!showSidebarMenu && 'Archive'}
-            </a>
-            {/* <button className='addWorkspace'> <HiPlus size={10} style={{fontWeight:'bold'}}/> Add New Workspace</button> */}
+          <div className='sidebar-action' onClick={toggleAction}>
+            <h5 style={{textAlign:'left'}}>
+                {!showSidebarMenu ? 'ACTION' : ''}
+            </h5>
+            <div className="sidebar-label" style={{marginBottom:'1vh'}}>
+              <div className="sidebar-item" style={{textAlign:'left', padding:'0'}}>
+                <HiOutlineCog className='icon'/>
+                {!showSidebarMenu && <span className='menu-title'>Setting</span>}
+              </div>
+            </div>
+            <div className="sidebar-label" >
+              <div className="sidebar-item" style={{textAlign:'left', padding:'0'}}>
+                <HiArchive className='icon'/>
+                {!showSidebarMenu && <span className='menu-title'>Archive</span>}
+                {!showSidebarMenu && (
+                  showAction ?
+                  (<HiChevronUp className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto' }}/>
+                  ):(
+                    <HiChevronDown className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto' }}/>
+                  )
+                )}
+              </div>
+            </div>
+            {showAction && (
+              <div className="dropdown-menu">
+                <h5 className='dropdown-h5'>
+                  <HiDesktopComputer className='icon-action'/>
+                  {!showSidebarMenu && <span>Workspace</span>}
+                  
+                </h5>
+                <h5 className='dropdown-h5'>
+                  <MdOutlineDashboardCustomize className='icon-action'/>
+                  {!showSidebarMenu && <span> Board</span>}
+                </h5>
+                <h5 className='dropdown-h5'>
+                  <HiOutlineServer className='icon-action'/>
+                  {!showSidebarMenu && <span>list</span>}
+                </h5>
+                <h5 className='dropdown-h5'>
+                  <HiOutlineCreditCard className='icon-action'/>
+                  {!showSidebarMenu && <span>Card</span>}
+                </h5>
+              </div>
+            )}
           </div>
         </div>
         

@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { getBoard, createBoard,getListsCountByBoard } from '../services/Api'
 import { useNavigate, useParams } from 'react-router-dom';
-import { HiPlus,HiOutlineX,HiDotsHorizontal, HiOutlineServer, HiOutlineCalendar,HiChevronRight  } from "react-icons/hi";
+import { HiArchive,HiPlus,HiOutlineX,HiDotsHorizontal, HiOutlineServer, HiOutlineCalendar,HiChevronRight  } from "react-icons/hi";
 import '../style/BoardStyle.css'
 import moment from 'moment'
 import { LuUsers } from "react-icons/lu";
 import Background from './Background';
+
+import { AiFillDelete } from "react-icons/ai";
 
 const Board = () => {
     const {workspaceId} = useParams();
@@ -15,10 +17,22 @@ const Board = () => {
     const [showForm, setShowForm] = useState(false);
     const [listCount, setListCount] = useState({});
     const [backgroundImage, setBackgroundImage] = useState('');
+    const [showAction, setShowAction] = useState('');
 
     const toggleFormVisibility = () => {
         setShowForm(!showForm)
     }
+
+    //show action
+    const toggleActionVisibility = (workspaceId, event) => {
+      event.stopPropagation();
+      setShowAction(showAction === workspaceId ? null : workspaceId)
+    }
+
+    const handleAction = (workspaceId, action) => {
+      console.log(`Action: ${action} for workspace: ${workspaceId}`);
+      setShowAction(null); //hide dropdown after action
+  }
 
     const loadBoards = useCallback(async () => {
         try {
@@ -84,17 +98,12 @@ const Board = () => {
           <h5 style={{textAlign:'left', color:'white',paddingLeft:'10px', margin:'0'}}>Happy days, here your boards!</h5>
         </div>
 
-         {/* Background selector */}
-        {/* <div className='bg-select'>
-          <Background onChangeBackground={handleBackgroundChange}/>
-        </div> */}
-
         <div className='board-list-container'>
           <div className='board-list'>
             {boards.map((board) => (
                 <div key={board.id} className='board-card' onClick={() => handleNavigateToBoardView(board.id)}>
                   <h4 style={{display:'flex', fontSize:'15px', fontWeight:'bold', justifyContent:'space-between', margin:'5px 0'}}>
-                    {board.name} <HiDotsHorizontal/>
+                    {board.name} <HiDotsHorizontal className='dot-btn' onClick={(e)=> toggleActionVisibility(board.id, e)}/>
                   </h4>
                   <div style={{paddingRight:'5px', height:'4vh'}}>
                     <p className='board-description'>{board.description}</p>
@@ -104,6 +113,27 @@ const Board = () => {
                     <p><HiOutlineCalendar size={15} style={{marginRight:'2px', color:'black'}}/>{moment(board.create_at).format(('D MMMM YYYY'))}</p>
                     <p><LuUsers size={15} style={{marginRight:'2px', color:'black'}}/>0 member</p>
                   </div>
+                  {/* {showAction === board.id && (
+                    <div className='dropdown-menu'>
+                        <ul style={{padding:'4px', fontSize:'13px', fontWeight:'bold'}}>
+                            Actions
+                            <li onClick={() => handleAction(board.id, 'delete')} className='dropdown-li'>
+                                <AiFillDelete  size={20} style={{marginRight:'1vh', color:'#6b1c14', padding:'4px'}}/>
+                                <div>
+                                    Delete <br />
+                                    <span style={{fontSize:'10px',fontWeight:'normal', }}>Delete workspace</span>
+                                </div>
+                            </li>
+                            <li onClick={() => handleAction(board.id, 'archive')} className='dropdown-li' >
+                                <HiArchive size={20} style={{marginRight:'1vh', color:'#6b1c14', padding:'4px'}}/>
+                                <div>
+                                    Archive <br />
+                                    <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive your workspace</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                  )} */}
                 </div>
               ))}
               <div className="board-card2">

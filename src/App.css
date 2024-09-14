@@ -6,7 +6,7 @@
   font-optical-sizing: auto;
   font-style: normal;
   display: flex;
-}
+} 
 .App1{
   width: 15%;
   min-width: 200px; /* Lebar minimal untuk sidebar jika diperlukan */
@@ -15,6 +15,6 @@
 }
 .App2{
   flex: 1;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
   overflow: hidden;
 }

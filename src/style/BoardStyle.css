@@ -74,6 +74,64 @@ margin-bottom: 5vh;
   max-height: 100%;
 }
 
+.board-card .dot-btn{
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+}
+
+.dropdown-menu{
+  position: absolute;
+  padding: 2px 4px;
+  right: 100px;
+  top: 35px;
+  background-color: white;
+  border: 1px solid #6b1c14;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
+}
+
+/* .dropdown-menu{
+  position: fixed;
+  padding: 2px 4px;
+  right: 0px;
+  top: 35px;
+  background-color: white;
+  border: 1px solid #6b1c14;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
+}
+
+.dropdown-menu ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.dropdown-menu li{
+  width: 150px;
+  padding: 8px 5px;
+  cursor: pointer;
+  border-bottom: 1px solid #6b1d1474;
+}
+.dropdown-menu .dropdown-li{
+  display: flex;
+  align-items: start;
+  justify-content: left;
+  font-size: 13px;
+  font-weight: bold;
+
+}
+.dropdown-menu li:hover{
+  background-color: #bc7b7476;
+  border-radius: 8px;
+  color: white;
+}
+
+.dropdown-icon{
+  margin-right: 1vh;
+} */
+
 .board-view-container {
   padding: 10px 20px 20px;
   display: flex;

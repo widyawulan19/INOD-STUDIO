@@ -61,6 +61,11 @@
     flex-grow: 1;
     transition: opacity 0.3s ease;
   }
+
+  .sidebar-item .icon-dash{
+    margin-right: auto;
+    margin-left: 10px;
+  }
   
   .sidebar-item .icon-chevron {
     margin-left: auto;
@@ -110,8 +115,14 @@
   .sidebar-collapse-items:hover{
     border-bottom: 3px solid #97271C;
   }
-  
-  .icon {
+
+  .dropdown-h5{
+    display: flex;
+    align-items: center;
+  }
+
+
+  .icon-action {
     margin-right: 10px;
   }
 
@@ -139,31 +150,9 @@
     display: block;
     text-align: center;
   }
-  
-  .sidebar-item-group2{
-    margin-top: 5vh;
-    padding-top: 5vh;
-    border-top: 0.5px solid grey;
-  }
 
-  .sidebar-item-group2 button.addWorkspace{
-    background-color: #333;
-    color: white;
-    border: 1px solid #333;
-    border-radius: 15px;
-    width: 80%;
-    height: 5vh;
-    font-weight: bold;
-    margin-top: 2vh;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    /* transition: ease-in-out; */
-  }
-
-  button.addWorkspace:hover{
-    background-color: white;
-    color: #333;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    /* transform: translateY(5px) */
+  .sidebar-action{
+    border-top: 1px solid grey;
   }
 
   /*Marketing*/
