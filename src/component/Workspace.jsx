@@ -96,15 +96,12 @@ const Workspace=()=> {
             </div>
             <div className='filter-button'>
                 <h4 style={{color:'white'}}>Filter by : </h4>
-                {/* <button className='filter'>Recent <HiChevronDown size={15} style={{marginLeft:'1vw'}}/></button>
-                <button className='filter'>New <HiChevronDown size={15} style={{marginLeft:'1vw'}}/></button> */}
             </div>
 
             {/* WORKSPACE CARD */}
                 <div className='workspace-grid' style={{textAlign:'left'}}>
                     {workspaces.map((workspace) =>(
                         <div onClick={()=>handleNavigateToBoard(workspace.id)} key={workspace.id} className='workspace-card' >
-                            {/* <h3 style={{textAlign:'right'}} onClick={toggleActionVisibility}></h3> */}
                             <h3 style={{display:'flex', justifyContent:'space-between'}}>
                                 {workspace.name} 
                                 <HiDotsHorizontal 

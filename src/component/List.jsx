@@ -8,7 +8,9 @@ import { FaPlus} from "react-icons/fa";
 import { GrAttachment } from "react-icons/gr";
 import { ImCross } from "react-icons/im";
 import { FaPlay } from "react-icons/fa6";
-import { HiDotsVertical } from "react-icons/hi";
+import { HiDotsVertical, HiArchive } from "react-icons/hi";
+import { AiFillDelete } from "react-icons/ai";
+
 
 const List=({listId, listName})=> {
     const {workspaceId, boardId} = useParams();
@@ -16,9 +18,32 @@ const List=({listId, listName})=> {
     const [cards, setCards] = useState([])
     const [newCard, setNewCard] = useState({title:'', description:'', position:0})
     const [showForm, setShowForm] = useState(false);
+    const [showAction, setShowAction] = useState('')
 
     const toggleFormVisibility = () => {
       setShowForm(!showForm)
+    }
+
+    const toggleActionThreeDotList = (listId, event)=>{
+      event.stopPropagation();
+      setShowAction(showAction === listId ? null : listId)
+      console.log('button pada list berhasil di klik')
+    }
+
+    const handleAction = (listId, action) => {
+      console.log(`Action: ${action} for lists: ${listId}`)
+      setShowAction(null);
+    }
+
+    const toggleActionCard = (cardId, event)=>{
+      event.stopPropagation();
+      setShowAction(showAction === cardId ? null : cardId)
+      console.log('button berhasil di klik')
+    }
+
+    const handleActionCard = (cardId, action)=>{
+      console.log(`Action: ${action} for cards: ${cardId}`)
+      setShowAction(null)
     }
 
     const loadCards = async () => {
@@ -60,16 +85,56 @@ const List=({listId, listName})=> {
         <div className='list-container'>
           <div className='title'>
             <p style={{display:'flex', alignItems:'center'}}><FaPlay style={{marginRight:'8px', color:'#333'}}/>{listName}</p>
-            <p><BsThreeDots/></p>
+            <p>
+              <BsThreeDots
+                className='dot-btn'
+                onClick={(e)=> toggleActionThreeDotList(listId, e)}
+              />
+            </p>
+            {showAction === boardId &&(
+              <div className='list-drodpwon-menu-action'>
+                <ul className='dropdown-ul'>
+                    Action
+                    <li>Delete</li>
+                    <li>Archive</li>
+                </ul>
+              </div>
+            )}
           </div>
           <hr style={{opacity:'50%'}}/>
           <div className='card-list-lists'>
             {cards.map((card) => (
               <div key={card.id} className='card-item-lists' onClick={()=> handleToCardDetail(card.id)}>
                 {/* ubah menjadi div */}
-                <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginRight:'1vw'}}>
+                <div className='card-container'>
                   <p style={{display:'flex', justifyContent:'space-between', margin:'0'}}><strong>{card.title}</strong> </p>
-                  <p className='dot-icon'><HiDotsVertical/></p>
+                  <p className='dot-icon'>
+                    <HiDotsVertical
+                      className='dot-btn'
+                      onClick={(e)=> toggleActionCard(card.id, e)}
+                    />
+                  </p>
+                  {showAction === card.id &&(
+                    <div className='card-dropdown-menu-action'>
+                     <ul className='dropdown-ul'>
+                          Actions
+                          <li onClick={() => handleAction(card.id, 'delete')} className='dropdown-li'>
+                              <AiFillDelete  className='ikon' size={15} />
+                              <div style={{size:'10px'}}>
+                                  Delete <br />
+                                  <span style={{fontSize:'10px',fontWeight:'normal', }}>Delete workspace</span>
+                              </div>
+                          </li>
+                          <li onClick={() => handleAction(card.id, 'archive')} className='dropdown-li' >
+                              <HiArchive  className='ikon' size={15} />
+                              <div>
+                                  Archive <br />
+                                  <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive your workspace</span>
+                              </div>
+                          </li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
                 {/* COVER  */}
                 <div className='cover'>

@@ -178,7 +178,7 @@
     padding: 4px;
   }
 
-.dropdown-menu-action{
+/* .dropdown-menu-action{
   position: absolute;
   background-color: white;
   border: 1pz solid #ddd;
@@ -186,7 +186,7 @@
   z-index: 1;
   padding: 8px;
   display: none;
-}
+} */
 
   
   .workspace-card button {

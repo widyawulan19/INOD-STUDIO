@@ -22,8 +22,11 @@ const BoardView=()=> {
             const response = await getBoardById(boardId) //memanggil api berdasar id nya
             console.log('Receive data:', response.data);
 
-            if(response.data.length > 0) {
-                setBoardName(response.data[0].name)//simpan nama board dalam state
+            // if(response.data && response.data.length > 0) {
+            //     setBoardName(response.data[0].name)//simpan nama board dalam state;
+            if(response.data){
+                setBoardName(response.data.name)
+
             }else{
                 console.error('Data not found')
             }

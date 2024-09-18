@@ -10,6 +10,64 @@
   align-items: center;
   padding-left: 5px;
   padding-right: 5px;
+  border: 1px solid green;
+}
+
+.lists-dropdown-menu-action{
+  position: absolute; /* Untuk memastikan dropdown muncul di atas konten lainnya */
+  background: white; /* Warna latar belakang dropdown */
+  border: 1px solid #ccc; /* Border dropdown */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Bayangan dropdown */
+  padding: 5px; /* Padding di dalam dropdown */
+  top: 30px; /* Jarak dari atas elemen yang mengandung dropdown */
+  right: 10px; /* Jarak dari kanan elemen yang mengandung dropdown */
+  z-index: 1000; /* Memastikan dropdown berada di atas konten lain */
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  gap: 5px;
+  /* width: 10vw; */
+  /* height: 100%; */
+}
+
+.lists-dropdown-menu-action .dropdown-ul{
+  padding: 0.5px;
+  font-size: 13px;
+  font-weight: bold;
+  margin: 0;
+  text-align: left;
+  /* border: 1px solid blue; */
+}
+
+.dropdown-li{
+  margin-top: 5px;
+  padding: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-li:hover{
+  background-color: #ddcccc;
+  border-radius: 5px;
+  color: white;
+}
+
+.dropdown-li .ikon{
+  margin-right: 1vh;
+  color: #6b1c14;
+  padding: 4px;
+}
+
+.dot-btn{
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+.dot-btn:hover{
+  color: #0079bf;
 }
 
 .list-container .cover{
@@ -66,6 +124,52 @@
 }
 .dot-icon:hover{
   transform: scale(1.4);
+}
+/* .card-container{
+  display: flex;
+  margin-right: 1vw;
+  position: relative;
+  border: 1px solid green;
+  height: 10px;
+} */
+.card-container .card-dropdown-menu-action{
+  display: block;
+}
+/*CARD DROPDOWN*/
+.card-dropdown-menu-action{
+  position: absolute;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  border-radius: 4px;
+  z-index: 10;
+  top: 40px; /* Sesuaikan agar muncul di bawah ikon */
+  right: 0;
+  width: 180px;
+}
+
+.dropdown-ul{
+  padding: 0.5px;
+  font-size: 13px;
+  font-weight: bold;
+  margin: 0;
+  text-align: left;
+  /* border: 1px solid blue; */
+}
+.dropdown-ul li {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-ul li:hover {
+  background-color: #f4f4f4; /* Warna latar saat dihover 
+}
+
+.ikon {
+  margin-right: 8px;
 }
 
 .label{

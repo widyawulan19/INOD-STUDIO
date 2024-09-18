@@ -1,87 +1,87 @@
 //just for note
 
 /*
-import React, { useEffect, useState } from "react";
-
-const Background = ({ boardId, onChangeBackground }) => {
-  const [backgrounds, setBackgrounds] = useState([]);
-  const [selectedImageId, setSelectedImageId] = useState('');
-
-  // Mengambil daftar background dari database saat komponen dimuat
-  useEffect(() => {
-    const fetchBackgrounds = async () => {
-      try {
-        const response = await fetch('/api/images');  // Panggil endpoint '/api/images'
-        const data = await response.json();
-        console.log('Backgrounds fetched:', data); // Debugging
-        setBackgrounds(data);  // Simpan data gambar ke state
-      } catch (error) {
-        console.error('Error fetching backgrounds:', error);
-      }
-    };
-
-    fetchBackgrounds();
-  }, []);
-
-  // Fungsi untuk mengupdate background ketika pilihan berubah
-  const handleUpdateBackground = async (e) => {
-    const newImageId = e.target.value;
-    setSelectedImageId(newImageId);
-
-    // Panggil onChangeBackground jika ada
-    if (onChangeBackground) {
-      onChangeBackground(newImageId);
-    }
-
-    // Update background di database dengan API
-    try {
-      const response = await fetch(`/api/boards/${boardId}/background`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ image_id: newImageId }), // Kirim image_id untuk update background board
-      });
-
-      const result = await response.json();
-      console.log('Background updated:', result); // Debugging
-    } catch (error) {
-      console.error('Error updating background:', error);
-    }
-  };
-
-  return (
-    <div style={{
-      width: '10vw',
-      backgroundColor: 'white',
-      boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
-      height: '4vh',
-      borderRadius: '5px',
-      marginRight: '1vw',
-      display: 'flex',
-      alignItems: 'center',
-      padding: '0 4px',
-    }}>
-      <select
-        onChange={handleUpdateBackground}
-        value={selectedImageId}
-        style={{ width: '100%', backgroundColor: 'white' }}
-      >
-        <option value="">Select Background</option>
-        {backgrounds.length > 0 ? (
-          backgrounds.map((bg) => (
-            <option key={bg.id} value={bg.id}>
-              {bg.name} {/* Pastikan bg.name sesuai dengan kolom nama pada tabel image 
-              </option>
-            ))
-          ) : (
-            <option disabled>No backgrounds available</option>
-          )}
-        </select>
+// List.jsx
+<div key={card.id} className='card-item-lists' onClick={() => handleToCardDetail(card.id)}>
+  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginRight: '1vw' }}>
+    <p style={{ display: 'flex', justifyContent: 'space-between', margin: '0' }}>
+      <strong>{card.title}</strong>
+    </p>
+    <p className='dot-icon'>
+      <HiDotsVertical
+        className='dot-btn'
+        onClick={(e) => toggleActionCard(card.id, e)}
+      />
+    </p>
+    {showAction === card.id && (
+      <div className='card-dropdown-menu-action'>
+        <ul className='dropdown-ul'>
+          Actions
+          <li onClick={() => handleAction(card.id, 'delete')} className='dropdown-li'>
+            <AiFillDelete className='ikon' size={15} />
+            <div style={{ size: '10px' }}>
+              Delete <br />
+              <span style={{ fontSize: '10px', fontWeight: 'normal' }}>Delete workspace</span>
+            </div>
+          </li>
+          <li onClick={() => handleAction(card.id, 'archive')} className='dropdown-li'>
+            <HiArchive className='ikon' size={15} />
+            <div>
+              Archive <br />
+              <span style={{ fontSize: '10px', fontWeight: 'normal' }}>Archive your workspace</span>
+            </div>
+          </li>
+        </ul>
       </div>
-    );
-  };
-  
-  export default Background;
-  
+    )}
+  </div>
+
+
+  /* Style untuk ikon HiDotsVertical 
+.dot-btn {
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.dot-btn:hover {
+  color: #0079bf; /* Memberikan warna saat dihover 
+}
+
+/* Style untuk dropdown action 
+.card-dropdown-menu-action, .list-drodpwon-menu-action {
+  position: absolute;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  border-radius: 4px;
+  z-index: 10;
+  top: 40px; /* Sesuaikan agar muncul di bawah ikon 
+  right: 0;
+  width: 180px;
+}
+
+.dropdown-ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-ul li {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-ul li:hover {
+  background-color: #f4f4f4; /* Warna latar saat dihover 
+}
+
+.ikon {
+  margin-right: 8px;
+}
+
 */

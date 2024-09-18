@@ -24,16 +24,17 @@ const Board = () => {
         setShowForm(!showForm)
     }
 
-    //show action
-    const toggleActionVisibility = (workspaceId, event) => {
+    const toggleActionThreeDot = (boardId, event) => {
       event.stopPropagation();
-      setShowAction(showAction === workspaceId ? null : workspaceId)
+      setShowAction(showAction === boardId ? null : boardId)
+      console.log('button berhasil di klik')
     }
 
-    const handleAction = (workspaceId, action) => {
-      console.log(`Action: ${action} for workspace: ${workspaceId}`);
+    const handleAction = (boardId, action)=>{
+      console.log(`Action: ${action} for workspace: ${boardId}`);
       setShowAction(null); //hide dropdown after action
-  }
+    }
+
 
     const loadBoards = useCallback(async () => {
         try {
@@ -114,7 +115,7 @@ const Board = () => {
         navigate('/')
     }
 
- 
+
     return (
       <div className='board-container' style={{backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover' }}>
         <div className='nav-board'>
@@ -133,9 +134,35 @@ const Board = () => {
           <div className='board-list'>
             {boards.map((board) => (
                 <div key={board.id} className='board-card' onClick={() => handleNavigateToBoardView(board.id)}>
-                  <h4 style={{display:'flex', fontSize:'15px', fontWeight:'bold', justifyContent:'space-between', margin:'5px 0'}}>
-                    {board.name} <HiDotsHorizontal className='dot-btn' onClick={(e)=> toggleActionVisibility(board.id, e)}/>
+                  <h4 style={{display:'flex', fontSize:'15px', fontWeight:'bold', justifyContent:'space-between', margin:'5px 0'}} >
+                    {board.name} 
+                    <HiDotsHorizontal 
+                      className='dot-btn'
+                      onClick={(e)=> toggleActionThreeDot(board.id, e)}
+                      />
                   </h4>
+                  {showAction === board.id &&(
+                    <div className='board-dropdown-menu-action'>
+                      <ul className='dropdown-ul'>
+                          Actions
+                          <li onClick={() => handleAction(board.id, 'delete')} className='dropdown-li'>
+                              <AiFillDelete  className='ikon' size={15} />
+                              <div style={{size:'10px'}}>
+                                  Delete <br />
+                                  <span style={{fontSize:'10px',fontWeight:'normal', }}>Delete workspace</span>
+                              </div>
+                          </li>
+                          <li onClick={() => handleAction(board.id, 'archive')} className='dropdown-li' >
+                              <HiArchive  className='ikon' size={15} />
+                              <div>
+                                  Archive <br />
+                                  <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive your workspace</span>
+                              </div>
+                          </li>
+                      </ul>
+                    </div>
+                  )}
+                  
                   <div style={{paddingRight:'5px', height:'4vh'}}>
                     <p className='board-description'>{board.description}</p>
                   </div>
@@ -144,27 +171,6 @@ const Board = () => {
                     <p><HiOutlineCalendar size={15} style={{marginRight:'2px', color:'black'}}/>{moment(board.create_at).format(('D MMMM YYYY'))}</p>
                     <p><LuUsers size={15} style={{marginRight:'2px', color:'black'}}/>0 member</p>
                   </div>
-                  {/* {showAction === board.id && (
-                    <div className='dropdown-menu'>
-                        <ul style={{padding:'4px', fontSize:'13px', fontWeight:'bold'}}>
-                            Actions
-                            <li onClick={() => handleAction(board.id, 'delete')} className='dropdown-li'>
-                                <AiFillDelete  size={20} style={{marginRight:'1vh', color:'#6b1c14', padding:'4px'}}/>
-                                <div>
-                                    Delete <br />
-                                    <span style={{fontSize:'10px',fontWeight:'normal', }}>Delete workspace</span>
-                                </div>
-                            </li>
-                            <li onClick={() => handleAction(board.id, 'archive')} className='dropdown-li' >
-                                <HiArchive size={20} style={{marginRight:'1vh', color:'#6b1c14', padding:'4px'}}/>
-                                <div>
-                                    Archive <br />
-                                    <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive your workspace</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                  )} */}
                 </div>
               ))}
               <div className="board-card2">
