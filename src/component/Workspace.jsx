@@ -107,8 +107,33 @@ const Workspace=()=> {
                             {/* <h3 style={{textAlign:'right'}} onClick={toggleActionVisibility}></h3> */}
                             <h3 style={{display:'flex', justifyContent:'space-between'}}>
                                 {workspace.name} 
-                                <HiDotsHorizontal className='dot-btn' onClick={(e)=> toggleActionVisibility(workspace.id, e)}/>
+                                <HiDotsHorizontal 
+                                    className='dot-btn' 
+                                    onClick={(e)=> toggleActionVisibility(workspace.id, e)}/>
                             </h3>
+
+                            {showAction === workspace.id && (
+                                <div className='dropdown-menu-action'>
+                                    <ul className='dropdown-ul'>
+                                        Actions
+                                        <li onClick={() => handleAction(workspace.id, 'delete')} className='dropdown-li'>
+                                            <AiFillDelete  className='ikon' size={20} />
+                                            <div>
+                                                Delete <br />
+                                                <span style={{fontSize:'10px',fontWeight:'normal', }}>Delete workspace</span>
+                                            </div>
+                                        </li>
+                                        <li onClick={() => handleAction(workspace.id, 'archive')} className='dropdown-li' >
+                                            <HiArchive  className='ikon' size={20} />
+                                            <div>
+                                                Archive <br />
+                                                <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive your workspace</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                             )}
+
                             <p style={{fontSize:'13px'}}>{workspace.description}</p>
                             <h5>Create by USERNAME</h5>
                             <div  className='action-workspace'>
@@ -118,28 +143,6 @@ const Workspace=()=> {
                                 </p>
                                 <button className='btn-workspace'><HiChevronRight size={20}/></button>
                             </div>
-
-                             {showAction === workspace.id && (
-                                <div className='dropdown-menu'>
-                                    <ul style={{padding:'4px', fontSize:'13px', fontWeight:'bold'}}>
-                                        Actions
-                                        <li onClick={() => handleAction(workspace.id, 'delete')} className='dropdown-li'>
-                                            <AiFillDelete  size={20} style={{marginRight:'1vh', color:'#6b1c14', padding:'4px'}}/>
-                                            <div>
-                                                Delete <br />
-                                                <span style={{fontSize:'10px',fontWeight:'normal', }}>Delete workspace</span>
-                                            </div>
-                                        </li>
-                                        <li onClick={() => handleAction(workspace.id, 'archive')} className='dropdown-li' >
-                                            <HiArchive size={20} style={{marginRight:'1vh', color:'#6b1c14', padding:'4px'}}/>
-                                            <div>
-                                                Archive <br />
-                                                <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive your workspace</span>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                             )}
 
                         </div>
                     ))}

@@ -1,50 +1,70 @@
-import React, { useState } from 'react'
-import img1 from '../assets/bg/bg1.jpeg'
-import img2 from '../assets/bg/bg2.jpeg'
-import img3 from '../assets/bg/bg3.jpeg'
-import img4 from '../assets/bg/bg4.jpeg'
-import img5 from '../assets/bg/bg5.jpeg'
-import img6 from '../assets/bg/bg6.jpeg'
-import img7 from '../assets/bg/bg7.jpeg'
-import img8 from '../assets/bg/bg8.jpeg'
+import React, { useEffect, useState } from 'react';
+import { getAllImage, updateBoardBackground } from '../services/Api';
 
-const BACKGROUND = [
-    img1,
-    img2,
-    img3,
-    img4,
-    img5,
-    img6,
-    img7,
-    img8
-]
+const Background = ({boardId, onChangeBackground }) => {
+  const [backgrounds, setBackgrounds] = useState([]);
+  const [selectedImageId, setSelectedImageId] = useState('');
 
-const Background =({onChangeBackground})=> {
+  useEffect(() => {
+    const fetchBackgrounds = async () => {
+      console.log('Received boardId:', boardId)
+      console.log('Selected image id:', selectedImageId)
+      try {
+        const response = await getAllImage(); // Mengambil semua gambar
+        setBackgrounds(response.data);
+      } catch (error) {
+        console.error('Error fetching backgrounds:', error);
+      }
+    };
+    fetchBackgrounds();
+  }, [selectedImageId,boardId]);
+
+  // Fungsi untuk handle update background
+  const handleUpdateBackground = async (e) => {
+    const newImageId = e.target.value;
+    setSelectedImageId(newImageId);
+
+    console.log('Selected Image ID:', newImageId); // Debugging
+    console.log('Board ID:', boardId); // Debugging
+
+    if (onChangeBackground) {
+      onChangeBackground(newImageId);
+    }
+
+    try {
+      await updateBoardBackground(boardId, newImageId);
+      console.log('Background updated');
+    } catch (error) {
+      console.error('Error updating background:', error);
+    }
+  };
 
   return (
     <div style={{
-                width:'10vw', 
-                backgroundColor:'white', 
-                boxShadow:'0 4px 8px rgba(0,0,0,0.3)',
-                height:'4vh', 
-                borderRadius:'5px', 
-                marginRight:'1vw',
-                display:'flex',
-                alignItems:'center',
-                padding: '0 4px',
-              }}>
-        <select onChange={(e) => onChangeBackground(e.target.value)}
-          style={{width:'100%', backgroundColor:'white'}}
-        >
-        {BACKGROUND.map((bg, index) => (
-          <option key={index} value={bg}>
-            Background {index + 1}
+      width: '10vw',
+      backgroundColor: 'white',
+      boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+      height: '4vh',
+      borderRadius: '5px',
+      marginRight: '1vw',
+      display: 'flex',
+      alignItems: 'center',
+      padding: '0 4px',
+    }}>
+      <select
+        onChange={handleUpdateBackground}
+        value={selectedImageId}
+        style={{ width: '100%', backgroundColor: 'white' }}
+      >
+        <option value="">Select Background</option>
+        {backgrounds.map((bg) => (
+          <option key={bg.id} value={bg.id}>
+            {bg.name}
           </option>
         ))}
       </select>
     </div>
+  );
+};
 
-  )
-}
-
-export default Background
+export default Background;

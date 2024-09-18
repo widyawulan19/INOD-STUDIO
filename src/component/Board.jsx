@@ -1,16 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { getBoard, createBoard,getListsCountByBoard } from '../services/Api'
+import { getBoard, createBoard,getListsCountByBoard, updateBoardBackground } from '../services/Api'
 import { useNavigate, useParams } from 'react-router-dom';
 import { HiArchive,HiPlus,HiOutlineX,HiDotsHorizontal, HiOutlineServer, HiOutlineCalendar,HiChevronRight  } from "react-icons/hi";
 import '../style/BoardStyle.css'
 import moment from 'moment'
 import { LuUsers } from "react-icons/lu";
 import Background from './Background';
-
 import { AiFillDelete } from "react-icons/ai";
 
 const Board = () => {
-    const {workspaceId} = useParams();
+    const {boardId, workspaceId} = useParams();
     const [boards, setBoards] = useState([]);
     const [newBoard, setNewBoard] = useState({name:'', description:''});
     const navigate = useNavigate();
@@ -18,6 +17,8 @@ const Board = () => {
     const [listCount, setListCount] = useState({});
     const [backgroundImage, setBackgroundImage] = useState('');
     const [showAction, setShowAction] = useState('');
+    const [localBoardId, setLocalBoardId] = useState(boardId);
+    const [boardData, setBoardData] = useState(null)
 
     const toggleFormVisibility = () => {
         setShowForm(!showForm)
@@ -60,11 +61,44 @@ const Board = () => {
         }
     }, [workspaceId]);
 
+    //Hook, useEffect hook yang digunakan untuk menampilkan data boards berdasarkan workspaceID yang dipanggila
+    useEffect(()=>{
+      console.log('Fetching data boards from workspaceid:', workspaceId);
+      loadBoards();
+    },[workspaceId,loadBoards])
 
-    useEffect(() => {
-        console.log('Fetching boards for workspaceId:', workspaceId);
-        loadBoards();
-    }, [workspaceId, loadBoards]);
+      useEffect(()=>{
+        setLocalBoardId(boardId);
+      }, [boardId]);
+
+      useEffect(()=> {
+        const fetchBoardData= async () =>{
+          try{
+            const response = await getBoard(boardId);
+            setBoardData(response.data) ;
+            setBackgroundImage(response.data.backgroundImageUrl)
+          }catch(error){
+            console.error('Error fetching board:', error)
+          }
+        };
+
+        if(boardId){
+          fetchBoardData();
+        }
+      },[boardId])
+
+      // const handleBackgroundChange= (newImageId)=>{
+      //   console.log('New background image ID:', newImageId)
+      // }
+      const handleBackgroundChange = async (newImageId) => {
+        try{
+          await updateBoardBackground(boardId,newImageId)
+          setBackgroundImage(`updateBoardBackground`)
+        }catch(error){
+          console.error('Error updating background', error)
+        }
+      }
+
 
     const handleCreateBoard = async () => {
         await createBoard({ ...newBoard, workspace_id: workspaceId});
@@ -80,20 +114,17 @@ const Board = () => {
         navigate('/')
     }
 
-    const handleBackgroundChange = (newBackground) => {
-      setBackgroundImage(newBackground);
-    }
  
     return (
-        <div className='board-container' style={{backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover' }}>
+      <div className='board-container' style={{backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover' }}>
         <div className='nav-board'>
           <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', paddingLeft:'10px', paddingRight:'10px', margin:'0', padding:'0'}}>
-            <h3 style={{textAlign:'left', color:'white', marginBottom:'0', margin:'0'}}>
-              <button onClick={handleBackToWorkspace} className='btn-nav'>Workspace</button> 
-              <HiChevronRight/>
+            <h3 style={{display:'flex',textAlign:'left', color:'white', marginBottom:'0', margin:'0', width:'20vw', alignItems:'center', gap:'10px'}}>
+              <button onClick={handleBackToWorkspace} className='btn-nav' >Workspace</button> 
+              <HiChevronRight style={{ fontSize:'1.5rem', flexShrink:'0'}} />
               <button className='btn-nav' style={{textAlign:'left'}}>Board</button>
             </h3>
-            <Background onChangeBackground={handleBackgroundChange}/>
+            <Background boardId={boardId} onChangeBackground={handleBackgroundChange}/>
           </div>
           <h5 style={{textAlign:'left', color:'white',paddingLeft:'10px', margin:'0'}}>Happy days, here your boards!</h5>
         </div>
@@ -178,3 +209,15 @@ const Board = () => {
 
 export default Board
 
+/*
+  //   useEffect(() => {
+  //     console.log('Fetching boards for workspaceId:', workspaceId);
+  //     loadBoards();
+  // }, [workspaceId, loadBoards, boardId]);
+
+
+      // const handleBackgroundChange = (newBackgroundId) => {
+    //   console.log('Background change to image ID', newBackgroundId)
+    //   setBackgroundImage(newBackgroundId);
+    // }
+*/

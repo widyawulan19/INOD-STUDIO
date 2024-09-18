@@ -14,7 +14,7 @@ const AppRoutes=()=> {
       <Routes>
         <Route path='/' element={<Workspace/>}/>
         <Route path='/workspaces/:workspaceId/boards' element={<Board/>}/>
-        <Route path='/workspaces/:workspacesId/boards/:boardId' element={<BoardView/>}/>
+        <Route path='/workspaces/:workspaceId/boards/:boardId' element={<BoardView/>}/>
         <Route path='/workspaces/:workspaceId/boards/:boardId/lists' element={<List/>}/>
         <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards' element={<Card/>}/>
         <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId' element={<CardDetail/>}/>

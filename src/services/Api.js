@@ -9,6 +9,25 @@ export const updateWorkspace = (id, data) => axios.put(`${API_URL}/workspaces/${
 export const deleteWorkspace = (id) => axios.delete(`${API_URL}/workspaces/${id}`);
 export const getWorkspaceById = (id) => axios.get(`${API_URL}/workspaces/${id}`);
 
+//image
+export const getAllImage = () => axios.get(`${API_URL}/images`);
+export const getImageById = (id) => axios.get(`${API_URL}/images/${id}`);
+
+//update backgorund board
+// export const updateBoardBackground = (boardId, imageId) => {
+//     return axios.put(`${API_URL}/boards/${boardId}/background`,{image_id: imageId});
+// }
+export const updateBoardBackground = (boardId, imageId) => {
+    return axios.put(`http://localhost:3002/api/boards/${boardId}/background`,{
+        image_Id: parseInt(imageId, 10)
+    })
+    .then(response=> response.data)
+    .catch(error =>{
+        console.error('Error memperbarui latarbelakang board:', error)
+        throw error;
+    })
+} 
+
 // Board APIs
 export const getBoard = (workspaceId) => axios.get(`${API_URL}/boards?workspace_id=${workspaceId}`);
 export const createBoard = (data) => axios.post(`${API_URL}/boards`, data);

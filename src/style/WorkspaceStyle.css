@@ -107,7 +107,8 @@
   }
   
   .workspace-card {
-    background-color: white;
+    position: relative;
+    background-color: #f5f3f3;
     padding: 15px;
     height: 170px;
     border-radius: 8px;
@@ -126,6 +127,7 @@
   .workspace-card .dot-btn{
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     border-radius: 5px;
+    cursor: pointer;
   }
 
   .workspace-card p {
@@ -133,47 +135,59 @@
     color: #555;
   }
 
-  .dropdown-menu{
+  .dropdown-menu-action{
+    background-color: white;
+    /* border: 1px solid #6b1c14; */
     position: fixed;
     padding: 2px 4px;
-    right: 0px;
     top: 35px;
-    background-color: white;
-    border: 1px solid #6b1c14;
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-    /* border-bottom-right-radius: 8px; */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
+    right:0;
+    height: 50%;
+    border-radius: 10px;
+  }
+  
+  .workspace-card .dropdown-menu-action{
+    display: block;
   }
 
-  .dropdown-menu ul{
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .dropdown-menu li{
-    width: 150px;
-    padding: 8px 5px;
-    cursor: pointer;
-    border-bottom: 1px solid #6b1d1474;
-  }
-  .dropdown-menu .dropdown-li{
-    display: flex;
-    align-items: start;
-    justify-content: left;
+  .dropdown-ul{
+    padding: 1px;
     font-size: 13px;
     font-weight: bold;
-
+    margin: 0;
+    /* border: 1px solid blue; */
   }
-  .dropdown-menu li:hover{
-    background-color: #bc7b7476;
-    border-radius: 8px;
+
+  .dropdown-li{
+    margin-top: 5px;
+    padding: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+  .dropdown-li:hover{
+    background-color: #ddcccc;
+    border-radius: 5px;
     color: white;
   }
 
-  .dropdown-icon{
+  .dropdown-li .ikon{
     margin-right: 1vh;
+    color: #6b1c14;
+    padding: 4px;
   }
+
+.dropdown-menu-action{
+  position: absolute;
+  background-color: white;
+  border: 1pz solid #ddd;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  z-index: 1;
+  padding: 8px;
+  display: none;
+}
+
   
   .workspace-card button {
     background-color: #007bff;
