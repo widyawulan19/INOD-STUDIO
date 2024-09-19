@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getCardDescriptionById } from '../services/Api';
+import { getCardDescriptionById, getlabel, getCardLabels } from '../services/Api';
 import { IoIosSend } from "react-icons/io";
 import { HiOutlineCreditCard,HiMenuAlt2,HiOutlineUserAdd,HiOutlinePaperClip,HiOutlineArrowRight,HiOutlineDuplicate, HiOutlineArchive } from "react-icons/hi";
 import { FaUserAstronaut } from "react-icons/fa";
@@ -10,27 +10,75 @@ import '../style/CardDetail.css'
 const CardDetail = () => {
     const {workspaceId, boardId, listId, cardId} = useParams();
     const [cardDetail,setCardDetail] = useState(null);
+    const [labels, setLabels] = useState([]);
+    const [selectedLabels, setSelectedLabels] = useState([])
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchCardDetail = async () => {
+      const fetchCardDetail = async () => {
           try {
-            const response = await getCardDescriptionById(cardId);
-            setCardDetail(response.data[0]);
+              const response = await getCardDescriptionById(cardId);
+              setCardDetail(response.data[0]);
           } catch (error) {
-            console.error('Error fetching card detail:', error);
+              console.error('Error fetching card detail:', error);
           }
-        };
-    
-        fetchCardDetail();
-      }, [cardId]);
+      };
+  
+      const fetchLabels = async () => {
+          try {
+              const response = await getlabel();
+              setLabels(response.data);
+          } catch (error) {
+              console.error('Error fetching labels:', error);
+          }
+      };
+  
+      const fetchCardLabels = async () => {
+          try {
+              const response = await getCardLabels(cardId);
+              const labelIds = response.data.map(label => label.id);
+              setSelectedLabels(labels.filter(label => labelIds.includes(label.id)));
+          } catch (error) {
+              console.error('Error fetching card labels:', error);
+          }
+      };
+  
+      fetchCardDetail();
+      fetchLabels();
+      fetchCardLabels();
+  }, [cardId, labels]);
+  
+
     
       if (!cardDetail) {
         return <p>Loading...</p>;
       }
+
+      const handleLabelSelect = (e) =>{
+        const labelId = e.target.value;
+        if(!selectedLabels.includes(labelId)){
+          setSelectedLabels([...selectedLabels, labelId])
+        }
+      };
+
       const handleBackToBoardView = () => {
         navigate(`/workspaces/${workspaceId}/boards/${boardId}`);
       };
+
+    const handleLabelChange = (e) => {
+      const selectedOptions = Array.from(e.target.selectedOptions);
+      const selectedIds = selectedOptions.map(option => parseInt(option.value, 10));
+      const selected = labels.filter(label => selectedIds.includes(label.id));
+      setSelectedLabels(selected);
+      console.log(selectedLabels);
+  };
+  
+  const handleLabelRemove = (labelId) => {
+      setSelectedLabels(selectedLabels.filter((label) => label.id !== labelId));
+  };
+
+
+
 
       return (
         <div className='card-detail-container'>
@@ -40,7 +88,126 @@ const CardDetail = () => {
               <div className="description">
                 
                 <h5 style={{textAlign:'left'}}> <HiOutlineCreditCard size={25}/>New Project-1track-alexxpiinksz-SWQUENCE-1D343 EXTRA FAST</h5>
-                <h5 >Labels</h5>
+                <div className='select-option'>
+                    <strong>Select Label</strong>
+                    <select
+                        multiple={true}
+                        onChange={handleLabelChange}
+                        style={{
+                            backgroundColor: '#323940',
+                            color: '#B6C2CE',
+                            fontWeight: 'bold',
+                            marginLeft: '10px',
+                            height: "30px",
+                            border: '1px solid #B6C2CE',
+                            borderRadius: '4px'
+                        }}
+                    >
+                        <option disabled>Select a label</option>
+                        {labels.map((label) => (
+                            <option
+                                key={label.id}
+                                value={label.id}
+                                style={{ backgroundColor: label.color, color: 'white' }}
+                            >
+                                {label.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* Display Selected Labels */}
+                <div className='selected-labels-container' style={{ marginTop: '10px' }}>
+                    <strong>Selected Labels:</strong>
+                    <div className='selected-labels'>
+                        {selectedLabels.length > 0 ? (
+                            selectedLabels.map((label) => (
+                                <div
+                                    key={label.id}
+                                    className='label'
+                                    style={{
+                                        backgroundColor: label.color,
+                                        color: '#fff',
+                                        padding: '5px 10px',
+                                        borderRadius: '4px',
+                                        marginBottom: '5px',
+                                        display: 'inline-block',
+                                        marginRight: '5px',
+                                    }}
+                                >
+                                    {label.name}
+                                    <button
+                                        onClick={() => handleLabelRemove(label.id)}
+                                        style={{
+                                            marginLeft: '5px',
+                                            backgroundColor: 'transparent',
+                                            border: 'none',
+                                            color: '#fff',
+                                            cursor: 'pointer',
+                                        }}
+                                    >
+                                        x
+                                    </button>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No labels selected</p>
+                        )}
+                    </div>
+                </div>
+
+
+                  
+                {/* <div className="label-selected-container">
+                            <h5>Selected Labels</h5>
+                            <select
+                                multiple={true}
+                                onChange={handleLabelChange}
+                                style={{ width: '200px', height: '100px' }}
+                            >
+                                {labels.map((label) => (
+                                    <option key={label.id} value={label.id} style={{ backgroundColor: label.color }}>
+                                        {label.name}
+                                    </option>
+                                ))}
+                            </select>
+                            <div className='selected-labels' style={{ marginTop: '10px' }}>
+                                {selectedLabels.length > 0 ? (
+                                    selectedLabels.map((label) => (
+                                        <div
+                                            key={label.id}
+                                            className='label'
+                                            style={{
+                                                backgroundColor: label.color,
+                                                color: '#fff',
+                                                padding: '5px 10px',
+                                                borderRadius: '4px',
+                                                marginBottom: '5px',
+                                                display: 'inline-block',
+                                                marginRight: '5px',
+                                            }}
+                                        >
+                                            {label.name}
+                                            <button
+                                                onClick={() => handleLabelRemove(label.id)}
+                                                style={{
+                                                    marginLeft: '5px',
+                                                    backgroundColor: 'transparent',
+                                                    border: 'none',
+                                                    color: '#fff',
+                                                    cursor: 'pointer',
+                                                }}
+                                            >
+                                                x
+                                            </button>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No labels selected</p>
+                                )}
+                            </div>
+                        </div> */}
+
                 <div className='description-attribute'>
                   <h5><HiMenuAlt2 style={{marginRight:'0.5vw'}}/>DESCRIPTION</h5>
                   <button className='btn-edit'>Edit</button>
@@ -245,3 +412,43 @@ const CardDetail = () => {
 
 export default CardDetail
 
+/*
+{/* <div className='label-container'>
+                  {labels.map((label)=>(
+                    <div key={label.id} className='label' style={{backgroundColor: label.color, padding:'5px 10px', borderRadius:'4px', marginBottom:'5px'}}>
+                      {label.name}
+                    </div>
+                  ))}
+                </div> 
+                {/* LABEL SELECTED 
+                {/* <div>
+                  <select onChange={handleLabelSelect} className='label-select'>
+                    <option value="">Select Label</option> 
+                    {/* {labels.map((label)=>(
+                      <option key={label.id} value={label.id}>
+                        {label.name}({label.color})
+                      </option>
+                    ))} 
+                    {/* {labels.map((label)=>(
+                      <option key={label.id} value={label.id}>
+                        <div className='label' style={{backgroundColor: label.color, padding:'5px 10px', borderRadius:'4px', marginBottom:'5px'}}>
+                          {label.name}
+                        </div>
+                      </option>
+                    ))}
+                  </select> 
+
+                  {/* DISPLAY SELECTED LABELS 
+                    {/* <div className='selected-labels'>
+                      {selectedLabels.map((labelId)=>{
+                        const label = labels.find((lbl)=> lbl.id === labelId);
+                        return(
+                          <div className='lable-item' key={labelId}>
+                            <span>{label.name}</span>
+                            <button onClick={()=> handleLabelRemove(labelId)}>Remove</button>
+                          </div>
+                        )
+                      })}
+                    </div> 
+
+*/

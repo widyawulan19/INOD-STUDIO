@@ -7,10 +7,16 @@ import Card from '../component/Card'
 import CardDetail from '../component/CardDetail'
 import BoardView from '../component/BoardView'
 import CardModal from '../component/CardModal'
+import Member from '../pages/Member'
+import WhitNavigate from '../component/WhitNavigate'
+import Sidebar from '../component/Sidebar'
+
+const SidebarWithNavigate = WhitNavigate(Sidebar)
 
 const AppRoutes=()=> {
   return (
     <Router>
+      {/* <SidebarWithNavigate/> */}
       <Routes>
         <Route path='/' element={<Workspace/>}/>
         <Route path='/workspaces/:workspaceId/boards' element={<Board/>}/>
@@ -19,6 +25,7 @@ const AppRoutes=()=> {
         <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards' element={<Card/>}/>
         <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId' element={<CardDetail/>}/>
         <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId/modal' element={<CardModal/>}/>
+        <Route path='/member' element={<Member/>}/>
       </Routes>
     </Router>
   )

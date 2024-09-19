@@ -2,6 +2,7 @@
   font-family: "Nunito", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
+  /* color: blue; */
 }
 
 .list-container .title{
@@ -10,24 +11,90 @@
   align-items: center;
   padding-left: 5px;
   padding-right: 5px;
-  border: 1px solid green;
+  /* border: 1px solid green; */
 }
 
-.lists-dropdown-menu-action{
-  position: absolute; /* Untuk memastikan dropdown muncul di atas konten lainnya */
-  background: white; /* Warna latar belakang dropdown */
-  border: 1px solid #ccc; /* Border dropdown */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Bayangan dropdown */
-  padding: 5px; /* Padding di dalam dropdown */
-  top: 30px; /* Jarak dari atas elemen yang mengandung dropdown */
-  right: 10px; /* Jarak dari kanan elemen yang mengandung dropdown */
-  z-index: 1000; /* Memastikan dropdown berada di atas konten lain */
+/*titik tiga ikon*/
+.dot-btn{
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
+  /* border-radius: 5px; */
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+.dot-btn:hover{
+  color: #0079bf;
+}
+/*titik tiga ikon*/
+
+
+.card-list-lists{
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px;
+  /* background-color: red; */
+}
+.card-item-lists{
+    background-color: #fff;
+    border: 1px solid grey;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: left;
+    width: 90%;
+    position: relative;
+}
+/*Dropdwon-menu-action*/
+.dropdown-menu-action{
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  z-index: 1000;
+  right: 10px;
+  top: 40px;
+  height: 100px;
+  border-radius: 5px;
+}
+.dropdown-ul{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  font-weight: bold;
+}
+.dropdown-li{
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.dropdown-li:hover{
+  background-color: #ddcccc;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/*list-dropdown-menu-action*/
+/* .lists-dropdown-menu-action{
+  position: absolute;
+  background: white; 
+  border: 1px solid #ccc; 
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+  padding: 5px; 
+  top: 30px; 
+  right: 10px; 
+  z-index: 1000; 
   display: flex;
   flex-direction: column;
   border-radius: 5px;
   gap: 5px;
-  /* width: 10vw; */
-  /* height: 100%; */
 }
 
 .lists-dropdown-menu-action .dropdown-ul{
@@ -36,10 +103,9 @@
   font-weight: bold;
   margin: 0;
   text-align: left;
-  /* border: 1px solid blue; */
 }
 
-.dropdown-li{
+.list-dropdown-menu-action.dropdown-li{
   margin-top: 5px;
   padding: 2px;
   cursor: pointer;
@@ -47,28 +113,19 @@
   align-items: center;
 }
 
-.dropdown-li:hover{
+.list-dropdown-menu-action.dropdown-li:hover{
   background-color: #ddcccc;
   border-radius: 5px;
   color: white;
 }
 
-.dropdown-li .ikon{
+.list-dropdown-menu-action.dropdown-li .ikon{
   margin-right: 1vh;
   color: #6b1c14;
   padding: 4px;
-}
+} */
+/*end list-dropdown-menu-action*/
 
-.dot-btn{
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1.2rem;
-  transition: color 0.3s ease;
-}
-.dot-btn:hover{
-  color: #0079bf;
-}
 
 .list-container .cover{
   width: 95%;
@@ -90,99 +147,82 @@
   height: auto; /* Mengatur tinggi secara otomatis sesuai dengan konten */
 }
 
-.card-list-lists{
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  border-radius: 5px;
-  /* background-color: red; */
-}
-.card-item-lists{
-    background-color: #fff;
-    /* border: 1px solid grey; */
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-align: left;
-    width: 90%;
-}
+
 
 .dot-icon{
-  /* border: 1px solid grey; */
-  border-radius: 5px;
-  width: 20px;
+  position: relative;
+  margin: 0;
+  padding: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 2px 0px;
+  justify-content: flex-end;
   box-shadow: 0 4px 8px rgba(0, 0, 0.2, 0.2);
   transition: transform 0.3s ease, color 0.3s ease;
 }
 .dot-icon:hover{
   transform: scale(1.4);
 }
-/* .card-container{
+.card-container{
   display: flex;
-  margin-right: 1vw;
-  position: relative;
-  border: 1px solid green;
-  height: 10px;
-} */
-.card-container .card-dropdown-menu-action{
+  justify-content: space-between;
+  align-items: center;
+  height: 30px;
+}
+.card-item-lists .card-dropdown-menu-action{
   display: block;
 }
+
 /*CARD DROPDOWN*/
 .card-dropdown-menu-action{
   position: absolute;
   background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   padding: 8px;
+  border :1px solid #ccc;
   border-radius: 4px;
-  z-index: 10;
-  top: 40px; /* Sesuaikan agar muncul di bawah ikon */
+  z-index: 1000;
+  top: 30px; /* Sesuaikan agar muncul di bawah ikon */
   right: 0;
   width: 180px;
 }
 
-.dropdown-ul{
+.card-dropdown-menu-action .dropdown-ul{
   padding: 0.5px;
   font-size: 13px;
   font-weight: bold;
   margin: 0;
   text-align: left;
+  list-style: none;
   /* border: 1px solid blue; */
 }
-.dropdown-ul li {
-  padding: 8px 12px;
+.card-dropdown-menu-action li {
+  padding: 5px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  transition: background-color 0.3s ease;
+  gap: 5px;
 }
 
-.dropdown-ul li:hover {
-  background-color: #f4f4f4; /* Warna latar saat dihover 
+.card-dropdown-menu-action .dropdown-li:hover {
+  /* background-color: #f4f4f4; */
+  background-color: #ddcccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.ikon {
+.card-dropdown-menu-action .ikon {
   margin-right: 8px;
+  color: #6b1c14;
+  font-size: 15px;
 }
 
 .label{
   display: flex;
-  /* display: grid; */
-  /* grid-template-columns: repeat(auto-fill, minmax(100px, 0.5fr)); */
-  /* gap: 20px; */
   width: 80%;
   height: 70%;
   gap: 5px;
   padding: 5px;
   font-size: 10px;
-  /* border: 1px solid grey; */
 }
 .label1{
   border: 1px solid #236BCD;

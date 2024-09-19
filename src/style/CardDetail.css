@@ -32,6 +32,7 @@
     justify-content: center;
     width: 100%;
     gap: 10px;
+    /* border: 1px solid red; */
 }
 
 .description{
@@ -51,6 +52,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 5px;
+    /* border: 1px solid green; */
 }
 .description-attribute .btn-edit{
     color: white;
@@ -94,6 +96,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    /* border: 1px solid black; */
 }
 
 .attachment button{
@@ -132,7 +135,7 @@
     /* justify-content: center; */
     width: 25%;
     height: 100%;
-    /* border: 1px solid grey;  */
+    /* border: 1px solid blue;  */
     margin-right: 20px;
 }
 .action .btn{
@@ -151,6 +154,93 @@
     margin-right: 0.5vw;
 }
 
+/*for label*/
+.label-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .label {
+    color: #fff; /* Ubah warna teks menjadi putih agar terlihat lebih jelas di atas background warna */
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    width: 100%;
+    height: 20px;
+    margin: 5px;
+    display: inline-block;
+    border-radius: 4px;
+  }
+
+  .label-select-container{
+    display: flex;
+    flex-direction: column;
+  }
+  .selected-labels{
+    margin-top: 10px;
+  }
+
+  .select{
+    padding: 5px;
+    margin-top: 10px;
+    border-radius: 4px;
+    min-width: 200px;
+    height: 100px;
+  }
+
+  .selected-labels-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px; /* Spacing between labels */
+    margin-top: 10px;
+}
+
+.selected-labels .label {
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: white;
+}
+
+  /* .label-select-container{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .selected-label{
+    color: white;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+  .select{
+    padding: 5px;
+    margin-top: 10px;
+    border-radius: 4px;
+  }
+   */
+
 /*
 background-image: linear-gradient(to right top, #721111, #841414, #971717, #aa1a1a, #be1d1d, #b51922, #ac1627, #a3152a, #7a1429, #521422, #2c1017, #000000);
+
+<h5 style={{textAlign:'left'}}> <HiOutlineCreditCard size={25}/>New Project-1track-alexxpiinksz-SWQUENCE-1D343 EXTRA FAST</h5>
+                <div className="label-selection-container">
+                  <h5 >Labels</h5>
+                  <select onChange={handleLabelChange}>
+                    <option value="">Choose a Label</option>
+                    {labels.map((label)=>(
+                      <option key={label.id} value={label.id} style={{backgroundColor: label.color}}>
+                        {label.name}
+                      </option>
+                    ))}
+                  </select>
+
+                  {/* MENAMPILKAN LABEL YANG DIPILIH 
+                  {selectedLabels && (
+                    <div className='selected-label' style={{backgroundColor: selectedLabels.color,  color: '#fff', padding: '10px', marginTop: '10px', borderRadius: '4px' }}>
+                      <strong>{selectedLabels.name}</strong>
+                    </div>
+                  )}
 */
