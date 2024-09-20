@@ -53,7 +53,7 @@ return (
               View Card
             </button>
           </div>
-        ))}
+        ))}  
       </div>
       <div className='card-form'>
         <input

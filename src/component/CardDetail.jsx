@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getCardDescriptionById, getlabel, getCardLabels } from '../services/Api';
+import { getCardDescriptionById, getlabel, getCardLabels, getCardById, getAllCover,  } from '../services/Api';
 import { IoIosSend } from "react-icons/io";
-import { HiOutlineCreditCard,HiMenuAlt2,HiOutlineUserAdd,HiOutlinePaperClip,HiOutlineArrowRight,HiOutlineDuplicate, HiOutlineArchive } from "react-icons/hi";
+import { HiOutlineCreditCard,HiMenuAlt2,HiOutlineUserAdd,HiOutlinePaperClip,HiOutlineArrowRight,HiOutlineDuplicate, HiOutlineArchive, HiChevronDown, HiChevronUp } from "react-icons/hi";
 import { FaUserAstronaut } from "react-icons/fa";
 import '../style/CardDetail.css'
+import DataCover, { Data_Cover, Data_Label } from '../data/DataCover'
+
 
  
 const CardDetail = () => {
@@ -13,8 +15,25 @@ const CardDetail = () => {
     const [labels, setLabels] = useState([]);
     const [selectedLabels, setSelectedLabels] = useState([])
     const navigate = useNavigate();
+    const [card, setCard] = useState(null)
+    const [cover, setCover] = useState([]);
+    const [cardCover, setCardCover] = useState([]);
+    const [showOption, setShowOption] = useState(false);
+    
+    //dropdown option
+    const toggleOptionVisibility = () => {
+      setShowOption(!showOption);
+    }
 
     useEffect(() => {
+      const fetchCard = async () => {
+        try {
+            const response = await getCardById(cardId); // Panggil API untuk mendapatkan detail kartu dan label
+            setCard(response.data); // Simpan data kartu ke state
+        } catch (error) {
+            console.error("Failed to fetch card: ", error);
+        }
+      };
       const fetchCardDetail = async () => {
           try {
               const response = await getCardDescriptionById(cardId);
@@ -32,23 +51,47 @@ const CardDetail = () => {
               console.error('Error fetching labels:', error);
           }
       };
+      
+      const fetchCover = async () => {
+        try{
+          const response = await getAllCover();
+          setCover(response.data);
+          console.log('Cover Data:', response.data)
+        }catch(error){
+          console.error('Error fetching cover image:', error);
+        }
+      }
   
-      const fetchCardLabels = async () => {
-          try {
-              const response = await getCardLabels(cardId);
-              const labelIds = response.data.map(label => label.id);
-              setSelectedLabels(labels.filter(label => labelIds.includes(label.id)));
-          } catch (error) {
-              console.error('Error fetching card labels:', error);
-          }
-      };
+      // const fetchCardLabels = async () => {
+      //     try {
+      //         const response = await getCardLabels(cardId);
+      //         const labelIds = response.data.map(label => label.id);
+      //         setSelectedLabels(labels.filter(label => labelIds.includes(label.id)));
+      //     } catch (error) {
+      //         console.error('Error fetching card labels:', error);
+      //     }
+      // };
   
       fetchCardDetail();
       fetchLabels();
-      fetchCardLabels();
-  }, [cardId, labels]);
-  
+      fetchCard();
+      fetchCover();
+      //fetchCardLabels();
+  }, [cardId]);
 
+  useEffect(()=> {
+    const fetchCovers = async () => {
+      try {
+          const response = await getAllCover();
+          setCardCover(response.data); // Simpan data cover ke state
+          console.log(cover);
+      } catch (error) {
+          console.error('Error fetching covers:', error);
+      }
+  }
+  fetchCovers();
+  }, []);
+  
     
       if (!cardDetail) {
         return <p>Loading...</p>;
@@ -60,6 +103,14 @@ const CardDetail = () => {
           setSelectedLabels([...selectedLabels, labelId])
         }
       };
+
+      const handleLabelSelection = (label) => {
+          if(selectedLabels.includes(label)){
+            setSelectedLabels(selectedLabels.filter((l)=> l !== label))
+          }else{
+            setSelectedLabels([...selectedLabels, label])
+          }
+      }
 
       const handleBackToBoardView = () => {
         navigate(`/workspaces/${workspaceId}/boards/${boardId}`);
@@ -76,136 +127,69 @@ const CardDetail = () => {
   const handleLabelRemove = (labelId) => {
       setSelectedLabels(selectedLabels.filter((label) => label.id !== labelId));
   };
-
-
-
-
       return (
         <div className='card-detail-container'>
           <div className="description-container">
             <div className='cover'></div>
             <div className="container">
-              <div className="description">
+              <div className="description" style={{}}>
                 
                 <h5 style={{textAlign:'left'}}> <HiOutlineCreditCard size={25}/>New Project-1track-alexxpiinksz-SWQUENCE-1D343 EXTRA FAST</h5>
-                <div className='select-option'>
-                    <strong>Select Label</strong>
-                    <select
-                        multiple={true}
-                        onChange={handleLabelChange}
-                        style={{
-                            backgroundColor: '#323940',
-                            color: '#B6C2CE',
-                            fontWeight: 'bold',
-                            marginLeft: '10px',
-                            height: "30px",
-                            border: '1px solid #B6C2CE',
-                            borderRadius: '4px'
-                        }}
-                    >
-                        <option disabled>Select a label</option>
-                        {labels.map((label) => (
-                            <option
-                                key={label.id}
-                                value={label.id}
-                                style={{ backgroundColor: label.color, color: 'white' }}
-                            >
-                                {label.name}
-                            </option>
-                        ))}
+                <div className='select-option' style={{}}>
+                    <strong style={{marginRight:'10px'}}>Select Label here</strong>
+                    <select multiple={true} style={{height:'20px', padding:'2px 5px', width:'200px'}} onChange={(e)=> handleLabelSelection(e.target.value)}>
+                      <option value="">Select Label</option>
+                      {labels.map((label)=>(
+                        <option key={label.id} style={{backgroundColor:label.color, height:'100%'}} onClick={()=> handleLabelSelection(label)}>
+                          {/* {selectedLabels.includes(label) ? 'Unselect' : 'Select'} {label.name} */}
+                          {label.name}
+                        </option>
+                      ))}
                     </select>
                 </div>
 
+                {/* EXAMPLE */}
+                {/* <div className='select-option' style={{border:'1px solid red' }} onClick={toggleOptionVisibility}>
+                    <strong style={{marginRight:'10px'}}>Select Label here</strong>
+                    <select multiple={true} style={{height:'20px', padding:'2px 5px', width:'200px'}} onChange={(e)=> handleLabelSelection(e.target.value)}>
+                      {showOption ? 
+                      (<><HiChevronDown/>Select</>):()}
+                    </select>
+                </div> */}
+
                 {/* Display Selected Labels */}
-                <div className='selected-labels-container' style={{ marginTop: '10px' }}>
-                    <strong>Selected Labels:</strong>
+                <div className='selected-labels-container' style={{ marginTop: '10px', padding:'5px',wordWrap:'break-word',overflowWrap:'break-word',whiteSpace:'normal',height:'auto' }}>
+                    {/* <strong>Selected Labels:</strong> */}
                     <div className='selected-labels'>
-                        {selectedLabels.length > 0 ? (
-                            selectedLabels.map((label) => (
-                                <div
-                                    key={label.id}
-                                    className='label'
-                                    style={{
-                                        backgroundColor: label.color,
-                                        color: '#fff',
-                                        padding: '5px 10px',
-                                        borderRadius: '4px',
-                                        marginBottom: '5px',
-                                        display: 'inline-block',
-                                        marginRight: '5px',
-                                    }}
-                                >
-                                    {label.name}
-                                    <button
-                                        onClick={() => handleLabelRemove(label.id)}
-                                        style={{
-                                            marginLeft: '5px',
-                                            backgroundColor: 'transparent',
-                                            border: 'none',
-                                            color: '#fff',
-                                            cursor: 'pointer',
-                                        }}
-                                    >
-                                        x
-                                    </button>
-                                </div>
-                            ))
-                        ) : (
-                            <p>No labels selected</p>
-                        )}
+                      <div>
+                        {selectedLabels.map((label)=> (
+                          <span key={label.id} style={{ backgroundColor: label.color, padding: '5px', margin: '2px' }}>
+                            {label.name}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                 </div>
 
-
-                  
-                {/* <div className="label-selected-container">
-                            <h5>Selected Labels</h5>
-                            <select
-                                multiple={true}
-                                onChange={handleLabelChange}
-                                style={{ width: '200px', height: '100px' }}
-                            >
-                                {labels.map((label) => (
-                                    <option key={label.id} value={label.id} style={{ backgroundColor: label.color }}>
-                                        {label.name}
-                                    </option>
-                                ))}
-                            </select>
-                            <div className='selected-labels' style={{ marginTop: '10px' }}>
-                                {selectedLabels.length > 0 ? (
-                                    selectedLabels.map((label) => (
-                                        <div
-                                            key={label.id}
-                                            className='label'
-                                            style={{
-                                                backgroundColor: label.color,
-                                                color: '#fff',
-                                                padding: '5px 10px',
-                                                borderRadius: '4px',
-                                                marginBottom: '5px',
-                                                display: 'inline-block',
-                                                marginRight: '5px',
-                                            }}
-                                        >
-                                            {label.name}
-                                            <button
-                                                onClick={() => handleLabelRemove(label.id)}
-                                                style={{
-                                                    marginLeft: '5px',
-                                                    backgroundColor: 'transparent',
-                                                    border: 'none',
-                                                    color: '#fff',
-                                                    cursor: 'pointer',
-                                                }}
-                                            >
-                                                x
-                                            </button>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p>No labels selected</p>
-                                )}
+                        {/* <div className="cover">
+                          {cardCover.map((cover)=>(
+                            <img 
+                            key={cover.id}
+                            src={cover.cover_image_url} 
+                            alt={cover.name}
+                            style={{ width: '100%', height: 'auto' }}
+                          />
+                          ))}
+                        </div> */}
+                        {/* <div className="cover">
+                          {Data_Cover.map(cover => (
+                            <div key={cover.id}>
+                              <img 
+                                src={cover.cover_image_url} 
+                                alt={cover.name} 
+                              />
                             </div>
+                          ))}
                         </div> */}
 
                 <div className='description-attribute'>
@@ -391,19 +375,6 @@ const CardDetail = () => {
               </div>
             </div>
           </div>
-          {/* <div className='title'>
-              <h3>title</h3>
-          </div>
-          <div className='description'>
-            <h2>Card Details</h2>
-            <p><strong>Order Number:</strong> {cardDetail.order_number}</p>
-            <p><strong>Buyer Name:</strong> {cardDetail.buyer_name}</p>
-            <p><strong>Order Type:</strong> {cardDetail.order_type}</p>
-            <p><strong>Price:</strong> {cardDetail.price}</p>
-            <p><strong>Account:</strong> {cardDetail.account}</p>
-            {/* Tambahkan field lainnya sesuai kebutuhan 
-            <button onClick={handleBackToBoardView}>back to card</button>
-          </div> */}
 
 
         </div>
