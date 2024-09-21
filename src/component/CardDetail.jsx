@@ -3,9 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { getCardDescriptionById, getlabel, getCardLabels, getCardById, getAllCover,  } from '../services/Api';
 import { IoIosSend } from "react-icons/io";
 import { HiOutlineCreditCard,HiMenuAlt2,HiOutlineUserAdd,HiOutlinePaperClip,HiOutlineArrowRight,HiOutlineDuplicate, HiOutlineArchive, HiChevronDown, HiChevronUp } from "react-icons/hi";
-import { FaUserAstronaut } from "react-icons/fa";
+import { FaUserAstronaut, FaCcDiscover } from "react-icons/fa";
 import '../style/CardDetail.css'
-import DataCover, { Data_Cover, Data_Label } from '../data/DataCover'
+import { Data_Cover } from '../data/DataCover'
 
 
  
@@ -19,10 +19,41 @@ const CardDetail = () => {
     const [cover, setCover] = useState([]);
     const [cardCover, setCardCover] = useState([]);
     const [showOption, setShowOption] = useState(false);
+    const [showCover, setShowCover] = useState(false);
+    const [selectCover, setSelectCover] = useState(null);
+
+    const hexToRgba = (hex, opacity) => {
+      // Pastikan hex dimulai dengan '#' dan panjangnya 7 karakter
+      if (!hex || hex[0] !== '#' || hex.length !== 7) {
+        console.error('Invalid hex color:', hex);
+        return 'rgba(0, 0, 0, 0)'; // Warna default bila hex tidak valid
+      }
+    
+      let r = parseInt(hex.slice(1, 3), 16);
+      let g = parseInt(hex.slice(3, 5), 16);
+      let b = parseInt(hex.slice(5, 7), 16);
+    
+      return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    };
+    
     
     //dropdown option
     const toggleOptionVisibility = () => {
-      setShowOption(!showOption);
+      setShowOption(prevState => !prevState);
+    }
+    const closeDropdown = () => {
+      setShowOption(false);
+    };
+
+
+    //cover
+    const toggleCoverVisibility = () =>{
+      setShowCover(!showCover);
+    }
+
+    const handleCoverSelect = (cover)=>{
+      setSelectCover(cover);
+      setShowCover(false);
     }
 
     useEffect(() => {
@@ -130,67 +161,102 @@ const CardDetail = () => {
       return (
         <div className='card-detail-container'>
           <div className="description-container">
-            <div className='cover'></div>
+            <div className='cover'>
+              {selectCover &&(
+                <div className='imgCover'>
+                  <img src={selectCover.cover_image_url} alt={selectCover.name} />
+                </div>
+              )}
+            </div>
             <div className="container">
               <div className="description" style={{}}>
-                
                 <h5 style={{textAlign:'left'}}> <HiOutlineCreditCard size={25}/>New Project-1track-alexxpiinksz-SWQUENCE-1D343 EXTRA FAST</h5>
-                <div className='select-option' style={{}}>
-                    <strong style={{marginRight:'10px'}}>Select Label here</strong>
-                    <select multiple={true} style={{height:'20px', padding:'2px 5px', width:'200px'}} onChange={(e)=> handleLabelSelection(e.target.value)}>
-                      <option value="">Select Label</option>
-                      {labels.map((label)=>(
-                        <option key={label.id} style={{backgroundColor:label.color, height:'100%'}} onClick={()=> handleLabelSelection(label)}>
-                          {/* {selectedLabels.includes(label) ? 'Unselect' : 'Select'} {label.name} */}
-                          {label.name}
-                        </option>
-                      ))}
-                    </select>
+                <div className='select-option'>
+                  {/* <strong style={{marginRight:'1vw'}}>Select Label Here</strong> */}
+                  <div style={{display:'flex', flexDirection:'column', marginBottom:'2vh'}}>
+                    <div
+                      style={{
+                        position:'relative',
+                        padding:'5px',
+                        border:'1px solid grey',
+                        borderRadius:'5px',
+                        boxShadow:'0px 4px 8px rgba(0, 0, 0, 0.2)',
+                        width:'95%',
+                        cursor:'pointer',
+                        backgroundColor:'#f9f9f9',
+                        fontSize:'10px'
+                      }}
+                      onClick={toggleOptionVisibility}
+                    >
+                      {selectedLabels.length > 0 ? 'Select Another Label' : 'Select Label'}
+                    </div>
+                      {/* DROPWDOWN  */}
+                    {showOption && (
+                      <div
+                        className='dropdown-options'
+                        style={{
+                          position:'absolute',
+                          top: '100%',
+                          left: '0',
+                          border: '1px solid grey',
+                          backgroundColor: '#fff',
+                          zIndex: 1000,
+                          width: '50%',
+                          boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
+                          borderRadius:'5px',
+                          maxHeight: '150px',
+                          overflowY: 'auto',
+                          marginLeft:''
+                        }}
+                      >
+                        {labels.map((label)=>(
+                          <div
+                            key={label.id}
+                            style={{
+                              backgroundColor: hexToRgba(label.color, 0.4),
+                              border:`1px solid ${label.text_color}`,
+                              padding: '10px',
+                              cursor:'pointer',
+                              color: label.text_color,
+                              fontWeight:'bold'
+                            }}
+                            onClick={()=> {
+                              handleLabelSelection(label);
+                              closeDropdown();
+                            }}
+                          >
+                            {selectedLabels.includes(label)? 'Unselect ' : 'Select '}{label.name}
+                          </div>
+                        ))}
+
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                {/* EXAMPLE */}
-                {/* <div className='select-option' style={{border:'1px solid red' }} onClick={toggleOptionVisibility}>
-                    <strong style={{marginRight:'10px'}}>Select Label here</strong>
-                    <select multiple={true} style={{height:'20px', padding:'2px 5px', width:'200px'}} onChange={(e)=> handleLabelSelection(e.target.value)}>
-                      {showOption ? 
-                      (<><HiChevronDown/>Select</>):()}
-                    </select>
-                </div> */}
-
                 {/* Display Selected Labels */}
-                <div className='selected-labels-container' style={{ marginTop: '10px', padding:'5px',wordWrap:'break-word',overflowWrap:'break-word',whiteSpace:'normal',height:'auto' }}>
-                    {/* <strong>Selected Labels:</strong> */}
+               <div className='selected-labels-container'>
+                    <strong>Selected Labels:</strong>
                     <div className='selected-labels'>
-                      <div>
+                      <div style={{ margin:'0', height:'auto', width:'100%', display:'flex',flexWrap:'wrap'}}>
                         {selectedLabels.map((label)=> (
-                          <span key={label.id} style={{ backgroundColor: label.color, padding: '5px', margin: '2px' }}>
+                          <span key={label.id} style={{ 
+                            backgroundColor: hexToRgba(label.color, 0.5), 
+                            color: label.text_color,
+                            fontSize:'12px',
+                            fontWeight:'bold',
+                            border: `2px solid ${label.text_color}`,
+                            display:'flex',
+                            borderRadius:'5px',
+                            padding:'4px',
+                            marginTop:'2px'
+                            }}>   
                             {label.name}
                           </span>
                         ))}
                       </div>
-                    </div>
+                    </div> 
                 </div>
-
-                        {/* <div className="cover">
-                          {cardCover.map((cover)=>(
-                            <img 
-                            key={cover.id}
-                            src={cover.cover_image_url} 
-                            alt={cover.name}
-                            style={{ width: '100%', height: 'auto' }}
-                          />
-                          ))}
-                        </div> */}
-                        {/* <div className="cover">
-                          {Data_Cover.map(cover => (
-                            <div key={cover.id}>
-                              <img 
-                                src={cover.cover_image_url} 
-                                alt={cover.name} 
-                              />
-                            </div>
-                          ))}
-                        </div> */}
 
                 <div className='description-attribute'>
                   <h5><HiMenuAlt2 style={{marginRight:'0.5vw'}}/>DESCRIPTION</h5>
@@ -372,6 +438,37 @@ const CardDetail = () => {
                 <button className='btn'><HiOutlineArrowRight className='action-icon'/>Move</button>
                 <button className='btn'><HiOutlineDuplicate className='action-icon'/>Copy</button>
                 <button className='btn'><HiOutlineArchive className='action-icon'/>Archive</button>
+                <button className='btn' onClick={toggleCoverVisibility}>
+                  {showCover ?
+                 (<><FaCcDiscover className='action-icon'/>Pilih Cover</>):(<><FaCcDiscover className='action-icon'/>Cover</>)   
+                }
+                </button>
+                {showCover && (
+                  <div style={{
+                      border:'0.1px solid grey',
+                      borderRadius:'5px',
+                      boxShadow:'0 4px 8px rgba(0,0,0,0.1)',
+                      padding:'5px',
+                      width:'100px',
+                      height:'130px',
+                      overflowY:'auto'
+                  }}>
+                    {Data_Cover.map((cover)=>(
+                      <div 
+                        className='coverImg' 
+                        key={cover.id}
+                        onClick={()=> handleCoverSelect(cover)}
+                        style={{marginBottom:'5px', cursor:'pointer'}}
+                      >
+                        <img 
+                          src={cover.cover_image_url} 
+                          alt={cover.name} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* {menampilkan hasil cover} */}
               </div>
             </div>
           </div>
@@ -382,44 +479,3 @@ const CardDetail = () => {
 }
 
 export default CardDetail
-
-/*
-{/* <div className='label-container'>
-                  {labels.map((label)=>(
-                    <div key={label.id} className='label' style={{backgroundColor: label.color, padding:'5px 10px', borderRadius:'4px', marginBottom:'5px'}}>
-                      {label.name}
-                    </div>
-                  ))}
-                </div> 
-                {/* LABEL SELECTED 
-                {/* <div>
-                  <select onChange={handleLabelSelect} className='label-select'>
-                    <option value="">Select Label</option> 
-                    {/* {labels.map((label)=>(
-                      <option key={label.id} value={label.id}>
-                        {label.name}({label.color})
-                      </option>
-                    ))} 
-                    {/* {labels.map((label)=>(
-                      <option key={label.id} value={label.id}>
-                        <div className='label' style={{backgroundColor: label.color, padding:'5px 10px', borderRadius:'4px', marginBottom:'5px'}}>
-                          {label.name}
-                        </div>
-                      </option>
-                    ))}
-                  </select> 
-
-                  {/* DISPLAY SELECTED LABELS 
-                    {/* <div className='selected-labels'>
-                      {selectedLabels.map((labelId)=>{
-                        const label = labels.find((lbl)=> lbl.id === labelId);
-                        return(
-                          <div className='lable-item' key={labelId}>
-                            <span>{label.name}</span>
-                            <button onClick={()=> handleLabelRemove(labelId)}>Remove</button>
-                          </div>
-                        )
-                      })}
-                    </div> 
-
-*/

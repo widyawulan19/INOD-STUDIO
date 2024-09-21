@@ -230,4 +230,18 @@ return (
                               />
                               ))}
                             </div>
+
+
+                            <div className='select-option' style={{border: '1px solid red'}}>
+  <strong style={{marginRight: '10px'}}>Select Label here</strong>
+  <select style={{padding: '2px 5px', width: '200px'}} onChange={(e) => handleLabelSelection(e.target.value)}>
+    <option value="">-- Select Label --</option>
+    {labels.map((label) => (
+      <option key={label.id} value={label.id} style={{backgroundColor: label.color}}>
+        {label.name}
+      </option>
+    ))}
+  </select>
+</div>
+
 */
