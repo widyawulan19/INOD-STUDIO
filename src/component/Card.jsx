@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { createCard, getCards } from '../services/Api';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../style/CardStyle.css'
+import { Data_Cover, Data_Bg } from '../data/DataCover';
 
 const Card = ()=> {
     const {boardId, listId, workspaceId} = useParams()
@@ -74,6 +75,7 @@ return (
           value={newCard.position}
           onChange={(e) => setNewCard({ ...newCard, position: e.target.value })}
         />
+        
         <button onClick={handleCreateCard}>Add Card</button>
         <button onClick={handleBackToList}>Back To List</button>
       </div>

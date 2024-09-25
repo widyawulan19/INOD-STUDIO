@@ -1,247 +1,145 @@
-/*
-import { useState, useEffect } from 'react';
-import { getCardById, updateCardLabels } from './api'; // Pastikan API ini sudah ada
+import React, { useCallback, useEffect, useState } from 'react'
+import { getBoard, createBoard, getListsCountByBoard, updateBoardBackground } from '../services/Api'
+import { useNavigate, useParams } from 'react-router-dom';
+import { HiChevronRight, HiChevronDown, HiChevronUp } from "react-icons/hi";
+import moment from 'moment';
+import { Data_Bg } from '../data/DataCover';
 
-const CardDetail = ({ cardId }) => {
-    const [card, setCard] = useState(null);
-    const [selectedLabels, setSelectedLabels] = useState([]); // State untuk label yang dipilih
+const Board = () => {
+    const { boardId, workspaceId } = useParams();
+    const [boards, setBoards] = useState([]);
+    const [newBoard, setNewBoard] = useState({ name: '', description: '' });
+    const navigate = useNavigate();
+    const [listCount, setListCount] = useState({});
+    const [backgroundImage, setBackgroundImage] = useState('');
+    const [showBg, setShowBg] = useState(false);
+    const [selectBg, setSelectBg] = useState(null);
 
+    // Toggle visibility for background selection
+    const toggleBgVisibility = () => {
+        setShowBg(!showBg);
+    };
+
+    // Handle background selection
+    const handleBgSelect = (bg) => {
+        setSelectBg(bg);
+        setShowBg(false);
+    };
+
+    // Load boards
+    const loadBoards = useCallback(async () => {
+        try {
+            const response = await getBoard(workspaceId);
+            const filteredBoards = response.data.filter(board => board.workspace_id === Number(workspaceId));
+            setBoards(filteredBoards);
+
+            // Fetch list counts for each board
+            const listCounts = await Promise.all(filteredBoards.map(async (board) => {
+                const listCountResponse = await getListsCountByBoard(board.id);
+                return { boardId: board.id, count: listCountResponse.data.list_count };
+            }));
+
+            // Map the list counts to the respective board
+            const countMap = {};
+            listCounts.forEach(({ boardId, count }) => {
+                countMap[boardId] = count;
+            });
+            setListCount(countMap);
+        } catch (error) {
+            console.error('Failed to load boards', error);
+        }
+    }, [workspaceId]);
+
+    // Fetch board data when boardId changes
     useEffect(() => {
-        const fetchCard = async () => {
+        const fetchBoardData = async () => {
             try {
-                const response = await getCardById(cardId);
-                setCard(response.data);
-                // Set initial selected labels from card data
-                const initialLabels = response.data.labels.map(label => label.id);
-                setSelectedLabels(initialLabels);
+                const response = await getBoard(boardId);
+                setBackgroundImage(response.data.backgroundImageUrl);
             } catch (error) {
-                console.error("Failed to fetch card: ", error);
+                console.error('Error fetching board:', error);
             }
         };
 
-        fetchCard();
-    }, [cardId]);
-
-    const handleLabelChange = (labelId) => {
-        setSelectedLabels(prev =>
-            prev.includes(labelId) ? prev.filter(id => id !== labelId) : [...prev, labelId]
-        );
-    };
-
-    const handleSave = async () => {
-        try {
-            await updateCardLabels(cardId, selectedLabels); // Panggil API untuk memperbarui label
-            alert("Labels saved successfully!");
-        } catch (error) {
-            console.error("Failed to save labels: ", error);
+        if (boardId) {
+            fetchBoardData();
         }
+    }, [boardId]);
+
+    const handleCreateBoard = async () => {
+        await createBoard({ ...newBoard, workspace_id: workspaceId });
+        loadBoards();
     };
 
-    if (!card) {
-        return <div>Loading...</div>;
-    }
+    const handleNavigateToBoardView = (boardId) => {
+        navigate(`/workspaces/${workspaceId}/boards/${boardId}`);
+    };
 
     return (
-        <div className="card-detail">
-            <h3>{card.title}</h3>
-            <p>{card.description}</p>
+        <div className='board-container' style={{ backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none', backgroundSize: 'cover' }}>
+            <div className='nav-board'>
+                <div className='nav-board2'>
+                    <h3 style={{ display: 'flex', textAlign: 'left', color: 'white', marginBottom: '0', margin: '0', width: '20vw', alignItems: 'center', gap: '10px' }}>
+                        <button onClick={() => navigate('/')} className='btn-nav'>Workspace</button>
+                        <HiChevronRight style={{ fontSize: '1.5rem', flexShrink: '0' }} />
+                        <button className='btn-nav' style={{ textAlign: 'left' }}>Board</button>
+                    </h3>
 
-            {/* Render label selection *
-            <div className="label-selection">
-                {card.labels.map(label => (
-                    <label key={label.id}>
-                        <input
-                            type="checkbox"
-                            checked={selectedLabels.includes(label.id)}
-                            onChange={() => handleLabelChange(label.id)}
-                        />
-                        {label.name}
-                    </label>
-                ))}
+                    {/* Background selection button */}
+                    <button className='btn-bg' onClick={toggleBgVisibility}>
+                        {showBg ? <>Background <HiChevronUp /></> : <>Select Background <HiChevronDown /></>}
+                    </button>
+                    {selectBg && (
+                        <span style={{ color: 'white', marginLeft: '10px' }}>Selected: {selectBg.name}</span>
+                    )}
+
+                    {/* Background options dropdown */}
+                    {showBg && (
+                        <div style={{
+                            backgroundColor: 'white',
+                            border: '0.1px solid grey',
+                            borderRadius: '5px',
+                            boxShadow: '0px 4px 8px rgba(0,0,0,0.1)',
+                            padding: '5px',
+                            width: '150px',
+                            overflowY: 'auto',
+                        }}>
+                            {Data_Bg.map((bg) => (
+                                <div
+                                    className='coverBg'
+                                    key={bg.id}
+                                    onClick={() => handleBgSelect(bg)}
+                                    style={{
+                                        marginBottom: '5px',
+                                        cursor: 'pointer',
+                                        color: 'red',
+                                    }}
+                                >
+                                    <p>{bg.name}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <h5 style={{ textAlign: 'left', color: 'white', paddingLeft: '10px', margin: '0' }}>Your boards:</h5>
             </div>
 
-            <button onClick={handleSave}>Save</button>
+            {/* Board list */}
+            <div className='board-list-container'>
+                <div className='board-list'>
+                    {boards.map((board) => (
+                        <div key={board.id} className='board-card' onClick={() => handleNavigateToBoardView(board.id)}>
+                            <h4>{board.name}</h4>
+                            <p>{board.description}</p>
+                            <p>{listCount[board.id] || 0} lists</p>
+                            <p>{moment(board.create_at).format('D MMMM YYYY')}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 };
 
-export default CardDetail;
-
-
-return (
-        <div className='card-detail-container'>
-          <div className="description-container">
-            <div className='cover'></div>
-            <div className="container">
-              <div className="description">
-              <div className="labels">
-                {card-labels && card-labels.map(label => (
-                    <span 
-                        key={label.id} 
-                        style={{ backgroundColor: label.color, padding: '5px', margin: '5px', color: '#fff' }}>
-                        {label.name}
-                    </span>
-                ))}
-              </div>
-                
-                <h5 style={{textAlign:'left'}}> <HiOutlineCreditCard size={25}/>New Project-1track-alexxpiinksz-SWQUENCE-1D343 EXTRA FAST</h5>
-                <div className='select-option'>
-                    <strong>Select Label</strong>
-                    <div>
-                      {labels.map((label)=>(
-                        <button key={label.id} style={{backgroundColor: label.color}} onClick={()=> handleLabelSelection(label)}>
-                          {selectedLabels.includes(label) ? 'Unselect' : 'Select'} {label.name}
-                        </button>
-                      ))}
-                    </div>
-
-                    
-                    {/* <select
-                        multiple={true}
-                        onChange={handleLabelChange}
-                        style={{
-                            backgroundColor: '#323940',
-                            color: '#B6C2CE',
-                            fontWeight: 'bold',
-                            marginLeft: '10px',
-                            height: "30px",
-                            border: '1px solid #B6C2CE',
-                            borderRadius: '4px'
-                        }}
-                    >
-                        <option disabled>Select a label</option>
-                        {labels.map((label) => (
-                            <option
-                                key={label.id}
-                                value={label.id}
-                                style={{ backgroundColor: label.color, color: 'white' }}
-                            >
-                                {label.name}
-                            </option>
-                        ))}
-                    </select> 
-                    </div>
-
-                    {/* Display Selected Labels 
-                    <div className='selected-labels-container' style={{ marginTop: '10px', border:'1px solid blue' }}>
-                        <strong>Selected Labels:</strong>
-                        <div className='selected-labels'>
-                          <div>
-                            {selectedLabels.map((label)=> (
-                              <span key={label.id} style={{ backgroundColor: label.color, padding: '5px', margin: '2px' }}>
-                                {label.name}
-                              </span>
-                            ))}
-                          </div>
-                            {/* {selectedLabels.length > 0 ? (
-                                selectedLabels.map((label) => (
-                                    <div
-                                        key={label.id}
-                                        className='label'
-                                        style={{
-                                            backgroundColor: label.color,
-                                            color: '#fff',
-                                            padding: '5px 10px',
-                                            borderRadius: '4px',
-                                            marginBottom: '5px',
-                                            display: 'inline-block',
-                                            marginRight: '5px',
-                                        }}
-                                    >
-                                        {label.name}
-                                        <button
-                                            onClick={() => handleLabelRemove(label.id)}
-                                            style={{
-                                                marginLeft: '5px',
-                                                backgroundColor: 'transparent',
-                                                border: 'none',
-                                                color: '#fff',
-                                                cursor: 'pointer',
-                                            }}
-                                        >
-                                            x
-                                        </button>
-                                    </div>
-                                ))
-                            ) : (
-                                <p>No labels selected</p>
-                            )} 
-                        </div>
-                    </div>
-    
-    
-                      
-                    {/* <div className="label-selected-container">
-                                <h5>Selected Labels</h5>
-                                <select
-                                    multiple={true}
-                                    onChange={handleLabelChange}
-                                    style={{ width: '200px', height: '100px' }}
-                                >
-                                    {labels.map((label) => (
-                                        <option key={label.id} value={label.id} style={{ backgroundColor: label.color }}>
-                                            {label.name}
-                                        </option>
-                                    ))}
-                                </select>
-                                <div className='selected-labels' style={{ marginTop: '10px' }}>
-                                    {selectedLabels.length > 0 ? (
-                                        selectedLabels.map((label) => (
-                                            <div
-                                                key={label.id}
-                                                className='label'
-                                                style={{
-                                                    backgroundColor: label.color,
-                                                    color: '#fff',
-                                                    padding: '5px 10px',
-                                                    borderRadius: '4px',
-                                                    marginBottom: '5px',
-                                                    display: 'inline-block',
-                                                    marginRight: '5px',
-                                                }}
-                                            >
-                                                {label.name}
-                                                <button
-                                                    onClick={() => handleLabelRemove(label.id)}
-                                                    style={{
-                                                        marginLeft: '5px',
-                                                        backgroundColor: 'transparent',
-                                                        border: 'none',
-                                                        color: '#fff',
-                                                        cursor: 'pointer',
-                                                    }}
-                                                >
-                                                    x
-                                                </button>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <p>No labels selected</p>
-                                    )}
-                                </div>
-                            </div> 
-                            <div className="cover">
-                              {cover.map((cover)=>(
-                                <img 
-                                key={cover.id}
-                                src={cover.cover_image_url} 
-                                alt={cover.name}
-                                style={{ width: '100%', height: 'auto' }}
-                              />
-                              ))}
-                            </div>
-
-
-                            <div className='select-option' style={{border: '1px solid red'}}>
-  <strong style={{marginRight: '10px'}}>Select Label here</strong>
-  <select style={{padding: '2px 5px', width: '200px'}} onChange={(e) => handleLabelSelection(e.target.value)}>
-    <option value="">-- Select Label --</option>
-    {labels.map((label) => (
-      <option key={label.id} value={label.id} style={{backgroundColor: label.color}}>
-        {label.name}
-      </option>
-    ))}
-  </select>
-</div>
-
-*/
+export default Board;

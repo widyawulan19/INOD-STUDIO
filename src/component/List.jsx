@@ -8,20 +8,37 @@ import { FaPlus} from "react-icons/fa";
 import { GrAttachment } from "react-icons/gr";
 import { ImCross } from "react-icons/im";
 import { FaPlay } from "react-icons/fa6";
-import { HiDotsVertical, HiArchive } from "react-icons/hi";
+import { HiDotsVertical, HiArchive, HiChevronUp, HiChevronDown } from "react-icons/hi";
 import { AiFillDelete } from "react-icons/ai";
+import { Data_Cover } from '../data/DataCover.js';
 
 
 const List=({listId, listName})=> {
     const {workspaceId, boardId} = useParams();
     const navigate = useNavigate();
     const [cards, setCards] = useState([])
-    const [newCard, setNewCard] = useState({title:'', description:'', position:0})
+    const [newCard, setNewCard] = useState({title:'', description:'', position:0, cover_image_url:null})
     const [showForm, setShowForm] = useState(false);
-    const [showAction, setShowAction] = useState(null)
+    const [showAction, setShowAction] = useState(null);
+    const [showCover, setShowCover] = useState(false);
+    const [selectCover, setSelectCover] = useState(null);
 
     const toggleFormVisibility = () => {
       setShowForm(!showForm)
+    }
+
+    //cover
+    const toggleCoverVisibility = ()=>{
+      setShowCover(!showCover)
+    }
+
+    const handleCoverSelect = (cover) => {
+      setSelectCover(cover.cover_image_url);//edit1
+      setNewCard((prevCard) => ({
+         ...prevCard,
+          cover_image_url: cover.cover_image_url,//edit2
+        }));
+      setShowCover(false);
     }
 
     const toggleActionThreeDotList = (listId, event)=>{
@@ -62,14 +79,27 @@ const List=({listId, listName})=> {
       loadCards();
     }
   }, [listId]);
-    
+
       const handleCreateCard = async () => {
-        await createCard({ ...newCard, list_id: listId });
-        loadCards();
-        setShowForm(false);
-        setNewCard({title:'', description:'', position:''})
-      };
-    
+        try{
+          await createCard({
+            ...newCard,
+            list_id:listId
+          })
+          loadCards();
+          setShowForm(false);
+          setNewCard({
+            title:'',
+            description:'',
+            position:'',
+            cover_image_url:''
+          })
+        }catch(error){
+          console.error('Failed to create card', error)
+        }
+      }
+
+
       const handleToCardModal = (cardId, event) => {
         event.stopPropagation();
         console.log(`Navigating to card modal with ID: ${cardId}`)
@@ -157,7 +187,13 @@ const List=({listId, listName})=> {
                   )}
                 </p>
               </div>
-              <div className='cover'></div>
+             
+              {cards.cover_image_url && (
+                <div className='cover'>
+                  <img src={cards.cover_image_url} alt={cards.name}/>
+                </div>
+              )}
+             
               <p className='card-description'>{card.description}</p>
 
               <div style={{display: 'flex'}}>
@@ -217,6 +253,34 @@ const List=({listId, listName})=> {
                       value={newCard.position}
                       onChange={(e) => setNewCard({ ...newCard, position: e.target.value })}
                     />
+                    <button className='btn' onClick={toggleCoverVisibility}>
+                      {showCover ? 
+                      (<>Select Cover <HiChevronUp/></>):(<>Select Cover <HiChevronDown/></>)  
+                    }
+                    </button>
+                    {showCover && (
+                      <div 
+                      style={{
+                          border:'0.1px solid grey',
+                          borderRadius:'5px',
+                          boxShadow:'0px 4px 8px rgba(0,0,0,0.1)',
+                          padding:'5px',
+                          width:'100px',
+                          height:'130px',
+                          overflowY:'auto'
+                      }}>
+                        {Data_Cover.map((cover)=>(
+                          <div
+                            className='coverImg'
+                            key={cover.id}
+                            onClick={()=> handleCoverSelect(cover)}
+                            style={{marginBottom:'5px', cursor:'pointer'}}
+                          >
+                            <img src={cover.cover_image_url} alt={cover.name} />
+                          </div>
+                        ))}
+                      </div>
+                    )}
                     <button className='add-btn' onClick={handleCreateCard}>Add Card</button>
                 </div>
               )}

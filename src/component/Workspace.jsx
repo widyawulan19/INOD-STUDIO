@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getWorkspaces, createWorkspace, getBoardCountByWorkspace} from '../services/Api'
+import { getWorkspaces, createWorkspace, getBoardCountByWorkspace, getAllImage} from '../services/Api'
 import { useNavigate } from 'react-router-dom';
 import '../style/WorkspaceStyle.css'
 import { BiSolidCalendarEdit } from "react-icons/bi";
@@ -9,7 +9,7 @@ import { FaTags } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
 import moment from 'moment';
-import Background from './Background';
+// import Background from './Background';
 // import img1 from '../assets/bg/bg2.jpeg';
 
 
@@ -19,7 +19,7 @@ const Workspace=()=> {
     const navigate = useNavigate();
     const [showForm, setShowForm] = useState(false)
     const [showAction, setShowAction] = useState(false)
-    const [backgroundImage, setBackgroundImage] = useState('');
+    const [backgroundImage, setBackgroundImage] = useState([]);
 
     //show form
     const toggleFormVisibility = () => {
@@ -33,9 +33,20 @@ const Workspace=()=> {
     }
 
     useEffect(()=>{
-        loadWorkspaces();
+        loadWorkspaces(); 
     }, [])
 
+    useEffect(()=>{
+        const loadImages = async () => {
+            try{
+                const response = await getAllImage();
+                setBackgroundImage(response.data);
+            }catch(error){
+                console.error('Error loading images', error);
+            }
+        };
+        loadImages()
+    }, [])
 
     const loadWorkspaces = async () => {
         try{
@@ -87,16 +98,27 @@ const Workspace=()=> {
             <div className="workspace-title">
                 <h4 style={{textAlign:'left', color:'white'}}>WORKSPACE DASHBOARD</h4>
                 <div style={{ display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <Background onChangeBackground={handleBackgroundChange}/>
+                    {/* <Background onChangeBackground={handleBackgroundChange}/> */}
                     <HiOutlineSearch size={20} className='workspace-icons'/>
                     <IoMdNotificationsOutline size={20} className='workspace-icons'/>
                     <FaUserCircle size={25} className='workspace-icons-user'/>
 
                 </div>
             </div>
-            <div className='filter-button'>
-                <h4 style={{color:'white'}}>Filter by : </h4>
+            <div className="background-selector">
+                <label htmlFor="background-select" style={{color:'white'}}>Select Background:</label>
+                <select id='background-select' onChange={(e)=>handleBackgroundChange(e.target.value)}>
+                    <option value="">Choose an image</option>
+                    {Array.isArray(backgroundImage) && backgroundImage.map(image => (
+                        <option key={image.id} value={image.image_url}>
+                            {image.name}
+                        </option>
+                    ))}
+                </select>
             </div>
+            {/* <div className='filter-button'>
+                <h4 style={{color:'white'}}>Filter by : </h4>
+            </div> */}
 
             {/* WORKSPACE CARD */}
                 <div className='workspace-grid' style={{textAlign:'left'}}>
@@ -174,21 +196,3 @@ const Workspace=()=> {
 }
  
 export default Workspace
-
-
-/*
-<ul>
-                                        <li onClick={() => handleAction(workspace.id, 'delete')}
-                                            className='dropdown-li'    
-                                        >
-                                            <AiFillDelete  size={20} style={{marginRight:'1vh', color:'#6b1c14'}}/>
-                                            Delete
-                                        </li>
-                                        <li onClick={() => handleAction(workspace.id, 'archive')}
-                                            className='dropdown-li'
-                                        >
-                                            <HiArchive size={20} style={{marginRight:'1vh', color:'#6b1c14'}}/>
-                                            Archive
-                                        </li>
-                                    </ul>
-*/

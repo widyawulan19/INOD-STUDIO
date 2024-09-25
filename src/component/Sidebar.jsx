@@ -8,8 +8,9 @@ import { LuUsers, LuLayers } from "react-icons/lu";
 import { getWorkspaces } from '../services/Api';
 import { AiOutlineDatabase } from "react-icons/ai"
 import logo from '../assets/LOGO1.png'
+import { useNavigate } from 'react-router-dom';
 
-const Sidebar = ({navigate})=> {
+const Sidebar = ()=> {
   const [showSidebarMenu, setShowSidebarMenu] = useState(false)
   const [showSidebar, setShowSidebar] = useState(false)
   const [showAnotherMenu, setShowAnotherMenu] = useState(false) //member
@@ -17,12 +18,12 @@ const Sidebar = ({navigate})=> {
   const [showMarketingData, setShowMarketingData ] = useState(false) //marketing
   const [showMarketingAction, setShowMarketingAction] = useState(false)//marketing archive
   const [showAction, setShowAction] = useState(false)//toggle action
-
+  const navigate = useNavigate();
 
   //navigate to member page
-  const handleNavigation = () => {
-    navigate('/member')
-  }
+  // const handleNavigation = () => {
+  //   navigate('/member')
+  // }
 
   const toggleFormVisibility = () =>{
     setShowSidebar(!showSidebar);
@@ -113,7 +114,7 @@ const Sidebar = ({navigate})=> {
               <div className='sidebar-label' onClick={toggleFormVisibility2}>
                 <div className='sidebar-item' style={{textAlign:'left', paddingLeft:'0'}}>
                     <LuUsers className='icon'/>
-                    {!showSidebarMenu && <span className='menu-title' onClick={handleNavigation}>Inod Member </span>}
+                    {!showSidebarMenu && <span className='menu-title'>Inod Member </span>}
                     {!showSidebarMenu && (
                       showAnotherMenu?
                       (<HiChevronUp className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto' }}/>

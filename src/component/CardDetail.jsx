@@ -5,7 +5,7 @@ import { IoIosSend } from "react-icons/io";
 import { HiOutlineCreditCard,HiMenuAlt2,HiOutlineUserAdd,HiOutlinePaperClip,HiOutlineArrowRight,HiOutlineDuplicate, HiOutlineArchive, HiChevronDown, HiChevronUp } from "react-icons/hi";
 import { FaUserAstronaut, FaCcDiscover } from "react-icons/fa";
 import '../style/CardDetail.css'
-import { Data_Cover } from '../data/DataCover'
+import { Data_Cover } from '../data/DataCover.js'
 
 
  
