@@ -103,22 +103,6 @@ const CardModal=()=> {
             ))}
             <button onClick={handleSave}>Save</button>
             </div>
-            {/* Add other input fields in a similar manner */}
-            {/* <label>
-              Labels:
-              {labels.map((label) => (
-                <div key={label.id}>
-                  <input
-                    type="checkbox"
-                    value={label.id}
-                    checked={selectedLabels.includes(label.id)}
-                    onChange={handleLabelChange}
-                  />
-                  <span style={{ backgroundColor: label.color }}>{label.name}</span>
-                </div>
-              ))}
-            </label> */}
-            
           </form>
         </div>
       );

@@ -49,6 +49,7 @@
     font-size: 1.5rem;
     transition: opacity 0.3s ease;
   }
+
   .menu-title{
     flex-grow: 1;
     margin-right: 60px;
@@ -56,6 +57,25 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  /* SIDEBAR LINK */
+  .menu-title a{
+    text-decoration: none;
+    color: white;
+  }
+  /*menu yang telah dikunjungi*/
+  .menu-title a:visited{
+    color: rgb(211, 208, 208);
+  }
+  .menu-title a:hover {
+    color: #97271C; /* Warna teks link saat di-hover (contoh: biru) */
+  }
+  
+  .menu-title a:active {
+    color: #97271C; /* Warna teks link saat aktif (klik) */
+    /* text-decoration: underline; */
+  }
+  /* END SIDEBAR LINK */
 
   .sidebar-item .menu-text {
     flex-grow: 1;
@@ -126,13 +146,17 @@
     margin-right: 10px;
   }
 
-  .dropdown-menu h5{
+  .sidebar-dropdown-menu{
+    /* background-color: white; */
+
+  }
+  .sidebar-dropdown-menu h5{
     font-size: 15px;
     text-align: Left;
     margin-left: 20px;
     font-weight: 50;
   }
-  .dropdown-menu h5:hover{
+  .sidebar-dropdown-menu h5:hover{
     border-bottom: 3px solid #97271C;
   }
 

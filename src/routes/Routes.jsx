@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Workspace from '../component/Workspace'
 import Board from '../component/Board'
 import List from '../component/List'
@@ -22,7 +22,7 @@ const AppRoutes=()=> {
       <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId/modal' element={<CardModal/>}/>
       <Route path='/member' element={<Member/>}/>
     </Routes>
-  )
+  ) 
 }
 
 export default AppRoutes

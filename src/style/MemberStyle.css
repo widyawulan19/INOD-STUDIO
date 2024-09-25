@@ -1,6 +1,178 @@
-.member-container{
-    display: flex;
-    margin: 0;
-    padding: 0;
+.member-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
     background-color: white;
+    height: 100%;
 }
+.member-navbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* border: 1px solid grey; */
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(63, 19, 19, 0.3);
+}
+
+.filter-form {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.filter-form label {
+    margin-right: 10px;
+}
+
+.filter-select {
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 13px;
+    color: #333;
+    outline: none;
+    transition: border 0.3s, box-shadow 0.3s;
+  }
+  
+  .filter-select:focus {
+    border-color: #4A90E2; /* Warna saat focus */
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5); /* Efek shadow saat focus */
+  }
+  
+  .filter-select:hover {
+    border-color: #bbb; /* Warna saat hover */
+  }
+  
+  .filter-select option {
+    padding: 10px;
+    background-color: #fff;
+    color: #333;
+  }
+
+.filter-form select, 
+.filter-form input, 
+.filter-form button {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.filter-form button {
+    background-color: #6b1c14; /* Warna biru */
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.filter-form button:hover {
+    background-color: #491510; /* Warna biru yang lebih gelap saat hover */
+}
+
+.tabel-data {
+    overflow-x: auto; /* Agar tabel bisa di-scroll jika lebih lebar dari container */
+    font-size: 13px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+thead {
+    background-color:#6b1c14; /* Warna latar belakang untuk header tabel */
+    color: white;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd; /* Garis batas tabel */
+}
+
+th {
+    font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Warna latar belakang untuk baris genap */
+}
+
+tbody tr:hover {
+    background-color: #d09a94; /* Warna latar belakang saat hover pada baris */
+    color: white;
+}
+
+.pagination{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+.pagination button{
+    margin: 0 50px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+.pagination button.active{
+    background-color: #6b1c14;
+    color: white;
+}
+.pagination button:hover{
+    background-color: #491510;
+    color: white;
+}
+
+.modal {
+    position: fixed;
+    width: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(96, 28, 28, 0.5);
+    border-radius: 10px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal input {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: 0.3px solid grey;
+    width: 90%;
+    box-shadow: 0 0 10px rgba(96, 28, 28, 0.2);
+  }
+  
+  .modal .btn-member{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+
+  }
+  .btn-member button{
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    background-color: #6b1c14;
+    color: white;
+    border: 1px solid #491510;
+    border-radius: 5px;
+    margin-right: 2vw;
+    width: 70px;
+    height: 25px;
+    font-weight: bold;
+  }
+  .btn-member button:hover{
+    background-color: #491510;
+    color: white;
+  }

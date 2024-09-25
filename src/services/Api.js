@@ -91,6 +91,12 @@ export const updateCover = (id,data) => axios.put (`${API_URL}/cover/${id}`, dat
 export const createCover = (data) => axios.post(`${API_URL}/cover`, data);
 export const deleteCover = (id) => axios.delete(`${API_URL}/cover/${id}`);
 
+//employees
+export const getAllDataEmployee = () => axios.get(`${API_URL}/employees`);
+export const getDataEmployeeById = (id) => axios.get(`${API_URL}/employees/${id}`);
+export const updateDataEmployee = (id, data) => axios.put(`${API_URL}/employees/${id}`, data);
+export const createDataEmployee = (data) => axios.post(`${API_URL}/employees`, data);
+export const deleteDataEmployee = (id) => axios.delete(`${API_URL}/employees/${id}`); 
 
 /* contoh conver menggunakan axios pada frontend
 

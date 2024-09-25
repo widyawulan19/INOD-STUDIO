@@ -1,145 +1,241 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { getBoard, createBoard, getListsCountByBoard, updateBoardBackground } from '../services/Api'
-import { useNavigate, useParams } from 'react-router-dom';
-import { HiChevronRight, HiChevronDown, HiChevronUp } from "react-icons/hi";
-import moment from 'moment';
-import { Data_Bg } from '../data/DataCover';
+import React, { useCallback, useEffect, useState } from 'react';
+import { getAllDataEmployee, updateDataEmployee, deleteDataEmployee } from '../services/Api';
+import { LuUsers } from "react-icons/lu";
+import '../style/MemberStyle.css';
 
-const Board = () => {
-    const { boardId, workspaceId } = useParams();
-    const [boards, setBoards] = useState([]);
-    const [newBoard, setNewBoard] = useState({ name: '', description: '' });
-    const navigate = useNavigate();
-    const [listCount, setListCount] = useState({});
-    const [backgroundImage, setBackgroundImage] = useState('');
-    const [showBg, setShowBg] = useState(false);
-    const [selectBg, setSelectBg] = useState(null);
+function Member() {
+  const [member, setMember] = useState([]);
+  const [filteredMember, setFilteredMember] = useState([]);
+  const [category, setCategory] = useState('all');
+  const [filterValue, setFilterValue] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [dataPerPage] = useState(10);
+  const [editingMember, setEditingMember] = useState(null); // untuk menyimpan data yang sedang di edit
+  const [formData, setFormData] = useState({
+    name: '',
+    username: '',
+    email: '',
+    nomor_wa: '',
+    divisi: '',
+    shift: '',
+    jabatan: ''
+  });
 
-    // Toggle visibility for background selection
-    const toggleBgVisibility = () => {
-        setShowBg(!showBg);
-    };
+  const loadMemberData = useCallback(async () => {
+    try {
+      const response = await getAllDataEmployee();
+      setMember(response.data);
+      setFilteredMember(response.data);
+    } catch (err) {
+      console.error('Failed to load data employee', err);
+    }
+  }, []);
 
-    // Handle background selection
-    const handleBgSelect = (bg) => {
-        setSelectBg(bg);
-        setShowBg(false);
-    };
+  useEffect(() => {
+    loadMemberData();
+  }, [loadMemberData]);
 
-    // Load boards
-    const loadBoards = useCallback(async () => {
-        try {
-            const response = await getBoard(workspaceId);
-            const filteredBoards = response.data.filter(board => board.workspace_id === Number(workspaceId));
-            setBoards(filteredBoards);
+  const handleEditEmployee = (member) => {
+    setEditingMember(member);
+    setFormData({ ...member });
+  };
 
-            // Fetch list counts for each board
-            const listCounts = await Promise.all(filteredBoards.map(async (board) => {
-                const listCountResponse = await getListsCountByBoard(board.id);
-                return { boardId: board.id, count: listCountResponse.data.list_count };
-            }));
+  const handleUpdateEmployee = async (id) => {
+    try {
+      await updateDataEmployee(id, formData);
+      loadMemberData(); // Reload data setelah update
+      setEditingMember(null); // Tutup modal edit
+    } catch (error) {
+      console.error('Failed to update employee', error);
+    }
+  };
 
-            // Map the list counts to the respective board
-            const countMap = {};
-            listCounts.forEach(({ boardId, count }) => {
-                countMap[boardId] = count;
-            });
-            setListCount(countMap);
-        } catch (error) {
-            console.error('Failed to load boards', error);
-        }
-    }, [workspaceId]);
+  const handleDeleteEmployee = async (id) => {
+    if (window.confirm(`Apakah Anda yakin ingin menghapus data dengan ID ${id}?`)) {
+      try {
+        await deleteDataEmployee(id);
+        loadMemberData(); // Reload data setelah delete
+      } catch (error) {
+        console.error('Failed to delete employee', error);
+      }
+    }
+  };
 
-    // Fetch board data when boardId changes
-    useEffect(() => {
-        const fetchBoardData = async () => {
-            try {
-                const response = await getBoard(boardId);
-                setBackgroundImage(response.data.backgroundImageUrl);
-            } catch (error) {
-                console.error('Error fetching board:', error);
-            }
-        };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
 
-        if (boardId) {
-            fetchBoardData();
-        }
-    }, [boardId]);
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value);
+    setFilterValue('');
+  };
 
-    const handleCreateBoard = async () => {
-        await createBoard({ ...newBoard, workspace_id: workspaceId });
-        loadBoards();
-    };
+  const handleFilterChange = (e) => {
+    setFilterValue(e.target.value);
+  };
 
-    const handleNavigateToBoardView = (boardId) => {
-        navigate(`/workspaces/${workspaceId}/boards/${boardId}`);
-    };
+  const filterMember = () => {
+    if (category === 'all') {
+      setFilteredMember(member);
+    } else {
+      const filtered = member.filter((m) => m[category]?.toLowerCase() === filterValue.toLocaleLowerCase());
+      setFilteredMember(filtered);
+    }
+  };
 
-    return (
-        <div className='board-container' style={{ backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none', backgroundSize: 'cover' }}>
-            <div className='nav-board'>
-                <div className='nav-board2'>
-                    <h3 style={{ display: 'flex', textAlign: 'left', color: 'white', marginBottom: '0', margin: '0', width: '20vw', alignItems: 'center', gap: '10px' }}>
-                        <button onClick={() => navigate('/')} className='btn-nav'>Workspace</button>
-                        <HiChevronRight style={{ fontSize: '1.5rem', flexShrink: '0' }} />
-                        <button className='btn-nav' style={{ textAlign: 'left' }}>Board</button>
-                    </h3>
+  const indexOfLastMember = currentPage * dataPerPage;
+  const indexOfFirstMember = indexOfLastMember - dataPerPage;
+  const currentMembers = filteredMember.slice(indexOfFirstMember, indexOfLastMember);
+  const totalPages = Math.ceil(filteredMember.length / dataPerPage);
 
-                    {/* Background selection button */}
-                    <button className='btn-bg' onClick={toggleBgVisibility}>
-                        {showBg ? <>Background <HiChevronUp /></> : <>Select Background <HiChevronDown /></>}
-                    </button>
-                    {selectBg && (
-                        <span style={{ color: 'white', marginLeft: '10px' }}>Selected: {selectBg.name}</span>
-                    )}
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
-                    {/* Background options dropdown */}
-                    {showBg && (
-                        <div style={{
-                            backgroundColor: 'white',
-                            border: '0.1px solid grey',
-                            borderRadius: '5px',
-                            boxShadow: '0px 4px 8px rgba(0,0,0,0.1)',
-                            padding: '5px',
-                            width: '150px',
-                            overflowY: 'auto',
-                        }}>
-                            {Data_Bg.map((bg) => (
-                                <div
-                                    className='coverBg'
-                                    key={bg.id}
-                                    onClick={() => handleBgSelect(bg)}
-                                    style={{
-                                        marginBottom: '5px',
-                                        cursor: 'pointer',
-                                        color: 'red',
-                                    }}
-                                >
-                                    <p>{bg.name}</p>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
+  return (
+    <div className="member-container">
+      <div className='filter-form'>
+        <label htmlFor="category" style={{ fontSize: 'bold' }}>Filter by:</label>
+        <select id="category" value={category} onChange={handleCategoryChange}>
+          <option value="all">All</option>
+          <option value="divisi">Divisi</option>
+          <option value="shift">Shift</option>
+          <option value="jabatan">Jabatan</option>
+        </select>
+      </div>
 
-                <h5 style={{ textAlign: 'left', color: 'white', paddingLeft: '10px', margin: '0' }}>Your boards:</h5>
-            </div>
+      <div className='tabel-data'>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Nomor Telpn</th>
+              <th>Divisi</th>
+              <th>Shift</th>
+              <th>Jabatan</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentMembers.map((m, index) => (
+              <tr key={index}>
+                <td>{m.name}</td>
+                <td>{m.username}</td>
+                <td>{m.email}</td>
+                <td>{m.nomor_wa}</td>
+                <td>{m.divisi}</td>
+                <td>{m.shift}</td>
+                <td>{m.jabatan}</td>
+                <td>
+                  <button onClick={() => handleEditEmployee(m)}>Edit</button> |
+                  <button onClick={() => handleDeleteEmployee(m.id)}>Hapus</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-            {/* Board list */}
-            <div className='board-list-container'>
-                <div className='board-list'>
-                    {boards.map((board) => (
-                        <div key={board.id} className='board-card' onClick={() => handleNavigateToBoardView(board.id)}>
-                            <h4>{board.name}</h4>
-                            <p>{board.description}</p>
-                            <p>{listCount[board.id] || 0} lists</p>
-                            <p>{moment(board.create_at).format('D MMMM YYYY')}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
+        <div className="pagination">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              className={currentPage === index + 1 ? 'active' : ''}
+            >
+              {index + 1}
+            </button>
+          ))}
         </div>
-    );
-};
+      </div>
 
-export default Board;
+      {editingMember && (
+        <div className="modal">
+          <h2>Edit Employee</h2>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            placeholder="Name"
+          />
+          <input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleInputChange}
+            placeholder="Username"
+          />
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            placeholder="Email"
+          />
+          <input
+            type="text"
+            name="nomor_wa"
+            value={formData.nomor_wa}
+            onChange={handleInputChange}
+            placeholder="Nomor WA"
+          />
+          <input
+            type="text"
+            name="divisi"
+            value={formData.divisi}
+            onChange={handleInputChange}
+            placeholder="Divisi"
+          />
+          <input
+            type="text"
+            name="shift"
+            value={formData.shift}
+            onChange={handleInputChange}
+            placeholder="Shift"
+          />
+          <input
+            type="text"
+            name="jabatan"
+            value={formData.jabatan}
+            onChange={handleInputChange}
+            placeholder="Jabatan"
+          />
+          <button onClick={() => handleUpdateEmployee(editingMember.id)}>Update</button>
+          <button onClick={() => setEditingMember(null)}>Cancel</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default Member;
+
+/*
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.modal input {
+  display: block;
+  margin: 10px 0;
+  padding: 10px;
+  width: 100%;
+}
+
+.modal button {
+  margin: 5px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+*/
