@@ -98,6 +98,9 @@ export const updateDataEmployee = (id, data) => axios.put(`${API_URL}/employees/
 export const createDataEmployee = (data) => axios.post(`${API_URL}/employees`, data);
 export const deleteDataEmployee = (id) => axios.delete(`${API_URL}/employees/${id}`); 
 
+//work schedule
+export const getEmployeeScheduleById = (id) => axios.get(`${API_URL}/employees/${id}/schedule`);
+
 /* contoh conver menggunakan axios pada frontend
 
 import axios from 'axios';

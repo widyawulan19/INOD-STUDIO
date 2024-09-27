@@ -1,0 +1,70 @@
+/* Schedule.css */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 12px;
+    text-align: left;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #6b1c14;
+    text-align: center;
+}
+
+th {
+    background-color: #6b1c14;
+    color: white;
+    border: 1px solid black;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #ecdfdf;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+p {
+    text-align: center;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+p.available{
+    /* border: 2px solid #6b1c14; */
+    background-color: rgb(244, 201, 201);
+    color: #6b1c14;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+p.notAvailable{
+    background-color: rgb(201, 230, 201);
+    color: rgb(7, 62, 7);
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    
+}
+
+.member-navbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* border: 1px solid grey; */
+    /* border-radius: 10px; */
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(63, 19, 19, 0.3);
+    background-color: white;
+    margin-bottom: 5px;
+}
+
+

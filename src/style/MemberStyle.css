@@ -70,6 +70,40 @@
     background-color: #491510; /* Warna biru yang lebih gelap saat hover */
 }
 
+/*button new member*/
+.create-new-member{
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+.create-new-member button{
+    width: 10vw;
+    height: 30px;
+    margin-top: 1vh;
+    border: 1px solid #491510;
+    border-radius: 5px;
+    background-color: #6b1c14;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+}
+.create-new-member button:hover{
+    background-color: #491510;
+}
+
+.add-member a{
+    text-decoration: none;
+    color: white;
+}
+/* .add-member a:visited{
+    color: rgb(211, 208, 208);
+} */
+
+
+/*style tabel*/
 .tabel-data {
     overflow-x: auto; /* Agar tabel bisa di-scroll jika lebih lebar dari container */
     font-size: 13px;
@@ -126,6 +160,42 @@ tbody tr:hover {
     background-color: #491510;
     color: white;
 }
+
+/* Gaya untuk tombol Edit dan Hapus */
+.edit-btn, .hapus-btn {
+    height: 30px;
+    padding: 5px 8px;
+    font-size: 10px;
+    margin-right: 0.2vw;
+    margin-left: 0.2vw;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
+  }
+  
+  .edit-btn {
+    background-color:  rgb(187, 152, 187); /* Biru untuk Edit */
+    color: rgb(109, 54, 109);
+    border: 1px solid  rgb(109, 54, 109);
+  }
+  
+  .hapus-btn {
+    background-color: #f1d2cf;
+    border: 1px solid #491510;
+    color: #d3291a;
+  }
+  
+  .edit-btn:hover {
+    background-color: rgb(78, 40, 78);
+    color: white;
+  }
+  
+  .hapus-btn:hover {
+    background-color: #491510;
+    color: white;
+  }
 
 .modal {
     position: fixed;

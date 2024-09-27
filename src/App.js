@@ -17,6 +17,7 @@ import Archive from './pages/Archive'
 import Setting from './pages/Setting'
 import Faq from './pages/Faq'
 import ArchiveMarketing from './pages/ArchiveMarketing'
+import Schedule from './pages/Schedule';
 
 function App(){
   return(
@@ -38,6 +39,7 @@ function App(){
             <Route path='/archive-marketing' element={<ArchiveMarketing/>}/>
             <Route path='/setting' element={<Setting/>}/>
             <Route path='/faq' element={<Faq/>}/>
+            <Route path='/schedule' element={<Schedule/>}/>
           </Routes>
         </div>
       </div>

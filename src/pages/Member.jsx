@@ -1,7 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { FaFilter } from "react-icons/fa";
-import { getAllDataEmployee, updateDataEmployee, deleteDataEmployee} from '../services/Api';
+import { getAllDataEmployee, updateDataEmployee, deleteDataEmployee, createDataEmployee} from '../services/Api';
 import '../style/MemberStyle.css'
+import { HiOutlineX, HiPlus } from 'react-icons/hi';
+import { GrSchedules } from "react-icons/gr";
+import { Link } from 'react-router-dom';
 
 function Member() {
   const [member, setMember] = useState([]);
@@ -22,6 +25,36 @@ function Member() {
     shift:'',
     jabatan:''
   });
+  //create member
+  const [showForm, setShowForm] = useState(false)
+  const [newMember, setNewMember] = useState({
+    name:'',
+    username:'',
+    email:'',
+    nomor_wa:'',
+    divisi:'',
+    shift:'',
+    jabatan:''
+  })
+
+  //show form for create new member
+  const toggleFormCreateMemberVisibility = () => {
+    setShowForm(!showForm)
+  }
+
+  const handleAddNewMember = async () =>{
+    if(!newMember.name || !newMember.username || !newMember.email){
+      alert('Please fill out all required fields');
+      return;
+    }
+    try{
+      await createDataEmployee(newMember);
+      loadMemberData();
+      setShowForm(false);
+    }catch(error){
+      console.error('Failed to add new member', error)
+    }
+  }
 
   const loadMemberData = useCallback(async ()=> {
     try{
@@ -163,6 +196,75 @@ function Member() {
           ><FaFilter style={{marginRight:'0.5vw'}}/>Filter</button>
         </div>
       </div>
+
+      <div className='create-new-member'>
+        <div style={{marginRight:'0.5vw'}}>
+          <button className='add-member'><GrSchedules style={{marginRight:'10px'}}/><Link to='/schedule'>View Jadwal</Link></button>
+        </div>
+        <div>
+          <button className='add-member' onClick={toggleFormCreateMemberVisibility}>
+              {showForm ? 
+              (<><HiOutlineX style={{marginRight:'0.5vw'}}/> Cancle</>):(<><HiPlus style={{marginRight:'0.5vw'}}/> Add member</>)
+            }
+          </button>
+          {showForm && (
+            <div className='modal'>
+              <h2>Add New Member</h2>
+              <input 
+                type="text"
+                name='name'
+                value={newMember.name}
+                onChange={(e)=>setNewMember({...newMember, name:e.target.value})}
+                placeholder='name'
+              />
+              <input 
+                type="text"
+                name='username'
+                value={newMember.username}
+                onChange={(e)=>setNewMember({...newMember, username:e.target.value})}
+                placeholder='Username'
+              />
+              <input 
+                type="text"
+                name='Email'
+                value={newMember.email}
+                onChange={(e)=>setNewMember({...newMember, email:e.target.value})}
+                placeholder='email'
+              />
+              <input 
+                type="text"
+                name='Nomor'
+                value={newMember.nomor_wa}
+                onChange={(e)=>setNewMember({...newMember, nomor_wa:e.target.value})}
+                placeholder='nomor'
+              />
+              <input 
+                type="text"
+                name='Divisi'
+                value={newMember.divisi}
+                onChange={(e)=>setNewMember({...newMember, divisi:e.target.value})}
+                placeholder='Divisi'
+              />
+              <input 
+                type="text"
+                name='Shift'
+                value={newMember.shift}
+                onChange={(e)=>setNewMember({...newMember, shift:e.target.value})}
+                placeholder='Shift'
+              />
+              <input 
+                type="text"
+                name='Jabatan'
+                value={newMember.jabatan}
+                onChange={(e)=>setNewMember({...newMember, jabatan:e.target.value})}
+                placeholder='Jabatan'
+              />
+              <button onClick={handleAddNewMember}>Add Member</button>
+            </div>
+          )}
+        </div>
+      </div>
+
       
       {/* TABEL FORM  */}
       <div className='tabel-data'>
@@ -190,8 +292,8 @@ function Member() {
                   <td>{m.shift}</td>
                   <td>{m.jabatan}</td>
                   <td>
-                    <button onClick={() => handleEditEmployee(m)}>Edit</button> |
-                    <button onClick={() => handleDeleteEmployee(m.id)}>Hapus</button>
+                    <button className='edit-btn' onClick={() => handleEditEmployee(m)}>Edit</button> |
+                    <button className='hapus-btn' onClick={() => handleDeleteEmployee(m.id)}>Hapus</button>
                   </td>
               </tr>
             ))}
