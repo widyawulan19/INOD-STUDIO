@@ -165,7 +165,7 @@ function Member() {
         <div className='filter-form'>
           <label htmlFor="category" className='filter-label'>Filter by:</label>
           <select 
-            id="category" 
+            id="category"  
             value={category} 
             onChange={handleCategoryChange} 
             className='filter-select'

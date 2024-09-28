@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { getAllDataEmployee } from '../services/Api'
 import '../style/ScheduleStyle.css'
 import { FaFilter } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 function Schedule() {
     const [member, setMember] = useState([]);
@@ -19,6 +20,7 @@ function Schedule() {
             const response = await getAllDataEmployee();
             console.log('Receive data employe from database:', response.data)
             setMember(response.data)
+            setFilteredMember(response.data)
         }catch(error){
             console.error('Failed to load data employee:', error);
         }
@@ -91,7 +93,6 @@ function Schedule() {
             <option value="all">All</option>
             <option value="divisi">Divisi</option>
             <option value="shift">Shift</option>
-            <option value="jabatan">Jabatan</option>
           </select>
 
           {/* Input untuk memasukkan nilai filter */}
@@ -115,27 +116,35 @@ function Schedule() {
         </div>
       </div>
         <div className='schedule-container' style={{backgroundColor:'white', padding:'20px'}}>
-                <h1>Production Schedule</h1>
-                {member.length > 0 ? (
+            <div className='btn-member'>
+                <button><Link to='/member'>View All Member</Link></button>
+            </div>
+            <div className='schedule-table'>
+                {filteredMember.length > 0 ? (
                     <table>
                         <thead>
                             <tr>
                                 <th>Name</th>
                                 <th>Divisi</th>
+                                <th>Shift</th>
                                 {daysOfWeek.map((day) => (
                                     <th key={day}>{day}</th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
-                            {member.map((user) => (
+                            {filteredMember.map((user) => (
                                 <tr key={user.id}>
                                     <td style={{textAlign:'left'}}>{user.name}</td>
                                     <td>{user.divisi}</td>
+                                    <td>{user.shift}</td>
                                     {daysOfWeek.map((day, index) => {
                                         const isWorkDay = user.work_days.includes(day);
                                         return (
-                                            <td key={day}>
+                                            <td 
+                                                key={day}
+                                                className='attent-status'
+                                            >
                                                 {isWorkDay ? <><p className='available'>Available</p></> : <><p className='notAvailable'>Not Available</p></>}
                                             </td>
                                         );
@@ -149,27 +158,8 @@ function Schedule() {
                 )}
             </div>
         </div>
+    </div>
   )
 }
 
 export default Schedule
-
-/*
-
- <div>
-            <h1>Schedule</h1>
-            {member.length > 0 ? (
-                <ul>
-                    {member.map((user) => (
-                        <li key={user.id}>
-                            <h2>User ID: {user.id}</h2>
-                            <p>Work Days: {user.work_days.join(', ')}</p>
-                            <p>Off Days: {user.off_days.join(', ')}</p>
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No employee data available.</p>
-            )}
-        </div>
-*/
