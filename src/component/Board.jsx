@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { getBoard, createBoard,getListsCountByBoard, updateBoardBackground } from '../services/Api'
+import { getBoard, createBoard,getListsCountByBoard, updateBoardBackground, duplicateBoard } from '../services/Api'
 import { useNavigate, useParams } from 'react-router-dom';
 import { HiArchive,HiPlus,HiOutlineX,HiDotsHorizontal, HiOutlineServer, HiOutlineCalendar,HiChevronRight, HiChevronDown, HiChevronUp  } from "react-icons/hi";
 import '../style/BoardStyle.css'
@@ -7,6 +7,7 @@ import moment from 'moment'
 import { LuUsers } from "react-icons/lu";
 import { AiFillDelete } from "react-icons/ai";
 import { Data_Bg } from '../data/DataBg';
+import DuplicateBoardPopup from './DuplicateBoardPopup';
 
 const Board = () => {
     const {boardId, workspaceId} = useParams();
@@ -21,6 +22,8 @@ const Board = () => {
     const [boardData, setBoardData] = useState(null);
     const [showBg, setShowBg] = useState(false);
     const [selectBg, setSelectBg] = useState(null);
+    //board Popup
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     const toggleFormVisibility = () => {
         setShowForm(!showForm)
@@ -42,37 +45,52 @@ const Board = () => {
       console.log('button berhasil di klik')
     }
 
-    const handleAction = (boardId, action)=>{
-      console.log(`Action: ${action} for workspace: ${boardId}`);
-      setShowAction(null); //hide dropdown after action
-    }
+  const handleAction = async (event,boardId, action) => {
+    console.log(`Action: ${action} for board: ${boardId}`);
+    event.stopPropagation();
 
-
-    const loadBoards = useCallback(async () => {
-        try {
-            const response = await getBoard(workspaceId);
-            console.log('Received data:', response.data);
-
-            const filteredBoards = response.data.filter(board => board.workspace_id === Number(workspaceId));
-            setBoards(filteredBoards);
-
-            //fetch for lists count
-            const listCounts = await Promise.all(filteredBoards.map(async(board)=>{
-                const listCountResponse = await getListsCountByBoard(board.id);
-                return {boardId: board.id, count: listCountResponse.data.list_count};
-            }))
-
-            //set list counts
-            const countMap = {};
-            listCounts.forEach(({boardId,count})=>{
-                countMap[boardId] = count;
-            })
-            setListCount(countMap);
-
-        } catch (error) {
-            console.error('Failed to load Boards', error);
+    if (action === 'duplicate') {
+        if (!boardId) {
+            console.error('Board ID is undefined!');
+            return; // Hentikan eksekusi jika boardId tidak ada
         }
-    }, [workspaceId]);
+
+        try {
+            console.log('Attempting to duplicate board with ID:', boardId);
+            const duplicateBoardResponse = await duplicateBoard(boardId);
+            console.log('Board duplicated successfully:', duplicateBoardResponse);
+            loadBoards();
+        } catch (error) {
+            console.error('Failed to duplicate board:', error);
+        }
+    }
+    setShowAction(null);
+};
+
+
+
+        // Load boards based on workspace ID
+        const loadBoards = useCallback(async () => {
+          try {
+              const response = await getBoard(workspaceId);
+              const filteredBoards = response.data.filter(board => board.workspace_id === Number(workspaceId));
+              setBoards(filteredBoards);
+  
+              // Fetch list counts
+              const listCounts = await Promise.all(filteredBoards.map(async (board) => {
+                  const listCountResponse = await getListsCountByBoard(board.id);
+                  return { boardId: board.id, count: listCountResponse.data.list_count };
+              }));
+  
+              const countMap = {};
+              listCounts.forEach(({ boardId, count }) => {
+                  countMap[boardId] = count;
+              });
+              setListCount(countMap);
+          } catch (error) {
+              console.error('Failed to load boards', error);
+          }
+      }, [workspaceId]);
 
     //Hook, useEffect hook yang digunakan untuk menampilkan data boards berdasarkan workspaceID yang dipanggila
     useEffect(()=>{
@@ -110,12 +128,30 @@ const Board = () => {
         }
       }
 
-
-    const handleCreateBoard = async () => {
+      const handleCreateBoard = async () => {
         await createBoard({ ...newBoard, workspace_id: workspaceId});
         loadBoards();
         setShowForm(false);
-    };
+      };
+
+    const handleDuplicateBoard = async (boardIdToDuplicate)=>{
+      const boardToDuplicate = boards.find(board => board.id === boardIdToDuplicate);
+      if(boardIdToDuplicate){
+        const duplicateBoardData = {
+          name : `${boardIdToDuplicate.name}{Copy}`,
+          description: boardIdToDuplicate.description,
+          workspace_id: workspaceId,
+          backgroundImageUrl: boardIdToDuplicate.backgroundImageUrl
+        }
+        try{
+          await createBoard(duplicateBoardData);
+          loadBoards();
+          console.log('Board duplicated successfully');
+        }catch(error){
+          console.error('Error duplicate board:', error);
+        }
+      }
+    }
 
     const handleNavigateToBoardView = (boardId) =>{
         navigate(`/workspaces/${workspaceId}/boards/${boardId}`)
@@ -205,6 +241,17 @@ const Board = () => {
                                     <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive your workspace</span>
                                 </div>
                             </li>
+                            <li onClick={(event) => handleAction(event,board.id, 'duplicate')} className='dropdown-li'>
+                              <HiPlus className='ikon' size={15}/>
+                              <div>
+                                Duplicate <br/>
+                                <span style={{fontSize:'10px', fontWeight:'normal'}}>Duplicate your boards</span>
+                                <DuplicateBoardPopup
+                                  isOpen={isPopupOpen}
+                                  onClose={()=> setIsPopupOpen(false)}
+                                />
+                              </div>
+                            </li>
                         </ul>
                       </div>
                     )}
@@ -260,16 +307,3 @@ const Board = () => {
 }
 
 export default Board
-
-/*
-  //   useEffect(() => {
-  //     console.log('Fetching boards for workspaceId:', workspaceId);
-  //     loadBoards();
-  // }, [workspaceId, loadBoards, boardId]);
-
-
-      // const handleBackgroundChange = (newBackgroundId) => {
-    //   console.log('Background change to image ID', newBackgroundId)
-    //   setBackgroundImage(newBackgroundId);
-    // }
-*/

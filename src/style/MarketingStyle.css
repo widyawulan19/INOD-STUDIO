@@ -1,0 +1,121 @@
+.container-marketing{
+    background-color: white;
+    padding: 10px;
+}
+.tabel-data-marketing {
+    overflow-y: auto;
+    overflow-x: auto;
+}
+table{
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+   .tabel-data-marketing th, .tabel-data-marketing td {
+    border: 1px solid #6b1c14;
+     padding: 8px;
+     text-align: left;
+     overflow: hidden; /* Prevent text overflow */
+    text-overflow: ellipsis; /* Show ellipsis if text is too long */
+    white-space: nowrap; /* Prevent text wrapping */
+    }
+      
+   .tabel-data-marketing th {
+    background-color: #6b1c14;
+     font-weight: bold;
+     border: 1px solid #e8d6d6;
+    }
+    .tabel-data-marketing td{
+        height: 10px;
+    }
+
+  tbody tr:nth-child(even) {
+    background-color: #e8d6d6;
+    }
+
+/*CUSTOM WIDTH*/
+  
+.tabel-data-marketing th:nth-child(1) {
+    width: 150px; /* Nomer Active Order */
+  }
+  
+  .tabel-data-marketing th:nth-child(2) {
+    width: 120px; /* Input By */
+  }
+  
+  .tabel-data-marketing th:nth-child(3) {
+    width: 150px; /* Buyer Name */
+  }
+  
+  .tabel-data-marketing th:nth-child(4) {
+    width: 120px; /* Code Order */
+  }
+  
+  .tabel-data-marketing th:nth-child(5) {
+    width: 100px; /* Jumlah Track */
+  }
+  
+  .tabel-data-marketing th:nth-child(6) {
+    width: 130px; /* Order Number */
+  }
+  
+  .tabel-data-marketing th:nth-child(7) {
+    width: 120px; /* Account */
+  }
+  
+  .tabel-data-marketing th:nth-child(8) {
+    width: 150px; /* Deadline */
+  }
+  
+  .tabel-data-marketing th:nth-child(9) {
+    width: 110px; /* Jumlah Revisi */
+  }
+  
+  .tabel-data-marketing th:nth-child(10) {
+    width: 100px; /* Order Type */
+  }
+  
+  .tabel-data-marketing th:nth-child(11) {
+    width: 120px; /* Offer Type */
+  }
+  
+  .tabel-data-marketing th:nth-child(12) {
+    width: 120px; /* Jenis Track */
+  }
+  
+  .tabel-data-marketing th:nth-child(13) {
+    width: 100px; /* Genre */
+  }
+  
+  .tabel-data-marketing th:nth-child(14) {
+    width: 100px; /* Price */
+  }
+  
+  .tabel-data-marketing th:nth-child(15) {
+    width: 120px; /* Required File */
+  }
+  
+  .tabel-data-marketing th:nth-child(16) {
+    width: 150px; /* Project Type */
+  }
+  
+  .tabel-data-marketing th:nth-child(17) {
+    width: 100px; /* Duration */
+  }
+  
+  .tabel-data-marketing th:nth-child(18) {
+    width: 150px; /* Reference */
+  }
+  
+  .tabel-data-marketing th:nth-child(19) {
+    width: 150px; /* File and Chat */
+  }
+  
+  .tabel-data-marketing th:nth-child(20) {
+    width: 180px; /* Detail Project */
+  }
+  
+  .tabel-data-marketing th:nth-child(21) {
+    width: 50px; /* Progress */
+  }
+  

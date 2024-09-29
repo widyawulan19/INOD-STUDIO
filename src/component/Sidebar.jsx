@@ -93,14 +93,17 @@ const Sidebar = ()=> {
           <div className='sidebar-collapse'>
               <div className="sidebar-label" onClick={toggleFormVisibility}>
                 <div style={{textAlign:'left', paddingLeft:'0'}} className='sidebar-item'>
-                  <HiDesktopComputer className='icon'/>
-                  {!showSidebarMenu && <span className='menu-title'><Link to='/'>Workspace</Link></span>}
-                  {!showSidebarMenu && ( 
-                    showSidebar? 
-                    (<HiChevronUp className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto'}}/>
-                    ):(
-                    <HiChevronDown className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto'}}/>)
-                    )}
+                  <Link to='/' style={{textDecoration:'none'}}>
+                    <HiDesktopComputer className='icon'/>
+                    {!showSidebarMenu && <span className='menu-title'>Workspace</span>}
+                  </Link>
+                    {!showSidebarMenu && ( 
+                      showSidebar? 
+                      (<HiChevronUp className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto'}}/>
+                      ):(
+                      <HiChevronDown className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible',marginLeft:'auto'}}/>)
+                      )}
+                    {/* </Link> */}
                 </div>
               </div>
               {showSidebar && (
@@ -118,19 +121,23 @@ const Sidebar = ()=> {
 
               <div className='sidebar-label' onClick={toggleFormVisibility2}>
                 <div className='sidebar-item' style={{textAlign:'left', paddingLeft:'0'}}>
+                  <Link to='/member' style={{textDecoration:'none'}}>
                     <LuUsers className='icon'/>
                     {!showSidebarMenu && 
-                      <span className='menu-title'>
-                        <Link to='/member'>Inod Member</Link>  
+                      <span className='menu-title'style={{textDecoration:'none'}}>
+                        Inod Member  
                       </span>
                     }
+                    </Link>
                 </div>
               </div>
 
               <div className='sidebar-label' onClick={toggleVisibilityAction}>
                 <div className='sidebar-item' style={{textAlign:'left', paddingLeft:'0'}}>
                   <LuLayers className='icon'/>
+                  <Link to='' style={{textDecoration:'none'}}>
                   {!showSidebarMenu && <span className='menu-title'>Action</span>}
+                  </Link>
                   {!showSidebarMenu && (
                       showArchiveMenu?
                       (<HiChevronUp className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto' }}/>
@@ -157,11 +164,13 @@ const Sidebar = ()=> {
             </h5>
               <div className='sidebar-label' onClick={toggleMarketingData}>
                 <div className='sidebar-item' style={{textAlign:'left', padding:'0'}}>
+                  <Link to='/marketing' style={{textDecoration:'none'}}>
                   <AiOutlineDatabase className='icon'/>
                   {!showSidebarMenu && 
                     <span className='menu-title'>
-                      <Link to='/marketing'>Data Marketing</Link>
+                      Data Marketing
                     </span>}
+                    </Link>
                   {!showSidebarMenu && (
                       showMarketingData?
                       (<HiChevronUp className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto' }}/>

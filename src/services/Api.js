@@ -41,6 +41,17 @@ export const getBoardCountByWorkspace = (workspaceId) => {
         }
     })
 }
+export const getBoardByWorkspace = (workspaceId) => axios.get(`${API_URL}/boards`, workspaceId)
+export const duplicateBoard = async (boardId) => {
+    try{
+        const response = await axios.post(`${API_URL}/boards/${boardId}/duplicate`, boardId);
+
+        return response.data;
+    }catch(error){
+        console.error('Failed to duplicate board:', error)
+        throw error;
+    }
+}
 
 // List APIs
 export const getLists = (boardId) => axios.get(`${API_URL}/lists?board_id=${boardId}`);
@@ -90,6 +101,13 @@ export const getCoverById = (id) => axios.get(`${API_URL}/cover/${id}`);
 export const updateCover = (id,data) => axios.put (`${API_URL}/cover/${id}`, data);
 export const createCover = (data) => axios.post(`${API_URL}/cover`, data);
 export const deleteCover = (id) => axios.delete(`${API_URL}/cover/${id}`);
+
+//marketing
+export const getAllMarketingData = () => axios.get(`${API_URL}/marketing_data`);
+export const updateMarketingData = (id, data) => axios.put(`${API_URL}/marketing_data/${id}`, data);
+export const createMarketingData = (data) => axios.post(`${API_URL}/marketing_data`, data);
+export const deleteMarektingData = (id) => axios.delete(`${API_URL}/marketing_data/${id}`);
+export const getDataMarketingById = (id) => axios.get(`${API_URL}/marketing_data/${id}`);
 
 //employees
 export const getAllDataEmployee = () => axios.get(`${API_URL}/employees`);

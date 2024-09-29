@@ -48,6 +48,8 @@
     margin-right: 10px;
     font-size: 1.5rem;
     transition: opacity 0.3s ease;
+    text-decoration: none;
+    color: white;
   }
 
   .menu-title{
@@ -56,6 +58,8 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-decoration: none;
+    color: white;
   }
 
   /* SIDEBAR LINK */
@@ -90,6 +94,7 @@
   .sidebar-item .icon-chevron {
     margin-left: auto;
     transition: transform 0.3s ease;
+    color: white;
   }
   
 
@@ -108,6 +113,8 @@
   
   .sidebar.collapsed .sidebar-item .icon {
     margin-right: 0;
+    text-decoration: none;
+    color: white;
   }
   
   .sidebar-item:hover {
@@ -162,6 +169,7 @@
 
   .sidebar.collapsed .sidebar-item {
     justify-content: center;
+    text-decoration: none;
   }
   
   .sidebar.collapsed .sidebar-item-group,

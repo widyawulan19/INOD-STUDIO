@@ -104,30 +104,64 @@
 
 
 /*style tabel*/
-.tabel-data {
-    overflow-x: auto; /* Agar tabel bisa di-scroll jika lebih lebar dari container */
-    font-size: 13px;
+.tabel-data{
+  overflow-y: auto;
+  overflow-x: auto;
+}
+.tabel-data table{
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+
+.tabel-data th, .tabel-data td{
+  border: 1px solid #491510;
+  padding: 8px;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-thead {
-    background-color:#6b1c14; /* Warna latar belakang untuk header tabel */
-    color: white;
+
+/* Customize width for each column */
+.tabel-data th:nth-child(1), .tabel-data td:nth-child(1) {
+  width: 150px; /* Name */
 }
 
-th, td {
-    padding: 12px;
-    text-align: left;
-    border: 1px solid #ddd; /* Garis batas tabel */
+.tabel-data th:nth-child(2), .tabel-data td:nth-child(2) {
+  width: 120px; /* Username */
 }
 
-th {
-    font-weight: bold;
+.tabel-data th:nth-child(3), .tabel-data td:nth-child(3) {
+  width: 200px; /* Email */
+}
+
+.tabel-data th:nth-child(4), .tabel-data td:nth-child(4) {
+  width: 120px; /* Nomor Telpn */
+}
+
+.tabel-data th:nth-child(5), .tabel-data td:nth-child(5) {
+  width: 100px; /* Divisi */
+}
+
+.tabel-data th:nth-child(6), .tabel-data td:nth-child(6) {
+  width: 80px; /* Shift */
+}
+
+.tabel-data th:nth-child(7), .tabel-data td:nth-child(7) {
+  width: 100px; /* Jabatan */
+}
+
+.tabel-data th:nth-child(8), .tabel-data td:nth-child(8) {
+  width: 110px; /* Action */
+}
+
+.tabel-data th {
+  background-color: #6b1c14;
+  font-weight: bold;
+  text-align: center;
 }
 
 tbody tr:nth-child(even) {
@@ -163,13 +197,13 @@ tbody tr:hover {
 
 /* Gaya untuk tombol Edit dan Hapus */
 .edit-btn, .hapus-btn {
-    height: 30px;
+    height: 25px;
     padding: 5px 8px;
     font-size: 10px;
     margin-right: 0.2vw;
     margin-left: 0.2vw;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     
