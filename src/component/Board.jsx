@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { getBoard, createBoard,getListsCountByBoard, updateBoardBackground, duplicateBoard } from '../services/Api'
+import { getBoard, createBoard,getListsCountByBoard, updateBoardBackground, duplicateBoard, getBoardByWorkspace, deleteBoard, archiveBoard} from '../services/Api'
 import { useNavigate, useParams } from 'react-router-dom';
 import { HiArchive,HiPlus,HiOutlineX,HiDotsHorizontal, HiOutlineServer, HiOutlineCalendar,HiChevronRight, HiChevronDown, HiChevronUp  } from "react-icons/hi";
 import '../style/BoardStyle.css'
@@ -8,9 +8,11 @@ import { LuUsers } from "react-icons/lu";
 import { AiFillDelete } from "react-icons/ai";
 import { Data_Bg } from '../data/DataBg';
 import DuplicateBoardPopup from './DuplicateBoardPopup';
+import { AlertTitle } from '@mui/material';
 
 const Board = () => {
     const {boardId, workspaceId} = useParams();
+    const [workspaces, setWorkspaces] = useState([]);
     const [boards, setBoards] = useState([]);
     const [newBoard, setNewBoard] = useState({name:'', description:''});
     const navigate = useNavigate();
@@ -24,6 +26,84 @@ const Board = () => {
     const [selectBg, setSelectBg] = useState(null);
     //board Popup
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [selectedBoard, setSelectedBoard] = useState(null);
+    //delete board
+    const [boardToDelete, setBoardToDelete] = useState(null);
+    const [isPopupVisible, setIsPopupVisible] = useState(false)
+    const [alert, setAlert] = useState({show:false, message:'', severity:''})
+
+  // DELETE 
+  const handleDeleteClick = (boardId)=>{
+    setBoardToDelete(boardId);
+    setIsPopupVisible(true);
+  }
+
+  const handleConfirmDelete = async()=>{
+    if(boardToDelete){
+      const deleteResponse = await handleDelete(boardToDelete);
+      setIsPopupVisible(false);
+      setBoardToDelete(null)
+      if(deleteResponse){
+        setAlert({show:true, message:'Successfully delete your board', severity:'success'})
+        setTimeout(()=>{
+          setAlert({...alert,show:false})
+        },5000)
+      }else{
+        setAlert({show:true, message:'Failed to delete board', severity:'error'})
+        setTimeout(()=>{
+          setAlert({...alert, show:false})
+        },5000)
+      }
+    }
+  }
+  const handleCancleDelete = ()=>{
+    setIsPopupVisible(false);
+    setBoardToDelete(null);
+  }
+
+  const handleDelete = async(id) =>{
+    try{
+      await deleteBoard(id);
+      loadBoards();
+      return true;
+    }catch(error){
+      console.error('Error deleting workspace:', error);
+      return false;
+    }
+  }
+
+  // END DELETE 
+
+  //ARCHIVE
+  const [isArchivePopupVisible, setIsArchivePopupVisible] = useState(false);
+  const [alert2, setAlert2] = useState({show:false, message:'', severity:''})
+  const handleConfirmArchive = async(id)=>{
+    setIsArchivePopupVisible(false);
+    try{
+      await archiveBoard(id);
+      setAlert2({show:true, message:'Boards has been successfully archived', severity:'success'})
+      setTimeout(()=>{
+        setAlert2(prevState => ({ ...prevState, show:false}))
+      }, 5000)
+      loadBoards();
+    }catch(error){
+      setAlert2({show:false, message:'Failed to archive board. Please try again later'})
+      setTimeout(()=>{
+        setAlert2(prevState => ({ ...prevState, show:false}))
+      }, 5000)
+    }
+  };
+  useEffect(()=>{
+    loadBoards();
+  },[])
+
+  const handleArchive = () => {
+    setIsArchivePopupVisible(true);
+  }
+  const handleCancleArchive = () => {
+    setIsArchivePopupVisible(false)
+  }
+  //END ARCHIVE
 
     const toggleFormVisibility = () => {
         setShowForm(!showForm)
@@ -45,27 +125,66 @@ const Board = () => {
       console.log('button berhasil di klik')
     }
 
-  const handleAction = async (event,boardId, action) => {
-    console.log(`Action: ${action} for board: ${boardId}`);
-    event.stopPropagation();
+    //fetch workspace
+    // const fetchBoards = async (workspaceId) => {
+    //   const response = await getBoardByWorkspace(workspaceId);
+    //   setBoards(response.data)
+    // }
 
-    if (action === 'duplicate') {
-        if (!boardId) {
-            console.error('Board ID is undefined!');
-            return; // Hentikan eksekusi jika boardId tidak ada
-        }
-
-        try {
-            console.log('Attempting to duplicate board with ID:', boardId);
-            const duplicateBoardResponse = await duplicateBoard(boardId);
-            console.log('Board duplicated successfully:', duplicateBoardResponse);
-            loadBoards();
-        } catch (error) {
-            console.error('Failed to duplicate board:', error);
-        }
+    const fetchBoards = async (workspaceId) => {
+      try{
+        const response = await getBoardByWorkspace(workspaceId);
+        setBoards(response.data);
+      }catch(error){
+        console.error('Error fetching boards:', error)
+        alert('Gagal memuat boards')
+      }
     }
-    setShowAction(null);
-};
+
+    useEffect(()=> {
+      fetchBoards(workspaceId);
+    }, [workspaceId]);
+
+//   const handleAction = async (event,boardId, action) => {
+//     console.log(`Action: ${action} for board: ${boardId}`);
+//     event.stopPropagation();
+
+//     if (action === 'duplicate') {
+//         if (!boardId) {
+//             console.error('Board ID is undefined!');
+//             return; // Hentikan eksekusi jika boardId tidak ada
+//         }
+
+//         try {
+//             console.log('Attempting to duplicate board with ID:', boardId);
+//             const duplicateBoardResponse = await duplicateBoard(boardId);
+//             console.log('Board duplicated successfully:', duplicateBoardResponse);
+//             loadBoards();
+//         } catch (error) {
+//             console.error('Failed to duplicate board:', error);
+//         }
+//     }
+//     setShowAction(null);
+// };
+
+    const handleAction = async(event,boardId,action) => {
+      event.stopPropagation();
+      if(action === 'duplicate'){
+        setSelectedBoard(boardId);
+        setIsPopupOpen(true);
+      }
+      setShowAction(null)
+    }
+
+    // // open and close popup 
+    // const openPopup = (boardId)=> {
+    //   setSelectedBoard(boardId);
+    //   setIsPopupOpen(true);
+    // }
+    // const closePopup = () => {
+    //   setIsPopupOpen(false);
+    //   setSelectedBoard(null);
+    // }
 
 
 
@@ -76,7 +195,7 @@ const Board = () => {
               const filteredBoards = response.data.filter(board => board.workspace_id === Number(workspaceId));
               setBoards(filteredBoards);
   
-              // Fetch list counts
+              // Fetch list countso
               const listCounts = await Promise.all(filteredBoards.map(async (board) => {
                   const listCountResponse = await getListsCountByBoard(board.id);
                   return { boardId: board.id, count: listCountResponse.data.list_count };
@@ -119,6 +238,7 @@ const Board = () => {
       },[boardId])
 
 
+      //handle backgorund
       const handleBackgroundChange = async (newImageId) => {
         try{
           await updateBoardBackground(boardId,newImageId)
@@ -128,37 +248,74 @@ const Board = () => {
         }
       }
 
-      const handleCreateBoard = async () => {
-        await createBoard({ ...newBoard, workspace_id: workspaceId});
-        loadBoards();
-        setShowForm(false);
-      };
+      // create board 
+      const [alert1, setAlert1] = useState({show:false, message:'', severity:''})
+      useEffect(()=>{
+        console.log('Alert state updated:', alert1)
+      }, [alert1])
 
-    const handleDuplicateBoard = async (boardIdToDuplicate)=>{
-      const boardToDuplicate = boards.find(board => board.id === boardIdToDuplicate);
-      if(boardIdToDuplicate){
-        const duplicateBoardData = {
-          name : `${boardIdToDuplicate.name}{Copy}`,
-          description: boardIdToDuplicate.description,
-          workspace_id: workspaceId,
-          backgroundImageUrl: boardIdToDuplicate.backgroundImageUrl
+      const handleCreateBoard = async () =>{
+        try{
+          const successResponse = await createBoard({ ...newBoard,workspace_id: workspaceId})
+
+          if(successResponse && successResponse.status === 200){
+            setAlert1({show:true, message:'Success create new board', severity:'success'})
+
+            setTimeout(()=>{
+              setAlert1(prevState => ({ ...prevState, show:false}));
+            }, 5000)
+          }else{
+            setAlert1({show:true, message:'Failed to create new board', severity:'error'});
+            setTimeout(()=>{
+              setAlert1(prevState => ({ ...prevState, show:false}))
+            },5000)
+          }
+
+          loadBoards();
+          setShowForm(false);
+        }catch(error){
+          setAlert1({show:true, message:'Error occurred while creating board', severity:'error'})
+          setTimeout(()=>{
+            setAlert1(prevState => ({ ...prevState, show:false}))
+          },5000);
+          console.error('Error creating board', error)
         }
+      }
+
+    //duplicate 
+    const handleDuplicateBoard = async (boardIdToDuplicate, targetWorkspaceId)=> {
+      fetchBoards(workspaceId);
+      const boardToDuplicate = boards.find(board => board.id === boardIdToDuplicate);
+
+      if (boardToDuplicate){
+        const duplicateBoardData = {
+          name : `${boardToDuplicate.name} (Copy)`,
+          description: boardToDuplicate.description,
+          workspace_id: targetWorkspaceId, //menggunakan workspace tujuan
+          backgroundImageUrl: boardToDuplicate.backgroundImageUrl
+        };
         try{
           await createBoard(duplicateBoardData);
           loadBoards();
-          console.log('Board duplicated successfully');
+          alert(`Board berhasil diduplikasi ke workspace: ${targetWorkspaceId}`);
         }catch(error){
-          console.error('Error duplicate board:', error);
+          console.error('Error duplicate board:', error)
         }
       }
     }
 
+    //navigate
     const handleNavigateToBoardView = (boardId) =>{
         navigate(`/workspaces/${workspaceId}/boards/${boardId}`)
     }
 
     const handleBackToWorkspace = () =>{
         navigate('/')
+    }
+
+    const handleBoardDuplicate = async (workspaceId)=> {
+      const updatedBoards = await getBoardByWorkspace(workspaceId);
+      setBoards(updatedBoards);
     }
 
 
@@ -177,7 +334,7 @@ const Board = () => {
                 <HiChevronRight style={{ fontSize:'1.5rem', flexShrink:'0'}} />
                 <button className='btn-nav' style={{textAlign:'left'}}>Board</button>
               </h3>
-              <div>
+              <div style={{position:'relative'}}>
                 <button className='btn-bg' onClick={toggleBgVisibility}>
                   {showBg ?
                   (<>Background <HiChevronUp size={20} className='btn-icon'/></>):(<>Select Background <HiChevronDown size={20} className='btn-icon'/></>)  
@@ -188,12 +345,14 @@ const Board = () => {
                       backgroundColor:'white',
                       border:'0.1px solid grey',
                       borderRadius:'5px',
-                      boxShadow:'0px 4px 8px rgba(0,0,0,0.1',
+                      boxShadow:'0px 4px 8px rgba(0,0,0,0.1)',
                       padding:'5px',
                       width:'137px',
                       height:'100px',
                       overflowY:'auto',
-                      position:'absolute'
+                      position:'absolute',
+                      zIndex:'1000',
+                      top:'100%'
                   }}>
                     {Data_Bg.map((bg)=>(
                       <div 
@@ -211,6 +370,17 @@ const Board = () => {
             </div>
             <h5 style={{textAlign:'left', color:'white',paddingLeft:'10px', margin:'0'}}>Happy days, here your boards!</h5>
           </div>
+
+                  {/* Alert  */}
+                  {alert.show && (
+                    <AlertTitle
+                      severity={alert.severity}
+                      style={{marginBottom:'20px'}}
+                    >
+                      {alert.message}
+                    </AlertTitle>
+                  )}
+                  {/* End Alert  */}
   
           <div className='board-list-container'>
             <div className='board-list'>
@@ -223,39 +393,95 @@ const Board = () => {
                         onClick={(e)=> toggleActionThreeDot(board.id, e)}
                         />
                     </h4>
-                    {showAction === board.id &&(
-                      <div className='board-dropdown-menu-action'>
+
+                    {showAction === board.id && (
+                      <div className='board-dropdown-menu-action' style={{height:'100px'}}>
                         <ul className='dropdown-ul'>
-                            Actions
-                            <li onClick={() => handleAction(board.id, 'delete')} className='dropdown-li'>
-                                <AiFillDelete  className='ikon' size={15} />
-                                <div style={{size:'10px'}}>
-                                    Delete <br />
-                                    <span style={{fontSize:'10px',fontWeight:'normal', }}>Delete workspace</span>
+                          Actions
+                          <li className='dropdown-li'>
+                            <AiFillDelete className='ikon' size={15} />
+                            <button className='btn-li' onClick={(e) => {e.stopPropagation(); handleDeleteClick(board.id)}}>
+                              Delete <br />
+                              <span style={{fontSize:'10px', fontWeight:'normal'}}>Delete Board</span>
+                            </button>
+
+                            {isPopupVisible && (
+                              <div className='popup-overlay'>
+                                <div className='popup-content'>
+                                  <h3>Konfirmasi penghapusan</h3>
+                                  <p>Apakah anda yakin ingin menghapus board ini?</p>
+                                  <button className='btn-confirm' onClick={(e)=> {e.stopPropagation(); handleConfirmDelete()}}>Ya, hapus</button>
+                                  <button className='btn-confirm' onClick={(e) => {e.stopPropagation(); handleCancleDelete()}}>Batal</button>
                                 </div>
-                            </li>
-                            <li onClick={() => handleAction(board.id, 'archive')} className='dropdown-li' >
-                                <HiArchive  className='ikon' size={15} />
-                                <div>
-                                    Archive <br />
-                                    <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive your workspace</span>
-                                </div>
-                            </li>
-                            <li onClick={(event) => handleAction(event,board.id, 'duplicate')} className='dropdown-li'>
-                              <HiPlus className='ikon' size={15}/>
-                              <div>
-                                Duplicate <br/>
-                                <span style={{fontSize:'10px', fontWeight:'normal'}}>Duplicate your boards</span>
-                                <DuplicateBoardPopup
-                                  isOpen={isPopupOpen}
-                                  onClose={()=> setIsPopupOpen(false)}
-                                />
                               </div>
-                            </li>
+                            )}
+                          </li>
+                           <li className='dropdown-li'>
+                            <HiArchive className='ikon' size={15} />
+                            <button className='btn-li' onClick={(e) => {e.stopPropagation(); handleArchive(board.id)}}>
+                              Archive <br />
+                              <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive your board</span>
+                            </button>
+                            {isArchivePopupVisible && (
+                              <div className='popup-overlay'>
+                                <div className='popup-content'>
+                                  <p>Dengan memindahkan board kedalam archive, berarti menghapus workspace pada halaman ini <br /> Apa anda yakin?</p>
+                                  <button className='btn-confirm' onClick={(e)=> {e.stopPropagation(); handleConfirmArchive(board.id)}}>Archive</button>
+                                  <button className='btn-confirm' onClick={(e)=> {e.stopPropagation(); handleCancleArchive()}}>Cancle</button>
+                                </div>
+                              </div>
+                            )}
+                          </li>
+                          {/*
+                          <li onClick={(event) => handleAction(event, board.id, 'duplicate')} className='dropdown-li'>
+                            <HiPlus className='ikon' size={15} />
+                            <div >
+                              Duplicate <br />
+                              <span style={{ fontSize: '10px', fontWeight: 'normal' }}>Duplicate your boards</span>
+                            </div>
+                          </li> */}
                         </ul>
                       </div>
                     )}
-                    
+
+                    {/* {showAction === board.id && (
+                      <div className='board-dropdown-menu-action'>
+                        <ul className='dropdown-ul'>
+                          Actions
+                          <li onClick={(event) => handleAction(event, board.id, 'delete')} className='dropdown-li'>
+                            <AiFillDelete className='ikon' size={15} />
+                            <div style={{ size: '10px' }}>
+                              Delete <br />
+                              <span style={{ fontSize: '10px', fontWeight: 'normal' }}>Delete workspace</span>
+                            </div>
+                          </li>
+                          <li onClick={(event) => handleAction(event, board.id, 'archive')} className='dropdown-li'>
+                            <HiArchive className='ikon' size={15} />
+                            <div>
+                              Archive <br />
+                              <span style={{ fontSize: '10px', fontWeight: 'normal' }}>Archive your workspace</span>
+                            </div>
+                          </li>
+                          <li onClick={(event) => handleAction(event, board.id, 'duplicate')} className='dropdown-li'>
+                            <HiPlus className='ikon' size={15} />
+                            <div >
+                              Duplicate <br />
+                              <span style={{ fontSize: '10px', fontWeight: 'normal' }}>Duplicate your boards</span>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                    {isPopupOpen && (
+                      <DuplicateBoardPopup
+                        isOpen={isPopupOpen}
+                        onClose={closePopup}
+                        workspace={workspaceId}
+                        boardId={selectedBoard}
+                        // onDuplicate={handleDuplicateBoard}
+                        onBoardDuplicate={handleDuplicateBoard}
+                      />
+                    )} */}
                     <div style={{paddingRight:'5px', height:'4vh'}}>
                       <p className='board-description'>{board.description}</p>
                     </div>
@@ -300,6 +526,28 @@ const Board = () => {
                     </div>
                   )}
                 </div>
+
+                {/* ALERT  */}
+                {/* create board alert  */}
+                {alert1.show && (
+                  <AlertTitle
+                    severity={alert1.severity}
+                    style={{marginBottom:'20px'}}
+                  >
+                    {alert1.message}
+                  </AlertTitle>
+                )}
+
+                {/* archive board  */}
+                {alert2.show && (
+                  <AlertTitle
+                    severity={alert2.severity}
+                    style={{marginBottom:'20px'}}
+                  >
+                    {alert.message}
+                  </AlertTitle>
+                )}
+                {/* END ALERT  */}
           </div>
         </div>
       </div>

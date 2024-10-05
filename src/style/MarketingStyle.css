@@ -116,6 +116,12 @@ table{
   }
   
   .tabel-data-marketing th:nth-child(21) {
-    width: 50px; /* Progress */
+    width: 70px; /* Progress */
+  }
+  .tabel-data-marketing th:nth-child(22){
+    width: 150px;
   }
   
+  .btn-action{
+    margin-left:2px;
+  }

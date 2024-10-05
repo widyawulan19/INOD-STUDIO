@@ -133,6 +133,7 @@ function Marketing() {
                   <th>File and Chat</th>
                   <th>Detail Project</th>
                   <th>Progress</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -159,6 +160,11 @@ function Marketing() {
                     <td>{item.file_and_cha}</td>
                     <td>{item.detail_project}</td>
                     <td>{item.progress}</td>
+                    <td>
+                      <button className='btn-action'>Edit</button>
+                      <button className='btn-action'>Archive</button>
+                      <button className='btn-action'>Delete</button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

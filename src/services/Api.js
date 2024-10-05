@@ -8,6 +8,25 @@ export const createWorkspace = (data) => axios.post(`${API_URL}/workspaces`, dat
 export const updateWorkspace = (id, data) => axios.put(`${API_URL}/workspaces/${id}`, data);
 export const deleteWorkspace = (id) => axios.delete(`${API_URL}/workspaces/${id}`);
 export const getWorkspaceById = (id) => axios.get(`${API_URL}/workspaces/${id}`);
+export const updateWorkspaceBg = async (id, bgImage) => {
+    try{
+        const response = await axios.put(`${API_URL}/workspace/${id}/background`, {bg_image:bgImage,})
+        return response.data;
+    }catch(error){
+        console.error('Failed to update backgrounf', error)
+        throw error;
+    }
+}
+export const archiveWorkspace = async (id) => {
+    try {
+        const response = await axios.post(`${API_URL}/workspace/archive/${id}`);
+        return response.data; // Return the response data to the caller
+    } catch (error) {
+        console.error('Error while archiving workspace:', error);
+        throw error; // Rethrow the error for handling in the caller
+    }
+};
+
 
 //image
 export const getAllImage = () => axios.get(`${API_URL}/images`);
@@ -41,7 +60,19 @@ export const getBoardCountByWorkspace = (workspaceId) => {
         }
     })
 }
-export const getBoardByWorkspace = (workspaceId) => axios.get(`${API_URL}/boards`, workspaceId)
+export const archiveBoard = async (id) =>{
+    try{
+        const response = await axios.post(`${API_URL}/boards/archive/${id}`);
+        return response.data;
+    }catch(error){
+        console.error('Error while archiving board:', error);
+        throw error;
+    }
+}
+// export const getBoardByWorkspace = (workspaceId) => axios.get(`${API_URL}/boards`, workspaceId)
+
+export const getBoardByWorkspace = (workspace_id) => axios.get(`${API_URL}/boards-workspace`, workspace_id);
+
 export const duplicateBoard = async (boardId) => {
     try{
         const response = await axios.post(`${API_URL}/boards/${boardId}/duplicate`, boardId);

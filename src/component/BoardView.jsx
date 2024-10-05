@@ -2,9 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { getLists, createList, getBoardById } from '../services/Api'
 import List from './List'
 import { useNavigate, useParams } from 'react-router-dom'
-import { HiChevronRight, HiPlus, } from 'react-icons/hi'
+import { HiChevronDown, HiChevronRight, HiChevronUp, HiPlus, } from 'react-icons/hi'
 import '../style/BoardViewStyle.css'
 import { LuUsers } from "react-icons/lu";
+import { Data_Bg } from '../data/DataBg'
 
 const BoardView=()=> {
     const {workspaceId, boardId} = useParams();
@@ -14,6 +15,19 @@ const BoardView=()=> {
     const navigasi = useNavigate()
     const currentDate = new Date();
     const [boardName, setBoardName] = useState('');
+
+    //const for background
+    const [showBg, setShowBg] = useState(false)
+    const [selectBg, setSelectBg] = useState(null)
+
+    //backgoround
+    const toggleBgVisibility = () => {
+        setShowBg(!showBg);
+    }
+    const handleBgSelect= (bg) => {
+        setSelectBg(bg);
+        setShowBg(false);
+    }
 
 
     //boards
@@ -106,7 +120,13 @@ const BoardView=()=> {
     }
 
   return (
-    <div className='boardView-container'>
+    <div className='boardView-container'
+        style={{
+            backgroundImage: selectBg ? `url(${selectBg.image_url})`:'none',
+            backgroundSize:'cover',
+            backgroundPosition:'center'
+        }}
+    >
         <div className='nav-date'>
             <h3 style={{marginBottom:'0', marginTop:'0'}}>
             <button  
@@ -138,6 +158,41 @@ const BoardView=()=> {
                 </div>
                 <div className='member'>
                     <p><LuUsers/> : 10 member</p>
+                </div>
+                <div style={{display:'flex', alignItems:'flex-end', justifyContent:'right', position:'relative'}}>
+                    <button className='btn-bg' onClick={toggleBgVisibility}>
+                        {showBg? 
+                        (<>Background <HiChevronUp size={20} className='btn-icon'/></>):(<>Select Background <HiChevronDown size={20} className='btn-icon'/></>)
+                        }
+                    </button>
+                    {showBg && (
+                        <div
+                            style={{
+                                backgroundColor:'white',
+                                border:'0.1px solif grey',
+                                borderRadius:'5px',
+                                boxShadow:'0px 4px 8px rgba(0,0,0,0.1)',
+                                padding:'5px',
+                                width:'100%',
+                                height: '100px',
+                                overflowY:'auto',
+                                position:'absolute',
+                                zIndex:'1000',
+                                top:'100%',
+                                right:'24px'
+                            }}
+                        >
+                            {Data_Bg.map((bg)=>(
+                                <div
+                                className='coverBg'
+                                key={bg.id}
+                                onClick={()=> handleBgSelect(bg)}
+                                >
+                                    {bg.name}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div> 
         </div>

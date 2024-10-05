@@ -16,7 +16,8 @@
     z-index: 2000; /* Pastikan elemen ini berada di atas elemen lainnya */
     padding: 10px;
     /* border-bottom: 1px solid #731e17; */
-    background-image: linear-gradient(to right, #000000, #1f0c10, #341118, #4b141c, #62161e, #76161f, #8a171e, #9e191b, #b51519, #cc1015, #e4080d, #fb0000);
+    background-image: linear-gradient(to right, #00000065, #1f0c1065, #34111865, #4b141c65, #62161e65, #76162065, #8a171f65, #9e191b65, #b5151865, #cc101665, #e4080c65, #fb000065);
+    border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Menambahkan bayangan untuk mempertegas */
  }
 
@@ -215,4 +216,23 @@
   }
   .form-btn button.btn-form:hover{
     background-color: #731e17;
+  }
+
+  /*Background*/
+  .form-container .btn-bg{
+    width: 100%;
+    height: 30px;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    background-color: #6b1c14;
+    color: white;
+    border: 1px solid #491519;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-icon{
+    margin-left: 10px;
   }
