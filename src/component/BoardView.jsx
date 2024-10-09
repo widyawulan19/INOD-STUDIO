@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { getLists, createList, getBoardById } from '../services/Api'
+import { getLists, createList, getBoardById, deleteList } from '../services/Api'
 import List from './List'
 import { useNavigate, useParams } from 'react-router-dom'
 import { HiChevronDown, HiChevronRight, HiChevronUp, HiPlus, } from 'react-icons/hi'
@@ -15,6 +15,10 @@ const BoardView=()=> {
     const navigasi = useNavigate()
     const currentDate = new Date();
     const [boardName, setBoardName] = useState('');
+    //delete list
+    const [listToDelete, setListToDelete] = useState(null)
+    const [isPopupVisible, setIsPopupVisible] = useState(false)
+    const [alert,setAlert] = useState({show:true, message:'', severity:''})
 
     //const for background
     const [showBg, setShowBg] = useState(false)
@@ -84,6 +88,52 @@ const BoardView=()=> {
         loadLists();
     }, [loadLists])
 
+    //DELETE LIST
+    const handleDeleteClick = (listId) => {
+        setListToDelete(listId);
+        setIsPopupVisible(true);
+        console.log('button delete berhasil di klik')
+    }
+
+    const handleConfirmDelete = async()=>{
+        if(listToDelete){
+            const deleteResponse = await handleDelete(listToDelete);
+            setIsPopupVisible(false);
+            setListToDelete(null)
+            if(deleteResponse){
+                setAlert({show:true, message:'Successfully delete your list', severity:'success'})
+                setTimeout(()=> {
+                    setAlert({...alert, show:false})
+                }, 5000) 
+            }else{
+                setAlert({show:true, message:'Failed to delete list', severity:'error'})
+                setTimeout(()=>{
+                    setAlert({...alert, show:false})
+                }, 5000)
+            }
+        }
+    }
+    const handleCancleDelete = () => {
+        setIsPopupVisible(false)
+        setListToDelete(null)
+    }
+
+    const handleDelete = async(id) => {
+        try{
+            await deleteList(id);
+            loadLists();
+            return true;
+        }catch(error){
+            console.error('Error deleting lists: ', error)
+            return false;
+        }
+    }
+
+    //END DELETE LIST
+
+
+
+    //NAVIGASI
     const handleBackToBoard = () => {
         navigasi(`/workspaces/${workspaceId}/boards`)
         ///workspaces/:workspaceId/boards
@@ -91,6 +141,7 @@ const BoardView=()=> {
     const handleBackToWorkspace = () => {
         navigasi('/')
     }
+     //END NAVIGASI
 
     //const handle form submission
     const handleCreateList = async (e) =>{
@@ -203,7 +254,12 @@ const BoardView=()=> {
                 //wrap list heigh
                     <div>
                         <div key={list.id} className="list-wrapper">
-                            <List listId={list.id} listName={list.name} />
+                            <List  
+                                listId={list.id} 
+                                listName={list.name} 
+                                loadLists={loadLists}
+                                onDelete={handleDelete}
+                            />
                         </div>
                     </div>
                 ))}
@@ -230,76 +286,6 @@ const BoardView=()=> {
             </div>
         </div>
     </div>
-    
-    // <div className='boardView-container'>
-        // <div className='nav-date'>
-        //     <h3 style={{marginBottom:'0', marginTop:'0'}}>
-        //     <button  
-        //         onClick={handleBackToWorkspace} 
-        //         className='btn-nav'
-        //     >
-        //         Workspace
-        //     </button> <HiChevronRight/> 
-        //     <button 
-        //         onClick={handleBackToBoard}
-        //         className='btn-nav' 
-        //         style={{textAlign:'left', width:'5vw'}}
-        //     >
-        //         Board
-        //     </button><HiChevronRight/>
-        //     <button className='btn-nav' style={{textAlign:'left'}}>Lists</button>
-                
-        //     </h3>
-
-        //     {/* Form for date  */}
-        //     <div className='form-container' style={{marginTop:'0'}}>
-        //         <div className='date'>
-        //             <h4 style={{margin:'0'}}>{monthName}</h4>
-        //             <p style={{margin:'0', fontSize:'13px'}}>Hari ini adalah hari {dayName}, {date} {monthName} {year}</p>
-        //         </div>
-        //         <div className='board'>
-        //             <h4 style={{marginRight:'5px'}}>Board -</h4>
-        //             <p style={{display:'flex', alignItems:'center'}}>{boardName} </p>
-        //         </div>
-        //         <div className='member'>
-        //             <p><LuUsers/> : 10 member</p>
-        //         </div>
-        //     </div> 
-        // </div>
-
-        // <div className="board-view-container">
-        //     <div className="lists-container">
-        //     {lists.map((list) => (
-        //     //wrap list heigh
-        //         <div>
-        //             <div key={list.id} className="list-wrapper">
-        //                 <List listId={list.id} listName={list.name} />
-        //             </div>
-        //         </div>
-        //     ))}
-        //     <div className="create-list-container">
-        //         <button className='btn-list' onClick={() => setIsFormVisible(true)}>
-        //             {isFormVisible ? 'Add new list' : (<><HiPlus size={15} style={{ marginRight: '1vw' }} />Create List</>)}
-        //         </button>
-        //         {isFormVisible && (
-        //             <form onSubmit={handleCreateList} className='create-list-form'>
-        //                 <input
-        //                     type="text"
-        //                     value={newListName}
-        //                     onChange={(e) => setNewListName(e.target.value)}
-        //                     placeholder='Enter list name'
-        //                     required
-        //                 />
-        //                 <div className='form-btn'>
-        //                     <button className='btn-form' type='submit'>Add List</button>
-        //                     <button className='btn-form' type='button' onClick={handleButtonCancle}>Cancel</button>
-        //                 </div>
-        //             </form>
-        //         )}
-        //     </div>
-        // </div>
-    // </div>
-    // </div>
   )
 }
 

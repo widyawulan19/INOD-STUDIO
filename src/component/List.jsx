@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getCards, createCard, getLists, createList} from '../services/Api'
+import { getCards, createCard, deleteList} from '../services/Api'
 import { useNavigate, useParams } from 'react-router-dom';
 import '../style/ListStyle.css'
 import { BsThreeDots } from "react-icons/bs";
@@ -11,9 +11,10 @@ import { FaPlay } from "react-icons/fa6";
 import { HiDotsVertical, HiArchive, HiChevronUp, HiChevronDown } from "react-icons/hi";
 import { AiFillDelete } from "react-icons/ai";
 import { Data_Cover } from '../data/DataCover.js';
+import { AlertTitle } from '@mui/material';
 
 
-const List=({listId, listName})=> {
+const List=({listId, listName, loadList, onDelete })=> {
     const {workspaceId, boardId} = useParams();
     const navigate = useNavigate();
     const [cards, setCards] = useState([])
@@ -22,6 +23,46 @@ const List=({listId, listName})=> {
     const [showAction, setShowAction] = useState(null);
     const [showCover, setShowCover] = useState(false);
     const [selectCover, setSelectCover] = useState(null);
+    //DELETE 
+    const [isPopupVisible, setIsPopupVisible] = useState(false)
+    const [listToDelete, setListToDelete] = useState(null);
+    const [alert, setAlert] = useState({show:false, message:'', severity:''})
+
+
+    //FUNCION DELETE
+    const handleDeleteClick = (listId) =>{
+      setListToDelete(listId)
+      setIsPopupVisible(true)
+      console.log('tombol delete berhasil di klik')
+    }
+
+    const handleConfirmDelete = async()=>{
+      if(listToDelete){
+        const deleteResponse = await handleDelete(listToDelete);
+        setIsPopupVisible(false);
+        setListToDelete(null);
+        if(deleteResponse){
+          setAlert({show:true, message:'Successfully delete list', severity:'success'})
+          setTimeout(()=>{
+            setAlert({...alert, show:false})
+          }, 5000)
+        }else{
+          setAlert({show:true, message:'Error to delete list', severity:'error'})
+          setTimeout(()=>{
+            setAlert({...alert, show:false})
+          })
+        }
+      }
+    }
+
+    const handleCancleDelete = () =>{
+     setIsPopupVisible(false)
+     setListToDelete(null)
+    }
+    const handleDelete = ()=>{
+      onDelete()
+    }
+    //END FUNCION DELETE
 
     const toggleFormVisibility = () => {
       setShowForm(!showForm)
@@ -127,32 +168,33 @@ const List=({listId, listName})=> {
                 <div className='dropdown-menu-action'>
                   <ul className='dropdown-ul'>
                     Action
-                    <li
-                      className='dropdown-li'
-                      onClick={()=> handleAction(listId, 'delete')}
-                    >
-                      <AiFillDelete className='ikon' size={15}/>
-                      <div style={{size: '10px'}}>
-                        Delete <br />
-                        <span style={{fontSize: '10px', fontWeight: 'normal'}}>Delete this card</span>
-                      </div>
-                    </li>
-                    <li
-                      className='dropdown-li'
-                      onClick={()=> handleAction(listId, 'archive')}
-                    >
-                      <HiArchive className='ikon' size={15}/>
-                      <div>
-                        Archive <br />
-                        <span style={{fontSize: '10px', fontWeight: 'normal'}}>Archive this card</span>
-                      </div>
-                    </li>
+                    <AiFillDelete className='ikon' size={20}/>
+                    <button className='btn-li' onClick={(e)=> {e.stopPropagation(); handleDeleteClick(boardId)}}>
+                      Delete <br />
+                      <span style={{fontSize:'10px', fontWeight:'normal'}}>Delete list</span>
+                    </button>
                   </ul>
                 </div>
               )}
             </p>
-            
+            {isPopupVisible && (
+                <div className='popup-overlay'>
+                  <div className='popup-content'>
+                    <h3>Konfirmasi penghapusan</h3>
+                    <p>Apakah anda yakin ingin menghapus list ini?</p>
+                    <button className='btn-confirm' onClick={(e) => {e.stopPropagation(); handleConfirmDelete()}}>Ya, hapus</button>
+                    <button className='btn-confirm' onClick={(e) => {e.stopPropagation(); handleCancleDelete()}}>Batal</button>
+                  </div>
+                </div>
+              )}
           </div>
+            {/* ALERT  */}
+            {alert.show && (
+              <AlertTitle className='alert-position' severity={alert.severity}>
+                {alert.message}
+              </AlertTitle>
+            )}
+
           <hr style={{opacity:'50%'}}/>
           <div className='card-list-lists'>
           {cards.map((card) => (
@@ -285,6 +327,7 @@ const List=({listId, listName})=> {
                 </div>
               )}
           </div>
+
           
       );
 }
