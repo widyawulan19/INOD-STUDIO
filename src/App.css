@@ -9,12 +9,11 @@
 } 
 .App1{
   width: 15%;
-  min-width: 200px; /* Lebar minimal untuk sidebar jika diperlukan */
+  min-width: 200px; 
   max-width: 25%;
   border: 1px solid white;
 }
 .App2{
   flex: 1;
-  /* border: 1px solid blue; */
   overflow: hidden;
 }

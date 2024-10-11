@@ -89,38 +89,38 @@ const BoardView=()=> {
     }, [loadLists])
 
     //DELETE LIST
-    const handleDeleteClick = (listId) => {
-        setListToDelete(listId);
-        setIsPopupVisible(true);
-        console.log('button delete berhasil di klik')
-    }
+    // const handleDeleteClick = (listId) => {
+    //     setListToDelete(listId);
+    //     setIsPopupVisible(true);
+    //     console.log('button delete berhasil di klik')
+    // }
 
-    const handleConfirmDelete = async()=>{
-        if(listToDelete){
-            const deleteResponse = await handleDelete(listToDelete);
-            setIsPopupVisible(false);
-            setListToDelete(null)
-            if(deleteResponse){
-                setAlert({show:true, message:'Successfully delete your list', severity:'success'})
-                setTimeout(()=> {
-                    setAlert({...alert, show:false})
-                }, 5000) 
-            }else{
-                setAlert({show:true, message:'Failed to delete list', severity:'error'})
-                setTimeout(()=>{
-                    setAlert({...alert, show:false})
-                }, 5000)
-            }
-        }
-    }
-    const handleCancleDelete = () => {
-        setIsPopupVisible(false)
-        setListToDelete(null)
-    }
+    // const handleConfirmDelete = async()=>{
+    //     if(listToDelete){
+    //         const deleteResponse = await handleDelete(listToDelete);
+    //         setIsPopupVisible(false);
+    //         setListToDelete(null)
+    //         if(deleteResponse){
+    //             setAlert({show:true, message:'Successfully delete your list', severity:'success'})
+    //             setTimeout(()=> {
+    //                 setAlert({...alert, show:false})
+    //             }, 5000) 
+    //         }else{
+    //             setAlert({show:true, message:'Failed to delete list', severity:'error'})
+    //             setTimeout(()=>{
+    //                 setAlert({...alert, show:false})
+    //             }, 5000)
+    //         }
+    //     }
+    // }
+    // const handleCancleDelete = () => {
+    //     setIsPopupVisible(false)
+    //     setListToDelete(null)
+    // }
 
-    const handleDelete = async(id) => {
+    const handleDelete = async(listId) => {
         try{
-            await deleteList(id);
+            await deleteList(listId);
             loadLists();
             return true;
         }catch(error){
@@ -258,7 +258,7 @@ const BoardView=()=> {
                                 listId={list.id} 
                                 listName={list.name} 
                                 loadLists={loadLists}
-                                onDelete={handleDelete}
+                                onDelete={() => handleDelete(list.id)}
                             />
                         </div>
                     </div>

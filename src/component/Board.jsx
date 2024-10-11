@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { HiArchive,HiPlus,HiOutlineX,HiDotsHorizontal, HiOutlineServer, HiOutlineCalendar,HiChevronRight, HiChevronDown, HiChevronUp  } from "react-icons/hi";
 import '../style/BoardStyle.css'
 import moment from 'moment'
-import { LuUsers } from "react-icons/lu";
+import { LuUsers } from "react-icons/lu"; 
 import { AiFillDelete } from "react-icons/ai";
 import { Data_Bg } from '../data/DataBg';
 import DuplicateBoardPopup from './DuplicateBoardPopup';
@@ -12,7 +12,7 @@ import { AlertTitle } from '@mui/material';
 
 const Board = () => {
     const {boardId, workspaceId} = useParams();
-    const [workspaces, setWorkspaces] = useState([]);
+    // const [workspaces, setWorkspaces] = useState([]);
     const [boards, setBoards] = useState([]);
     const [newBoard, setNewBoard] = useState({name:'', description:''});
     const navigate = useNavigate();
@@ -67,7 +67,7 @@ const Board = () => {
       loadBoards();
       return true;
     }catch(error){
-      console.error('Error deleting workspace:', error);
+      console.error('Error deleting board:', error);
       return false;
     }
   }
@@ -76,20 +76,20 @@ const Board = () => {
 
   //ARCHIVE
   const [isArchivePopupVisible, setIsArchivePopupVisible] = useState(false);
-  const [alert2, setAlert2] = useState({show:false, message:'', severity:''})
+  // const [alert2, setAlert2] = useState({show:false, message:'', severity:''})
   const handleConfirmArchive = async(id)=>{
     setIsArchivePopupVisible(false);
     try{
       await archiveBoard(id);
-      setAlert2({show:true, message:'Boards has been successfully archived', severity:'success'})
+      setAlert({show:true, message:'Boards has been successfully archived', severity:'success'})
       setTimeout(()=>{
-        setAlert2(prevState => ({ ...prevState, show:false}))
+        setAlert(prevState => ({ ...prevState, show:false}))
       }, 5000)
       loadBoards();
     }catch(error){
-      setAlert2({show:false, message:'Failed to archive board. Please try again later'})
+      setAlert({show:true, message:'Failed to archive board. Please try again later', severity:'error'})
       setTimeout(()=>{
-        setAlert2(prevState => ({ ...prevState, show:false}))
+        setAlert(prevState => ({ ...prevState, show:false}))
       }, 5000)
     }
   };
@@ -119,6 +119,8 @@ const Board = () => {
       setShowBg(false);
     }
 
+
+    //ACTION
     const toggleActionThreeDot = (boardId, event) => {
       event.stopPropagation();
       setShowAction(showAction === boardId ? null : boardId)
@@ -137,7 +139,8 @@ const Board = () => {
         setBoards(response.data);
       }catch(error){
         console.error('Error fetching boards:', error)
-        alert('Gagal memuat boards')
+        // alert('Gagal memuat boards')
+        setAlert({show:true, message:'Error fetching boards', severity:'error'})
       }
     }
 
@@ -145,72 +148,60 @@ const Board = () => {
       fetchBoards(workspaceId);
     }, [workspaceId]);
 
-//   const handleAction = async (event,boardId, action) => {
-//     console.log(`Action: ${action} for board: ${boardId}`);
-//     event.stopPropagation();
 
-//     if (action === 'duplicate') {
-//         if (!boardId) {
-//             console.error('Board ID is undefined!');
-//             return; // Hentikan eksekusi jika boardId tidak ada
-//         }
-
-//         try {
-//             console.log('Attempting to duplicate board with ID:', boardId);
-//             const duplicateBoardResponse = await duplicateBoard(boardId);
-//             console.log('Board duplicated successfully:', duplicateBoardResponse);
-//             loadBoards();
-//         } catch (error) {
-//             console.error('Failed to duplicate board:', error);
-//         }
-//     }
-//     setShowAction(null);
-// };
-
-    const handleAction = async(event,boardId,action) => {
-      event.stopPropagation();
-      if(action === 'duplicate'){
-        setSelectedBoard(boardId);
-        setIsPopupOpen(true);
-      }
-      setShowAction(null)
-    }
-
-    // // open and close popup 
-    // const openPopup = (boardId)=> {
-    //   setSelectedBoard(boardId);
-    //   setIsPopupOpen(true);
-    // }
-    // const closePopup = () => {
-    //   setIsPopupOpen(false);
-    //   setSelectedBoard(null);
-    // }
-
-
-
-        // Load boards based on workspace ID
-        const loadBoards = useCallback(async () => {
-          try {
-              const response = await getBoard(workspaceId);
-              const filteredBoards = response.data.filter(board => board.workspace_id === Number(workspaceId));
+      const loadBoards = useCallback(async () => {
+        if (!workspaceId) {
+          console.error('Workspace ID is not available');
+          return;
+        }
+      
+        try {
+          // Fetch boards for the workspace
+          const response = await getBoard(workspaceId);
+      
+          if (response && response.data) {
+            // Filter boards by workspace ID
+            const filteredBoards = response.data.filter(board => board.workspace_id === Number(workspaceId));
+            
+            if (filteredBoards.length > 0) {
               setBoards(filteredBoards);
-  
-              // Fetch list countso
+              
+              // Fetch list counts for each board
               const listCounts = await Promise.all(filteredBoards.map(async (board) => {
+                try {
                   const listCountResponse = await getListsCountByBoard(board.id);
-                  return { boardId: board.id, count: listCountResponse.data.list_count };
+                  return { boardId: board.id, count: listCountResponse.data?.list_count || 0 };
+                } catch (listCountError) {
+                  console.error(`Failed to load list count for board ${board.id}`, listCountError);
+                  return { boardId: board.id, count: 0 };  // Set default count to 0 if there's an error
+                }
               }));
-  
+      
+              // Map list counts to board IDs
               const countMap = {};
               listCounts.forEach(({ boardId, count }) => {
-                  countMap[boardId] = count;
+                countMap[boardId] = count;
               });
+      
               setListCount(countMap);
-          } catch (error) {
-              console.error('Failed to load boards', error);
+            } else {
+              console.log('No boards found for this workspace.');
+              setBoards([]);
+              setListCount({});
+            }
+          } else {
+            console.error('Invalid response data from getBoard');
+            setBoards([]);
+            setListCount({});
           }
+      
+        } catch (error) {
+          console.error('Failed to load boards', error);
+          setBoards([]); // Reset boards in case of failure
+          setListCount({}); // Reset list counts in case of failure
+        }
       }, [workspaceId]);
-
+      
     //Hook, useEffect hook yang digunakan untuk menampilkan data boards berdasarkan workspaceID yang dipanggila
     useEffect(()=>{
       console.log('Fetching data boards from workspaceid:', workspaceId);
@@ -259,50 +250,58 @@ const Board = () => {
           const successResponse = await createBoard({ ...newBoard,workspace_id: workspaceId})
 
           if(successResponse && successResponse.status === 200){
-            setAlert1({show:true, message:'Success create new board', severity:'success'})
+            setAlert({show:true, message:'Success create new board', severity:'success'})
 
             setTimeout(()=>{
-              setAlert1(prevState => ({ ...prevState, show:false}));
+              setAlert(prevState => ({ ...prevState, show:false}));
             }, 5000)
           }else{
-            setAlert1({show:true, message:'Failed to create new board', severity:'error'});
+            setAlert({show:true, message:'Failed to create new board', severity:'error'});
             setTimeout(()=>{
-              setAlert1(prevState => ({ ...prevState, show:false}))
+              setAlert(prevState => ({ ...prevState, show:false}))
             },5000)
           }
 
           loadBoards();
           setShowForm(false);
         }catch(error){
-          setAlert1({show:true, message:'Error occurred while creating board', severity:'error'})
+          setAlert({show:true, message:'Error occurred while creating board', severity:'error'}) //cek lagi untuk pesan error berikut
           setTimeout(()=>{
-            setAlert1(prevState => ({ ...prevState, show:false}))
+            setAlert(prevState => ({ ...prevState, show:false}))
           },5000);
           console.error('Error creating board', error)
         }
       }
 
-    //duplicate 
-    const handleDuplicateBoard = async (boardIdToDuplicate, targetWorkspaceId)=> {
-      fetchBoards(workspaceId);
+    const handleDuplicateBoard = async (boardIdToDuplicate, targetWorkspaceId) => {
       const boardToDuplicate = boards.find(board => board.id === boardIdToDuplicate);
-
-      if (boardToDuplicate){
-        const duplicateBoardData = {
-          name : `${boardToDuplicate.name} (Copy)`,
-          description: boardToDuplicate.description,
-          workspace_id: targetWorkspaceId, //menggunakan workspace tujuan
-          backgroundImageUrl: boardToDuplicate.backgroundImageUrl
-        };
-        try{
-          await createBoard(duplicateBoardData);
-          loadBoards();
-          alert(`Board berhasil diduplikasi ke workspace: ${targetWorkspaceId}`);
-        }catch(error){
-          console.error('Error duplicate board:', error)
-        }
+      if (boardToDuplicate) {
+          const duplicateBoardData = {
+              name: `${boardToDuplicate.name} (Copy)`,
+              description: boardToDuplicate.description,
+              workspace_id: targetWorkspaceId,
+              backgroundImageUrl: boardToDuplicate.backgroundImageUrl,
+          };
+          try {
+              await createBoard(duplicateBoardData);
+              loadBoards();
+              setAlert({ show: true, message: `Board successfully duplicated to workspace: ${targetWorkspaceId}`, severity:'success' });
+          } catch (error) {
+              console.error('Error duplicating board:', error);
+              setAlert({ show: true, message: 'Error duplicating board', severity:'error' });
+          }
       }
-    }
+  };
+
+  const handleDuplicateClick = (boardId) => {
+    setSelectedBoard(boardId);
+    setIsPopupOpen(true)
+  }
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+    setSelectedBoard(null)
+  }
 
     //navigate
     const handleNavigateToBoardView = (boardId) =>{
@@ -383,7 +382,7 @@ const Board = () => {
                   {/* End Alert  */}
   
           <div className='board-list-container'>
-            <div className='board-list'>
+            <div className='board-list' style={{overflow:'visible'}}>
               {boards.map((board) => (
                   <div key={board.id} className='board-card' onClick={() => handleNavigateToBoardView(board.id)}>
                     <h4 style={{display:'flex', fontSize:'15px', fontWeight:'bold', justifyContent:'space-between', margin:'5px 0'}} >
@@ -395,7 +394,7 @@ const Board = () => {
                     </h4>
 
                     {showAction === board.id && (
-                      <div className='board-dropdown-menu-action' style={{height:'100px'}}>
+                      <div className='board-dropdown-menu-action'>
                         <ul className='dropdown-ul'>
                           Actions
                           <li className='dropdown-li'>
@@ -425,63 +424,27 @@ const Board = () => {
                             {isArchivePopupVisible && (
                               <div className='popup-overlay'>
                                 <div className='popup-content'>
-                                  <p>Dengan memindahkan board kedalam archive, berarti menghapus workspace pada halaman ini <br /> Apa anda yakin?</p>
+                                  <p>Dengan memindahkan board kedalam archive,<br /> berarti menghapus board pada halaman ini <br /> Apa anda yakin?</p>
                                   <button className='btn-confirm' onClick={(e)=> {e.stopPropagation(); handleConfirmArchive(board.id)}}>Archive</button>
                                   <button className='btn-confirm' onClick={(e)=> {e.stopPropagation(); handleCancleArchive()}}>Cancle</button>
                                 </div>
                               </div>
                             )}
                           </li>
-                          {/*
-                          <li onClick={(event) => handleAction(event, board.id, 'duplicate')} className='dropdown-li'>
-                            <HiPlus className='ikon' size={15} />
-                            <div >
+                          <li className='dropdown-li'>
+                            <HiPlus className='ikon' size={15}/>
+                            <button className='btn-li' onClick={(e) => { 
+                                e.stopPropagation(); 
+                                handleDuplicateClick(board.id)
+                            }}>
                               Duplicate <br />
-                              <span style={{ fontSize: '10px', fontWeight: 'normal' }}>Duplicate your boards</span>
-                            </div>
-                          </li> */}
-                        </ul>
-                      </div>
-                    )}
-
-                    {/* {showAction === board.id && (
-                      <div className='board-dropdown-menu-action'>
-                        <ul className='dropdown-ul'>
-                          Actions
-                          <li onClick={(event) => handleAction(event, board.id, 'delete')} className='dropdown-li'>
-                            <AiFillDelete className='ikon' size={15} />
-                            <div style={{ size: '10px' }}>
-                              Delete <br />
-                              <span style={{ fontSize: '10px', fontWeight: 'normal' }}>Delete workspace</span>
-                            </div>
-                          </li>
-                          <li onClick={(event) => handleAction(event, board.id, 'archive')} className='dropdown-li'>
-                            <HiArchive className='ikon' size={15} />
-                            <div>
-                              Archive <br />
-                              <span style={{ fontSize: '10px', fontWeight: 'normal' }}>Archive your workspace</span>
-                            </div>
-                          </li>
-                          <li onClick={(event) => handleAction(event, board.id, 'duplicate')} className='dropdown-li'>
-                            <HiPlus className='ikon' size={15} />
-                            <div >
-                              Duplicate <br />
-                              <span style={{ fontSize: '10px', fontWeight: 'normal' }}>Duplicate your boards</span>
-                            </div>
+                              <span style={{fontSize:'10px', fontWeight:'normal'}}>Duplicate your boards</span>
+                            </button>
                           </li>
                         </ul>
                       </div>
                     )}
-                    {isPopupOpen && (
-                      <DuplicateBoardPopup
-                        isOpen={isPopupOpen}
-                        onClose={closePopup}
-                        workspace={workspaceId}
-                        boardId={selectedBoard}
-                        // onDuplicate={handleDuplicateBoard}
-                        onBoardDuplicate={handleDuplicateBoard}
-                      />
-                    )} */}
+            
                     <div style={{paddingRight:'5px', height:'4vh'}}>
                       <p className='board-description'>{board.description}</p>
                     </div>
@@ -525,31 +488,16 @@ const Board = () => {
                       <button className='board-button' onClick={handleCreateBoard}>Add Board</button>
                     </div>
                   )}
-                </div>
-
-                {/* ALERT  */}
-                {/* create board alert  */}
-                {alert1.show && (
-                  <AlertTitle
-                    severity={alert1.severity}
-                    style={{marginBottom:'20px'}}
-                  >
-                    {alert1.message}
-                  </AlertTitle>
-                )}
-
-                {/* archive board  */}
-                {alert2.show && (
-                  <AlertTitle
-                    severity={alert2.severity}
-                    style={{marginBottom:'20px'}}
-                  >
-                    {alert.message}
-                  </AlertTitle>
-                )}
-                {/* END ALERT  */}
+                </div> 
           </div>
         </div>
+        {isPopupOpen && (
+                          <DuplicateBoardPopup
+                            boardId={selectedBoard}
+                            isOpen={isPopupOpen}
+                            onClose={handleClosePopup}
+                          />
+                        )}
       </div>
   )      
 }

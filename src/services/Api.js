@@ -72,14 +72,14 @@ export const archiveBoard = async (id) =>{
 // export const getBoardByWorkspace = (workspaceId) => axios.get(`${API_URL}/boards`, workspaceId)
 
 export const getBoardByWorkspace = (workspace_id) => axios.get(`${API_URL}/boards-workspace`, workspace_id);
-
-export const duplicateBoard = async (boardId) => {
+export const duplicateBoard = async (boardId, {workspace_id})=>{
     try{
-        const response = await axios.post(`${API_URL}/boards/${boardId}/duplicate`, boardId);
-
+        const response = await axios.post(`${API_URL}/boards/${boardId}/duplicate`, {
+            workspace_id,
+        });
         return response.data;
     }catch(error){
-        console.error('Failed to duplicate board:', error)
+        console.error('Failed to duplicate board:', error);
         throw error;
     }
 }
@@ -88,8 +88,29 @@ export const duplicateBoard = async (boardId) => {
 export const getLists = (boardId) => axios.get(`${API_URL}/lists?board_id=${boardId}`);
 export const createList = (data) => axios.post(`${API_URL}/lists`, data);
 export const updateList = (id, data) => axios.put(`${API_URL}/lists/${id}`, data);
-export const deleteList = (id) => axios.delete(`${API_URL}/lists/${id}`);
+export const deleteList = (id) => axios.delete(`${API_URL}/lists/${id}`); 
 export const getListById = (id) => axios.get(`${API_URL}/lists/${id}`);
+export const archiveLists = async (id) =>{
+    try{
+        const response = await axios.post(`${API_URL}/lists/archive/${id}`);
+        return response.data;
+    }catch(error){
+        console.error('Error while archiving list:', error);
+        throw error;
+    }
+}
+//duplicate list
+export const duplicateList = async (listId, {board_id}) => {
+    try{
+        const response = await axios.post(`${API_URL}/lists/${listId}/duplicate-to-board`,{
+            board_id,
+        })
+        return response.data;
+    }catch(error){
+        console.error('Failed to duplicate list:', error);
+        throw error;
+    }
+}
 //getListsCountByBoard
 export const getListsCountByBoard = (boardId) => { return axios.get(`${API_URL}/list-count/${boardId}`)}
 // export const getListsCountByBoard = (boardId) => {

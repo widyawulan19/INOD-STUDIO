@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getCards, createCard, deleteList} from '../services/Api'
+import { getCards, createCard, deleteList, archiveLists} from '../services/Api'
 import { useNavigate, useParams } from 'react-router-dom';
 import '../style/ListStyle.css'
 import { BsThreeDots } from "react-icons/bs";
@@ -8,13 +8,14 @@ import { FaPlus} from "react-icons/fa";
 import { GrAttachment } from "react-icons/gr";
 import { ImCross } from "react-icons/im";
 import { FaPlay } from "react-icons/fa6";
-import { HiDotsVertical, HiArchive, HiChevronUp, HiChevronDown } from "react-icons/hi";
+import { HiDotsVertical, HiArchive, HiChevronUp, HiChevronDown, HiPlus } from "react-icons/hi";
 import { AiFillDelete } from "react-icons/ai";
 import { Data_Cover } from '../data/DataCover.js';
 import { AlertTitle } from '@mui/material';
+import DuplicateListPopup from './DuplicateListPopup.jsx';
 
 
-const List=({listId, listName, loadList, onDelete })=> {
+const List=({listId, listName, loadLists, onDelete })=> {
     const {workspaceId, boardId} = useParams();
     const navigate = useNavigate();
     const [cards, setCards] = useState([])
@@ -27,6 +28,13 @@ const List=({listId, listName, loadList, onDelete })=> {
     const [isPopupVisible, setIsPopupVisible] = useState(false)
     const [listToDelete, setListToDelete] = useState(null);
     const [alert, setAlert] = useState({show:false, message:'', severity:''})
+    const [alert1, setAlert1] = useState({show:false, message:'', severity:''})
+    //ARCHIVE
+    const [isArchivePopupVisible, setIsArchivePopupVisible] = useState(false);
+    //list popup
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [selectedList, setSelectedList] = useState(null);
+
 
 
     //FUNCION DELETE
@@ -38,31 +46,68 @@ const List=({listId, listName, loadList, onDelete })=> {
 
     const handleConfirmDelete = async()=>{
       if(listToDelete){
-        const deleteResponse = await handleDelete(listToDelete);
+        await onDelete(listToDelete);
         setIsPopupVisible(false);
         setListToDelete(null);
-        if(deleteResponse){
-          setAlert({show:true, message:'Successfully delete list', severity:'success'})
-          setTimeout(()=>{
-            setAlert({...alert, show:false})
-          }, 5000)
-        }else{
-          setAlert({show:true, message:'Error to delete list', severity:'error'})
-          setTimeout(()=>{
-            setAlert({...alert, show:false})
-          })
-        }
+        setAlert({ show: true, message: 'Successfully deleted list', severity: 'success' });
+        console.log('list berhasil dihapus')
       }
     }
+
+    useEffect(()=>{
+      if (alert.show){
+        setTimeout(()=>{
+          setAlert({...alert, show:false})
+        }, 5000)
+      }
+    }, [alert])
 
     const handleCancleDelete = () =>{
      setIsPopupVisible(false)
      setListToDelete(null)
+     setAlert1({show:true, message:'batal menghapus list', severity:'success'})
     }
-    const handleDelete = ()=>{
-      onDelete()
+    
+    const handleDelete = () =>{
+      onDelete(listToDelete);
     }
+
+  
     //END FUNCION DELETE
+
+    //ARCHIVE 
+    const handleConfirmArchive = async (id)=>{
+      setIsArchivePopupVisible(false);
+      console.log('Archiving list with ID:', listId);
+      try{
+        const response = await archiveLists(listId);
+        setAlert({show:true, message:'List has been successfully archived', severity:'success'})
+        setTimeout(()=>{
+          setAlert(prevState => ({ ...prevState, show:false}))
+        }, 5000)
+        loadLists();
+        console.log(response);
+      }catch(error){
+        setAlert({show:true, message:'Failed to archive list. Please ty again later.', severity:'error'})
+        setTimeout(()=>{
+          setAlert(prevState => ({ ...prevState, show:false}))
+        }, 5000)
+        console.error('Error while archiving list:', error)
+      }
+    }
+    useEffect(()=>{
+      loadLists();
+    }, [])
+
+    const handleArchive = () =>{
+      setIsArchivePopupVisible(true)
+      console.log('handleArchive success')
+    }
+    const handleCancleArchive= () =>{
+      setIsArchivePopupVisible(false)
+      console.log('handleCancle works')
+    }
+    //END ARVHIVE
 
     const toggleFormVisibility = () => {
       setShowForm(!showForm)
@@ -97,11 +142,6 @@ const List=({listId, listName, loadList, onDelete })=> {
       event.stopPropagation();
       setShowAction(showAction === cardId ? null : cardId)
       console.log('button berhasil di klik')
-    }
-
-    const handleActionCard = (cardId, action)=>{
-      console.log(`Action: ${action} for cards: ${cardId}`)
-      setShowAction(null)
     }
 
     const loadCards = async () => {
@@ -151,6 +191,17 @@ const List=({listId, listName, loadList, onDelete })=> {
         navigate(`/workspaces/${workspaceId}/boards/${boardId}/lists/${listId}/cards/${cardId}`);
       };
 
+      //DUPLICATE LIST
+      const handleDuplicateClick = () =>{
+        setSelectedList(listId);
+        setIsPopupOpen(true);
+      }
+
+      //POPUP LIST
+      const handleClosePopup=() =>{
+        setIsPopupOpen(false);
+        setSelectedList(null);
+      }
 
       return (
         <div className='list-container'>
@@ -168,32 +219,53 @@ const List=({listId, listName, loadList, onDelete })=> {
                 <div className='dropdown-menu-action'>
                   <ul className='dropdown-ul'>
                     Action
-                    <AiFillDelete className='ikon' size={20}/>
-                    <button className='btn-li' onClick={(e)=> {e.stopPropagation(); handleDeleteClick(boardId)}}>
-                      Delete <br />
-                      <span style={{fontSize:'10px', fontWeight:'normal'}}>Delete list</span>
-                    </button>
+                    <li className='dropdown-li'>
+                      <AiFillDelete className='ikon' size={20}/>
+                      <button className='btn-li' onClick={(e)=> {e.stopPropagation(); handleDeleteClick(listId)}}>
+                        Delete <br />
+                        <span style={{fontSize:'10px', fontWeight:'normal'}}>Delete list</span>
+                      </button>
+                      {isPopupVisible && (
+                        <div className='popup-overlay'>
+                          <div className='popup-content'>
+                            <h3>Konfirmasi penghapusan</h3>
+                            <p>Apakah anda yakin ingin menghapus list ini?</p>
+                            <button className='btn-confirm' onClick={(e) => {e.stopPropagation(); handleConfirmDelete()}}>Ya, hapus</button>
+                            <button className='btn-confirm' onClick={(e) => {e.stopPropagation(); handleCancleDelete()}}>Batal</button>
+                          </div>
+                        </div>
+                      )}
+                    </li>
+                     <li className='dropdown-li'>
+                      <HiArchive className='ikon' size={20}/>
+                      <button className='btn-li' onClick={(e)=> {e.stopPropagation(); handleArchive(listId)}}>
+                        Archive <br />
+                        <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive your list</span>
+                      </button>
+                      {isArchivePopupVisible && (
+                        <div className='popup-overlay'>
+                          <div className='popup-content'>
+                          <p>Dengan memindahkan board kedalam archive,<br /> berarti menghapus board pada halaman ini <br /> Apa anda yakin?</p>
+                            <button className='btn-confirm' onClick={(e) => {e.stopPropagation(); handleConfirmArchive()}}>Archive</button>
+                            <button className='btn-confirm' onClick={(e) => {e.stopPropagation(); handleCancleArchive()}}>Cancle</button>
+                          </div>
+                        </div>
+                      )}
+                    </li>
+                    
+                    <li className='dropdown-li'>
+                      <HiPlus className='ikon' size={20}/>
+                      <button className='btn-li' onClick={(e)=>  {e.stopPropagation(); handleDuplicateClick(listId)}}>
+                        Duplicate <br />
+                        <span style={{fontSize:'10px', fontWeight:'normal'}}>Duplicate your list</span>
+                      </button>
+                    </li>
                   </ul>
                 </div>
               )}
             </p>
-            {isPopupVisible && (
-                <div className='popup-overlay'>
-                  <div className='popup-content'>
-                    <h3>Konfirmasi penghapusan</h3>
-                    <p>Apakah anda yakin ingin menghapus list ini?</p>
-                    <button className='btn-confirm' onClick={(e) => {e.stopPropagation(); handleConfirmDelete()}}>Ya, hapus</button>
-                    <button className='btn-confirm' onClick={(e) => {e.stopPropagation(); handleCancleDelete()}}>Batal</button>
-                  </div>
-                </div>
-              )}
           </div>
-            {/* ALERT  */}
-            {alert.show && (
-              <AlertTitle className='alert-position' severity={alert.severity}>
-                {alert.message}
-              </AlertTitle>
-            )}
+
 
           <hr style={{opacity:'50%'}}/>
           <div className='card-list-lists'>
@@ -209,7 +281,7 @@ const List=({listId, listName, loadList, onDelete })=> {
                     {showAction === card.id && (
                     <div className='card-dropdown-menu-action'>
                       <ul className='dropdown-ul'>
-                        Actions
+                        {/* Actions
                         <li onClick={() => handleActionCard(card.id, 'delete')} className='dropdown-li'>
                           <AiFillDelete className='ikon' size={15} />
                           <div style={{size: '10px'}}>
@@ -223,7 +295,7 @@ const List=({listId, listName, loadList, onDelete })=> {
                             Archive <br />
                             <span style={{fontSize: '10px', fontWeight: 'normal'}}>Archive this card</span>
                           </div>
-                        </li>
+                        </li> */}
                       </ul>
                     </div>
                   )}
@@ -326,11 +398,24 @@ const List=({listId, listName, loadList, onDelete })=> {
                     <button className='add-btn' onClick={handleCreateCard}>Add Card</button>
                 </div>
               )}
-          </div>
 
+           {/* ALERT  */}
+           {alert.show && (
+              <AlertTitle className='alert-position' severity={alert.severity}>
+                {alert.message}
+              </AlertTitle>
+            )}    
+            {isPopupOpen && (
+              <DuplicateListPopup
+                listId={selectedList}
+                isOpen={isPopupOpen}
+                onClose={handleClosePopup}
+              />
+            )}
+          </div>
+          
           
       );
 }
 
 export default List
-

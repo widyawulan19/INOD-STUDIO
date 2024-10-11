@@ -51,7 +51,7 @@
 }
 /*Dropdwon-menu-action*/
 .dropdown-menu-action{
-  position: absolute;
+  /* position: absolute;
   background-color: white;
   border: 1px solid #ccc;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
@@ -61,6 +61,22 @@
   top: 40px;
   height: 100px;
   border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  max-height: 100px;
+  overflow-y: auto; */
+  position: absolute; /* Adjust as needed */
+  background-color: white; /* Set a background color */
+  border: 1px solid #ddd; /* Border styling */
+  width: 150px; /* Set a fixed width if necessary */
+  z-index: 1000; /* Ensure it appears above other elements */
+  /* max-height: none; Remove max height restriction */
+  height: 150px;
+  overflow: visible; /* Allow all content to be visible */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+  /* Add padding and border radius for styling */
+  padding: 10px;
+  border-radius: 4px;
 }
 .dropdown-ul{
   list-style: none;
@@ -333,3 +349,65 @@
 .addButton:hover{
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
+
+
+/*Confirm delete*/
+.dropdown-li .btn-li{
+  background-color: rgba(255, 255, 255, 0);
+  border: 1px solid rgba(255, 255, 255, 0);
+}
+.popup-overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-overlay .btn-confirm{
+  background-color: #97271C;
+  color: white;
+}
+.popup-overlay .btn-confirm:hover{
+  background-color: #491519;
+}
+
+.popup-content{
+  background: white;
+  color: black;
+  font-weight: 300;
+  padding: 20px;
+  border-radius: 10px;
+  /* display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; */
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.popup-content h3{
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: bold;
+}
+
+.popup-content button{
+  margin: 5px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.popup-content button:hover{
+  background-color: #491519;
+  color: white;
+}
+/* End Confirm delete*/

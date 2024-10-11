@@ -1,121 +1,82 @@
 import React, { useEffect, useState } from 'react'
-import '../style/DuplicateBoardStyle.css'
 import { duplicateBoard, getWorkspaces } from '../services/Api';
-import Alert from '@mui/material/Alert'
-import { Button } from '@mui/material';
-import { getBoardsByWorkspace } from './Note';
+import { AlertTitle, Alert } from '@mui/material';
+import '../style/DuplicateBoardStyle.css'
 
-const DuplicateBoardPopup=({isOpen, onClose, workspace, boardId, onBoardDuplicate})=> {
-    const [selectedWorkspace, setSelectedWorkspace] = useState('');
+const DuplicateBoardPopup=({boardId, isOpen, onClose, onConfirm, selectedBoard})=> {
     const [workspaces, setWorkspaces] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [boards, setBoards] = useState([]);
+    const [selectedWorkspaceId, setSelectedWorkspaceId] = useState('');
+    const [alert, setAlert] = useState({show:false, message:'', severity:''})
 
-    //fetch all workspaces
-    useEffect(()=> {
+    useEffect(()=>{
         const fetchWorkspaces = async () => {
             try{
                 const response = await getWorkspaces();
                 setWorkspaces(response.data);
             }catch(error){
-                console.error('Error fetching workspaces:', error);
-                alert('Gagal memuat workspace')
-            }finally{
-                setLoading(false)
+                console.error('Failed to fetch workspace:', error);
             }
         };
-        if (isOpen){
-            fetchWorkspaces();
-        }
-    }, [isOpen])
+        fetchWorkspaces();
+    }, [])
 
-    const handleDuplicate = async () => {
-        if(!selectedWorkspace){ 
-            alert('Silahkan pilih workspace tujuan!')
+    const handleDuplicateBoard = async () => {
+        if(!selectedWorkspaceId){
+            setAlert({ show:true, message:'please select a workspace', severity:'error'})
             return;
         }
+        console.log('Request Data:', {boardId, workspace_id: selectedWorkspaceId});
+
         try{
-            await duplicateBoard(boardId, {workspaceId: selectedWorkspace});
-            alert('Boards berhasil diduplikasi ke workspace yang dituju!');
-            if(typeof onBoardDuplicate === 'function'){
-                onBoardDuplicate(selectedWorkspace);
-            }
-            onClose();
+            await duplicateBoard(boardId, {workspace_id:selectedWorkspaceId});
+            setAlert({show:true, message:'Board successfully duplicated!', severity:'success'})
+            setTimeout(() => {
+                setAlert({...alert, show:false})
+                onClose();
+            }, 5000);
         }catch(error){
-            alert('Terjadi kesalahan saat menduplikasikan board: ' + error.message);
-        }
-        // try{
-        //     await duplicateBoard(boardId, {workspaceId: selectedWorkspace});
-        //     alert('Board berhasil diduplikasi ke workspace yang dituju!');
-        //     onBoardDuplicate(selectedWorkspace);
-        //     fetchBoards(selectedWorkspace);
-        //     onClose();
-        // }catch(error){
-        //     console.error('Terjadi kesalahan saat menduplikasi board: ', error.message)
-        //     // alert('Terjadi kesalahan saat menduplikasikan board:', error.message);
-        // }
-    }
-
-    const fetchBoards = async (workspaceId) => {
-        try{
-            const boardsData = await getBoardsByWorkspace(workspaceId);
-            setBoards(boardsData);
-        }catch (error){
-            console.error('Error fetching boards:', error);
-            alert('Gagal memuat boards setelah duplikasi')
+            console.error('Duplicate Error:', error);
+            setAlert({show: true, message:'Failed to duplicate board:' + error.message, severity:'error'})
+            setTimeout(()=>{
+                setAlert({...alert, show:false})
+            },5000)
         }
     }
 
-    const handleSelectChange = (event) => {
-        event.stopPropagation();
-        setSelectedWorkspace(event.target.value);
-    }
 
-    const handleSelectKlik = (event) => {
-        event.stopPropagation();
-    }
-    
-
-    return isOpen ? (
-        <div className='popup-overlay'>
-            <div className="popup">
+  return (
+    isOpen && ( // Pastikan popup hanya ditampilkan jika isOpen true
+        <div className="popup-overlay">
+            <div className="popup-content">
                 <h2>Duplicate Board</h2>
-                <label>Pilih workspace tujuan:</label>
-                {loading ? (
-                    <p>Loading workspace ...</p>
-                ):(
-                    <select 
-                        value={selectedWorkspace}
-                        onChange={handleSelectChange}
-                        onClick={handleSelectKlik}
+                <label className='popup-label'>
+                    Select workspace:
+                    <select
+                        value={selectedWorkspaceId}
+                        onChange={(e) => setSelectedWorkspaceId(e.target.value)}
                     >
-                    <option value="">-- Pilih Workspace --</option>
-                    {workspaces.map((ws)=>(
-                        <option key={ws.id} value={ws.id}>
-                            {ws.name}
-                        </option>
-                    ))}
+                        <option value="">Select Workspace</option>
+                        {workspaces.map((workspace) => (
+                            <option key={workspace.id} value={workspace.id}>
+                                {workspace.name}
+                            </option>
+                        ))}
                     </select>
-                )}
-                <button onClick={handleDuplicate}>Duplicate</button>
+                </label>
+                <button onClick={handleDuplicateBoard} disabled={!selectedWorkspaceId}>Duplicate Board</button>
                 <button onClick={onClose}>Cancel</button>
-
-                <div>
-                    <h3>Boards in Selected Workspace:</h3>
-                    {boards.length > 0 ? (
-                        <ul>
-                            {boards.map(board => (
-                                <li key={board.id}>{board.name}</li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No boards available.</p>
-                    )}
-                </div>
             </div>
+            {alert.show && (
+                    <AlertTitle className='alert-position' severity={alert.severity} onClose={()=> setAlert({...alert, show:false})}>
+                        {/* <AlertTitle>{alert.severity === 'error' ? 'Error':'Success'}</AlertTitle> */}
+                        {alert.message}
+                    </AlertTitle>
+                 )}
         </div>
-    ) : null;
-    
+        
+    )
+  )
 }
+
 
 export default DuplicateBoardPopup
