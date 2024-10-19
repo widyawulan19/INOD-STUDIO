@@ -42,44 +42,45 @@ const Card = ()=> {
     }
 
 return (
-    <div className='card-container'>
-      <h4>Cards</h4>
-      <div className='card-list'>
-        {cards.map((card) => (
-          <div key={card.id} className='card-item'>
-            <h6>{card.title}</h6>
-            <p>{card.description}</p>
-            {/* Button to navigate to card detail */}
-            <button onClick={() => handleToCardDetail(card.id)}>
-              View Card
-            </button>
-          </div>
-        ))}  
-      </div>
-      <div className='card-form'>
-        <input
-          type='text'
-          placeholder='Card Title'
-          value={newCard.title}
-          onChange={(e) => setNewCard({ ...newCard, title: e.target.value })}
-        />
-        <input
-          type='text'
-          placeholder='Description'
-          value={newCard.description}
-          onChange={(e) => setNewCard({ ...newCard, description: e.target.value })}
-        />
-        <input
-          type='text'
-          placeholder='Position'
-          value={newCard.position}
-          onChange={(e) => setNewCard({ ...newCard, position: e.target.value })}
-        />
+  <></>
+    // <div className='card-container'>
+    //   <h4>Cards</h4>
+    //   <div className='card-list'>
+    //     {cards.map((card) => (
+    //       <div key={card.id} className='card-item'>
+    //         <h6>{card.title}</h6>
+    //         <p>{card.description}</p>
+    //         {/* Button to navigate to card detail */}
+    //         <button onClick={() => handleToCardDetail(card.id)}>
+    //           View Card
+    //         </button>
+    //       </div>
+    //     ))}  
+    //   </div>
+    //   <div className='card-form'>
+    //     <input
+    //       type='text'
+    //       placeholder='Card Title'
+    //       value={newCard.title}
+    //       onChange={(e) => setNewCard({ ...newCard, title: e.target.value })}
+    //     />
+    //     <input
+    //       type='text'
+    //       placeholder='Description'
+    //       value={newCard.description}
+    //       onChange={(e) => setNewCard({ ...newCard, description: e.target.value })}
+    //     />
+    //     <input
+    //       type='text'
+    //       placeholder='Position'
+    //       value={newCard.position}
+    //       onChange={(e) => setNewCard({ ...newCard, position: e.target.value })}
+    //     />
         
-        <button onClick={handleCreateCard}>Add Card</button>
-        <button onClick={handleBackToList}>Back To List</button>
-      </div>
-    </div>
+    //     <button onClick={handleCreateCard}>Add New Card</button>
+    //     <button onClick={handleBackToList}>Back To List</button>
+    //   </div>
+    // </div>
   );
 }
  

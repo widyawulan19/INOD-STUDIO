@@ -7,7 +7,7 @@ import bg5 from '../assets/bg/bg5.jpeg';
 import bg6 from '../assets/bg/bg6.jpeg';
 import bg7 from '../assets/bg/bg7.jpeg';
 import bg8 from '../assets/bg/bg8.jpeg';
-
+ 
 export const Data_Bg = [
         {
             "id": 1,

@@ -2,10 +2,14 @@ import axios from "axios";
 
 const API_URL = 'http://localhost:3002/api';
 
-// Workspace APIs
+// Workspace APIs 
 export const getWorkspaces = () => axios.get(`${API_URL}/workspaces`);
 export const createWorkspace = (data) => axios.post(`${API_URL}/workspaces`, data);
-export const updateWorkspace = (id, data) => axios.put(`${API_URL}/workspaces/${id}`, data);
+// export const updateWorkspace = (id, data) => axios.put(`${API_URL}/workspaces/${id}`, data);
+export const updateWorkspace = (id, data) => axios.put(`${API_URL}/workspaces/${id}`,{
+    name: data.name,
+    description: data.description,
+})
 export const deleteWorkspace = (id) => axios.delete(`${API_URL}/workspaces/${id}`);
 export const getWorkspaceById = (id) => axios.get(`${API_URL}/workspaces/${id}`);
 export const updateWorkspaceBg = async (id, bgImage) => {
@@ -99,6 +103,7 @@ export const archiveLists = async (id) =>{
         throw error;
     }
 }
+
 //duplicate list
 export const duplicateList = async (listId, {board_id}) => {
     try{
@@ -111,7 +116,7 @@ export const duplicateList = async (listId, {board_id}) => {
         throw error;
     }
 }
-//getListsCountByBoard
+
 export const getListsCountByBoard = (boardId) => { return axios.get(`${API_URL}/list-count/${boardId}`)}
 // export const getListsCountByBoard = (boardId) => {
 //     return axios.get(`${API_URL}/list-count`,{
@@ -127,6 +132,29 @@ export const createCard = (data) => axios.post(`${API_URL}/cards`, data);
 export const updateCard = (id, data) => axios.put(`${API_URL}/cards/${id}`, data);
 export const deleteCard = (id) => axios.delete(`${API_URL}/cards/${id}`);
 export const getCardById = (id) => axios.get(`${API_URL}/cards/${id}`);
+export const archiveCard = async(id)=>{
+    try{
+        const response = await axios.post(`${API_URL}/cards/archive/${id}`);
+        return response.data;
+    }catch(error){
+        console.error('Error while archiving card data:', error);
+        throw error;
+    }
+}
+//Duplicate card
+export const duplicateCard = async (cardId, {list_id}) =>{
+    try{
+        const response = await axios.post(`${API_URL}/cards/duplicate/${cardId}`,{
+            list_id,
+        })
+        // return response.data;
+        return response;
+    }catch(error){
+        console.error('Failed to duplicate card:', error);
+        throw error;
+    }
+}
+
 
 // Card Description APIs
 export const createCardDescription = (data) => axios.post(`${API_URL}/card-description`, data);

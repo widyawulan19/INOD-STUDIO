@@ -1,36 +1,62 @@
 import React, { useEffect, useState } from 'react'
-import { getWorkspaces, createWorkspace, getBoardCountByWorkspace, getAllImage,deleteWorkspace,archiveWorkspace} from '../services/Api'
+import { getWorkspaces, createWorkspace, getBoardCountByWorkspace, getAllImage,deleteWorkspace,archiveWorkspace, getWorkspaceById} from '../services/Api'
 import { useNavigate } from 'react-router-dom';
 import '../style/WorkspaceStyle.css'
 import { BiSolidCalendarEdit } from "react-icons/bi";
-import { HiArchive,HiPlus,HiOutlineX , HiDotsHorizontal, HiOutlineSearch, HiChevronDown, HiChevronRight, HiChevronUp} from "react-icons/hi";
+import { HiArchive,HiPlus,HiOutlineX , HiDotsHorizontal, HiOutlineSearch, HiOutlineViewList} from "react-icons/hi";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { FaTags } from "react-icons/fa6";
-import { FaUserCircle } from "react-icons/fa";
+import { FaUserCircle, FaRegEdit } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
 import moment from 'moment';
 import { Data_Bg } from '../data/DataBg';
 import CheckIcon from '@mui/icons-material/Check';
 import { AlertTitle, Snackbar } from '@mui/material';
+import WorkspaceEdit from './WorkspaceEdit';
+import '../style/WorkspaceEdit.css'
+import DeleteWorkspace from '../popup/DeleteWorkspace';
+import ArchiveWorkspace from '../popup/ArchiveWorkspace';
+import ImageSelector from './ImageSelector';
+
+ 
 
 
-
-
-const Workspace=()=> {
+const Workspace=({workspaceId})=> {
     const [workspaces, setWorkspaces] = useState([]);
+    const [selectedWorkspace, setSelectedWorkspace]= useState(null);
+    const [error, setError] = useState(null);
     const [newWorkspace, setNewWorkspace] = useState({name:'', description:''});
     const navigate = useNavigate();
     const [showForm, setShowForm] = useState(false)
     const [showAction, setShowAction] = useState(false)
-    const [backgroundImage, setBackgroundImage] = useState([]);
+    // const [backgroundImage, setBackgroundImage] = useState([]);
     const [showBg, setShowBg] = useState(false);
     const [selectBg, setSelectBg] = useState(null);
     const [alert, setAlert] = useState({show:false, message:'', severity:''})
     //delete confirm
     const [isPopupVisible, setIsPopupVisible] = useState(false)
     const [workspaceToDelete, setWorkspaceToDelete] = useState(null);
+    //edit 
+    const [editingWorkspace, setEditingWorkspace] = useState(null);
+    const [isEditingModalVisible, setIsEditModalVisible] = useState(false);
+    //background selector
+    const [backgroundImage, setBackgroundImage] = useState(null)
 
+    
 
+    //edit
+    const handleEditWorkspaceClick = (workspaceId) =>{
+        setEditingWorkspace(workspaceId);
+        setIsEditModalVisible(true);
+        console.log('Workspace ID:', workspaceId)
+    };
+
+    const handleCloseEditModal = () =>{
+        setEditingWorkspace(null);
+        setIsEditModalVisible(false)
+    }
+ 
+    //delete
     const handleDeleteClick = (workspaceId) => {
         setWorkspaceToDelete(workspaceId);
         setIsPopupVisible(true);
@@ -115,6 +141,7 @@ const Workspace=()=> {
     const loadWorkspaces = async () => {
         try{
             const response = await getWorkspaces();
+            setWorkspaces(response.data);
             const workspacesData = response.data;
 
             const workspacesWithBoardCounts = await Promise.all(workspacesData.map(async(workspace)=>{
@@ -130,14 +157,18 @@ const Workspace=()=> {
         }
     }
 
-    
-    // const handleCreateWorkspace = async()=> {
-    //     await createWorkspace(newWorkspace);
-    //     loadWorkspaces();
-    //     setShowForm(false);
-    //     // setShowAction(false);
-    // }
 
+    useEffect(()=>{
+        const fetchWorkspace = async () =>{
+            try{
+                const response = await getWorkspaceById(workspaceId);
+                setWorkspaces(response.data);
+            }catch(error){
+                console.error('Error fetching workspace by ID', error);
+            }
+        }
+        fetchWorkspace();
+    },[workspaceId])
 
     const [alert3, setAlert3] = useState({ show: false, message: '', severity: '' });
     useEffect(()=>{
@@ -238,58 +269,34 @@ const Workspace=()=> {
 
 
   return (
-        <div className='workspace-container' 
-        style={{
-            backgroundImage: selectBg ? `url(${selectBg.image_url})`: 'none' ,
-            backgroundSize: 'cover', 
-            backgroundPosition:'center'
-            }}
-        >
+    <div className='workspace-container' 
+    style={{
+        backgroundImage: selectBg ? `url(${selectBg.image_url})`: 'none' ,
+        backgroundSize: 'cover', 
+        backgroundPosition:'center'
+        }}
+    >
             <div className="workspace-title">
                 <h4 style={{textAlign:'left', color:'white'}}>WORKSPACE DASHBOARD</h4>
                 <div style={{ display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    {/* <Background onChangeBackground={handleBackgroundChange}/> */}
                     <HiOutlineSearch size={20} className='workspace-icons'/>
                     <IoMdNotificationsOutline size={20} className='workspace-icons'/>
                     <FaUserCircle size={25} className='workspace-icons-user'/>
-
                 </div>
             </div>
 
-            <div style={{display:'flex', alignItems:'flex-end', justifyContent:'right', marginRight:'35px', position:'relative'}}>
-                <button className='btn-bg' onClick={toggleBgVisibility}>
-                    {showBg ? 
-                    (<>Background <HiChevronUp size={20} className='btn-icon'/></>):(<>Select Background <HiChevronDown size={20} className='btn-icon'/></>)
-                }
-                </button>
-                {showBg && (
-                    <div
-                        style={{
-                            backgroundColor:'white',
-                            border:'0.1px solid grey',
-                            borderRadius:'5px',
-                            boxShadow:'0px 4px 8px rgba(0,0,0,0.1)',
-                            padding:'5px',
-                            width:'137px',
-                            height:'100px',
-                            overflowY:'auto',
-                            position:'absolute',
-                            zIndex:'1000',
-                            top:'100%'
-                        }}
-                    >
-                        {Data_Bg.map((bg)=>(
-                            <div
-                                className='coverBg'
-                                key={bg.id}
-                                onClick={()=> handleBgSelect(bg)}
-                            >
-                                {bg.name}
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
+            {/* <ImageSelector onSelectImage={handleImageSelect}/>
+            {backgroundImage && (
+                <div>
+                    <h3>Selected Background Images:</h3>
+                    <img
+                        src={backgroundImage.image_url}
+                        alt={backgroundImage.name}
+                        style={{width:'100%', maxWidth:'500px'}}
+                    />
+                    <p>{backgroundImage.name}</p>
+                </div>
+            )} */}
 
             {alert.show && (
                 <AlertTitle
@@ -313,42 +320,33 @@ const Workspace=()=> {
                             </h3>
 
                             {showAction === workspace.id && (
-                                <div className='dropdown-menu-action' style={{height:'100px'}}>
+                                <div className='dropdown-menu-action' style={{height:'150px'}}>
                                     <ul className='dropdown-ul'>
-                                        Actions
+                                    <div style={{display:'flex', alignItems:'center', justifyContent:'space-between',color:'#491519'}}>
+                                        Action 
+                                        <HiOutlineViewList/>
+                                    </div>
+                                    <hr style={{color:'#491519'}}/>
                                         <li className='dropdown-li'>
                                             <AiFillDelete className='ikon' size={20}/>
-                                            <button onClick={(e)=> {e.stopPropagation(); handleDeleteClick(workspace.id)}} className='btn-li'>
+                                            <button onClick={(e)=> {e.stopPropagation(); handleDeleteClick(workspace.id)}} className='btn-li' style={{ padding:'0'}}>
                                                 Delete <br />
                                                 <span style={{fontSize:'10px', fontWeight:'normal'}}>Delete Workspace</span>
                                             </button>
-                                            
-                                            {isPopupVisible && (
-                                                <div className='popup-overlay'>
-                                                    <div className='popup-content'>
-                                                        <h3>Konfirmasi penghapusan</h3>
-                                                        <p>Apakah Anda yakin ingin menghapus workspace ini?</p>
-                                                        <button className='btn-confirm' onClick={(e)=> { e.stopPropagation() ;handleConfirmDelete()}} >Ya, hapus</button>
-                                                        <button className='btn-confirm' onClick={(e)=>{e.stopPropagation() ;handleCancleDelete()}}>Batal</button>
-                                                    </div>
-                                                </div>
-                                             )}
                                         </li>
                                         <li className='dropdown-li'>
                                             <HiArchive className='ikon' size={20}/>
-                                            <button className='btn-li' onClick={(e)=> {e.stopPropagation(); handleArchive(workspace.id)}}>
+                                            <button className='btn-li' onClick={(e)=> {e.stopPropagation(); handleArchive(workspace.id)}} style={{ padding:'0'}}>
                                                 Archive <br />
-                                                <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive your workspace</span>
+                                                <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive workspace</span>
                                             </button>    
-                                            {isArchivePopupVisible && (
-                                                <div className='popup-overlay'>
-                                                    <div className='popup-content'>
-                                                        <p>Dengan memindahkan workspace kedalam archive, berarti menghapus workspace pada halaman ini <br /> Apa anda yakin?</p>
-                                                        <button className='btn-confirm' onClick={(e) => {e.stopPropagation(); handleConfirmArchive(workspace.id)}}>Archive</button>
-                                                        <button className='btn-confirm' onClick={(e)=> {e.stopPropagation(); handleCancleArchive()}}>Cancle</button>
-                                                    </div>
-                                                </div>
-                                            )}    
+                                        </li>
+                                        <li className='dropdown-li'>
+                                            <FaRegEdit className='ikon' size={20}/>
+                                            <button className='btn-li' onClick={(e)=>{e.stopPropagation(); handleEditWorkspaceClick(workspace)}} style={{ padding:'0'}}>
+                                                Edit <br />
+                                                <span style={{fontSize:'10px', fontWeight:'normal'}}>Edit workspace</span>
+                                            </button>
                                         </li> 
                                     </ul>
                                 </div>
@@ -367,6 +365,8 @@ const Workspace=()=> {
 
                         </div>
                     ))}
+
+
                     <div className='workspace-card-input'>
                         {/* Create your new workspace here! */}
                         <button className='new' onClick={toggleFormVisibility}>
@@ -414,6 +414,32 @@ const Workspace=()=> {
                     )}
                     {/* end archive alert  */}
                     {/* ALERT  */}
+                    
+                    {isPopupVisible && (
+                        <DeleteWorkspace
+                            isOpen={isPopupVisible}
+                            onClose={handleCancleDelete}
+                            onDeleteConfirm={handleConfirmDelete}
+                        />
+                    )}
+                    {isArchivePopupVisible && (
+                        <ArchiveWorkspace
+                            workspaceId ={selectedWorkspace}
+                            isOpen={isArchivePopupVisible}
+                            onClose={handleCancleArchive}
+                            onArchiveConfirm={handleConfirmArchive}
+                        />
+                    )}
+                    {isEditingModalVisible && (
+                        <WorkspaceEdit
+                            isOpen={isEditingModalVisible}
+                            workspace={editingWorkspace}
+                            onClose={handleCloseEditModal}
+                            onSave={loadWorkspaces}
+                            onStopPropagation={(e)=>{e.stopPropagation()}}
+                        />
+                    )}
+                    
 
                 </div>
         </div>
@@ -431,4 +457,15 @@ export default Workspace
 4. mapping data bg
 5. buat const handleBgSelect
 
+
+{isArchivePopupVisible && (
+          <ArchiveCardPopup
+            boardId ={selectedBoard}
+            isOpen={isArchivePopupVisible}
+            onClose={handleCancleArchive}
+            onArchiveConfirm={handleConfirmArchive}
+          />
+        )}
+
+        const [selectedWorkspace,setSelectedWorkspace] = useState(null)
 */

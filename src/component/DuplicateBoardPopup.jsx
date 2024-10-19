@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { duplicateBoard, getWorkspaces } from '../services/Api';
 import { AlertTitle, Alert } from '@mui/material';
 import '../style/DuplicateBoardStyle.css'
+import duplicate from '../assets/duplication.png'
 
 const DuplicateBoardPopup=({boardId, isOpen, onClose, onConfirm, selectedBoard})=> {
     const [workspaces, setWorkspaces] = useState([]);
@@ -26,7 +27,7 @@ const DuplicateBoardPopup=({boardId, isOpen, onClose, onConfirm, selectedBoard})
             return;
         }
         console.log('Request Data:', {boardId, workspace_id: selectedWorkspaceId});
-
+ 
         try{
             await duplicateBoard(boardId, {workspace_id:selectedWorkspaceId});
             setAlert({show:true, message:'Board successfully duplicated!', severity:'success'})
@@ -47,13 +48,15 @@ const DuplicateBoardPopup=({boardId, isOpen, onClose, onConfirm, selectedBoard})
   return (
     isOpen && ( // Pastikan popup hanya ditampilkan jika isOpen true
         <div className="popup-overlay">
-            <div className="popup-content">
+            <div className='popup-content'>
                 <h2>Duplicate Board</h2>
+                <img src={duplicate} alt={duplicate} />
                 <label className='popup-label'>
                     Select workspace:
                     <select
                         value={selectedWorkspaceId}
                         onChange={(e) => setSelectedWorkspaceId(e.target.value)}
+                        style={{border:'1px solid #491519'}}
                     >
                         <option value="">Select Workspace</option>
                         {workspaces.map((workspace) => (
@@ -63,15 +66,15 @@ const DuplicateBoardPopup=({boardId, isOpen, onClose, onConfirm, selectedBoard})
                         ))}
                     </select>
                 </label>
-                <button onClick={handleDuplicateBoard} disabled={!selectedWorkspaceId}>Duplicate Board</button>
-                <button onClick={onClose}>Cancel</button>
+                <button className='duplicate-btn' onClick={handleDuplicateBoard} disabled={!selectedWorkspaceId}>Duplicate Board</button>
+                <button className='cancle-btn' onClick={onClose}>Cancel</button>
             </div>
             {alert.show && (
-                    <AlertTitle className='alert-position' severity={alert.severity} onClose={()=> setAlert({...alert, show:false})}>
-                        {/* <AlertTitle>{alert.severity === 'error' ? 'Error':'Success'}</AlertTitle> */}
-                        {alert.message}
-                    </AlertTitle>
-                 )}
+                <AlertTitle className='alert-position' severity={alert.severity} onClose={()=> setAlert({...alert, show:false})}>
+                    {/* <AlertTitle>{alert.severity === 'error' ? 'Error':'Success'}</AlertTitle> */}
+                    {alert.message}
+                </AlertTitle>
+            )}
         </div>
         
     )

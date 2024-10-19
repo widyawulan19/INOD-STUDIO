@@ -23,7 +23,7 @@
   transition: color 0.3s ease;
 }
 .dot-btn:hover{
-  color: #0079bf;
+  color: #97271C;
 }
 /*titik tiga ikon*/
 
@@ -327,6 +327,9 @@
   color: white;
   font-weight: bold;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .card-form button.add-btn:hover{
   background-color: #731e17;
@@ -334,17 +337,21 @@
 
 .addButton{
   /* background-color: blue; */
-  max-width: 100% ;
+  width: 265px;
   height: 5vh;
   padding: 10px;
   display: flex;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
   font-size: 15px;
   font-weight: bold;
   font-family: "Roboto Serif", serif;
   border: 0.1px solid #F4F5F7;
   background-color: white;
   border-radius: 5px;
+  border: 1px solid grey;
+  margin-top: 5px;
+  color: #491519;
 }
 .addButton:hover{
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -411,3 +418,7 @@
   color: white;
 }
 /* End Confirm delete*/
+
+/* ALERT */
+/* 
+/* ALERT END  */

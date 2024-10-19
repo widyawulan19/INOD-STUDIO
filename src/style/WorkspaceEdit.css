@@ -1,0 +1,230 @@
+.edit-popup-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    border: 1px solid #491519;
+  }
+  
+  .edit-popup-overlay .btn-confirm{
+    background-color: #97271C;
+    color: white;
+  }
+  .edit-popup-overlay .btn-confirm:hover{
+    background-color: #491519;
+  }
+  
+  .edit-popup-content{
+    background: white;
+    color: black;
+    font-weight: 300;
+    padding: 20px;
+    border-radius: 10px;
+    width: 30vw;
+    /* display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; */
+    border: 1px solid #491519;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .edit-popup-content h2{
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: bold;
+    color: #491519;
+  }
+  
+  .edit-popup-content h3{
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: bold;
+    color: #491519;
+  }
+  
+  .edit-popup-content button{
+    margin: 5px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .edit-popup-content button:hover{
+    background-color: #491519;
+    color: white;
+  }
+
+  .input-name{
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    color: #491519;
+    /* border: 1px solid  #491519; */
+  }
+  .input-name input{
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #491519;
+    color: rgba(0, 0, 0, 0.5);
+  }
+  .input-name label{
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .input-desc{
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    /* border: 1px solid  #491519; */
+    margin-top: 10px;
+    color: #491519;
+  }
+  .input-desc label{
+    font-weight: bold;
+    text-align: left;
+  }
+  .input-desc textarea{
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #491519;
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  .modal-actions button{
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #97271C;
+    color: white;
+    font-weight: bold;
+    width: 100px;
+  }
+
+  .modal-actions button:hover{
+    background-color: #491519;
+  }
+
+  .modal-actions button .save-btn{
+    background-color: #97271C;
+  }
+
+
+  .popup-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* color: rgba(0, 0, 0, 0.5); */
+    color: #491519;
+    margin-bottom: 5vh;
+    border-bottom: 0.5px solid #491519;
+  }
+
+  .edit-popup-content img{
+    width: 30%;
+    height: 30%;
+    /* border: 1px solid grey; */
+  }
+
+  .edit-popup-content .sub-title{
+    font-size: 15px;
+    text-align: center;
+    /* font-weight: bold; */
+    color: #491519;
+    margin-top: 2vh;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .edit-popup-content p{
+    font-size: 11px;
+    text-align: center;
+    font-weight: bold;
+    color: rgba(128, 128, 128, 0.5);
+    /* margin-top: 2vh; */
+    /* margin-bottom: 4vh; */
+  }
+
+  .popup-button{
+    /* background-color: rgba(128, 128, 128, 0.119); */
+    /* background-color: #97261c23; */
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5vh;
+  }
+
+  .popup-button button{
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    width: 100px;
+    color: #491519;
+    font-weight: bold;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.5);
+  }
+
+  .popup-button button:hover{
+    background-color: #491519;
+  }
+
+  .popup-button .delete-btn{
+    background-color: #97271C;
+    color: white;
+  }
+
+  .popup-button .cancle-btn{
+    border: 1px solid #491519;
+    box-shadow: rgba(0, 0, 0, 0.5);
+  }
+
+
+  /* //ARCHIVE */
+.edit-popup-content .archive-sub-title{
+  font-size: 13px;
+  text-align: center;
+  color: black;
+  margin-top: 2vh;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-weight: normal;
+}
+.archive-sub-title span{
+  color: #97271C;
+  font-weight: bold;
+}
+
+.edit-popup-content button {
+  font-weight: bold;
+  box-shadow: rgba(117, 71, 71, 0.5);
+}
+.edit-popup-content .archive-btn{
+  background-color: #97271C;
+  color: white;
+}
+
+.edit-popup-content .cancle-btn{
+  border: 1px solid #491519;
+  color: #491519;
+  background-color: white;
+}
+  /* END ARCHIVE */

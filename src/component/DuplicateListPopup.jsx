@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { duplicateList, getBoard } from '../services/Api';
 import '../style/DuplicateBoardStyle.css'
 import { AlertTitle } from '@mui/material';
+import duplicate from '../assets/duplication.png'
 
 const DuplicateListPopup=({listId, isOpen, onClose})=> {
     const [boards, setBoards] = useState([]);
@@ -54,11 +55,13 @@ const DuplicateListPopup=({listId, isOpen, onClose})=> {
         <div className='popup-overlay'>
             <div className='popup-content'>
                 <h2>Duplicate List</h2>
+                <img src={duplicate} alt={duplicate} />
                 <label className='popup-label'>
-                    Select Board:
+                    Select Board: <br />
                     <select
                         value={selectedBoardId}
                         onChange={(e)=>setSelectedBoardId(e.target.value)}
+                        style={{border:'1px solid #491519'}}
                     >
                         <option value="">Select Board</option>
                         {boards.map((board)=>(
@@ -68,8 +71,8 @@ const DuplicateListPopup=({listId, isOpen, onClose})=> {
                         ))}
                     </select>
                 </label>
-                <button onClick={handleDuplicateList} disabled={!selectedBoardId}>Duplicate List</button>
-                <button onClick={onClose}>Cancle</button>
+                <button className='duplicate-btn' onClick={handleDuplicateList} disabled={!selectedBoardId}>Duplicate List</button>
+                <button className='cancle-btn' onClick={onClose}>Cancle</button>
             </div>
             {alert.show && (
                 <AlertTitle className='alert-position' severity={alert.severity} onClose={()=> setAlert({...alert, show:false})}>

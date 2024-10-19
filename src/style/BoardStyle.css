@@ -120,6 +120,8 @@ margin-bottom: 5vh;
   white-space: nowrap;
   max-height: 100%;
   height: 20vh;
+  border: 1px solid #491519;
+  margin-right: 10px;
 }
 
 .board-card .dot-btn{
@@ -149,6 +151,7 @@ margin-bottom: 5vh;
   top: 30px; /* Jarak dari atas elemen yang mengandung dropdown */
   right: 10px; /* Jarak dari kanan elemen yang mengandung dropdown */
   /* z-index: 9999; Memastikan dropdown berada di atas konten lain */
+  /* z-index: 9999; */
   display: flex;
   flex-direction: column;
   border-radius: 5px;
@@ -211,9 +214,11 @@ margin-bottom: 5vh;
   overflow-y: visible;
   padding-top: 20px;
   max-width: 100%;
+  height: 40vh;
   box-sizing: border-box;
   white-space: nowrap;
   position: relative;
+  /* border: 1px solid yellow; */
 }
 
 .board-container h3{

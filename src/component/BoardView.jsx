@@ -6,7 +6,8 @@ import { HiChevronDown, HiChevronRight, HiChevronUp, HiPlus, } from 'react-icons
 import '../style/BoardViewStyle.css'
 import { LuUsers } from "react-icons/lu";
 import { Data_Bg } from '../data/DataBg'
-
+import { AlertTitle } from '@mui/material'
+ 
 const BoardView=()=> {
     const {workspaceId, boardId} = useParams();
     const [lists,setLists] = useState([]);
@@ -19,6 +20,18 @@ const BoardView=()=> {
     const [listToDelete, setListToDelete] = useState(null)
     const [isPopupVisible, setIsPopupVisible] = useState(false)
     const [alert,setAlert] = useState({show:true, message:'', severity:''})
+    //CARD ALERT
+    const [cardAlert, setCardAlert] = useState({show:false, message:'', severity:''})
+    //const handleAlert
+    const handleAlert =(message, severity) =>{
+        setAlert({show:true, message:'', severity:''})
+    }
+
+    setTimeout(()=>{
+        setCardAlert({...cardAlert,show:false})
+    }, 5000)
+
+    //END const handleAlert
 
     //const for background
     const [showBg, setShowBg] = useState(false)
@@ -88,35 +101,6 @@ const BoardView=()=> {
         loadLists();
     }, [loadLists])
 
-    //DELETE LIST
-    // const handleDeleteClick = (listId) => {
-    //     setListToDelete(listId);
-    //     setIsPopupVisible(true);
-    //     console.log('button delete berhasil di klik')
-    // }
-
-    // const handleConfirmDelete = async()=>{
-    //     if(listToDelete){
-    //         const deleteResponse = await handleDelete(listToDelete);
-    //         setIsPopupVisible(false);
-    //         setListToDelete(null)
-    //         if(deleteResponse){
-    //             setAlert({show:true, message:'Successfully delete your list', severity:'success'})
-    //             setTimeout(()=> {
-    //                 setAlert({...alert, show:false})
-    //             }, 5000) 
-    //         }else{
-    //             setAlert({show:true, message:'Failed to delete list', severity:'error'})
-    //             setTimeout(()=>{
-    //                 setAlert({...alert, show:false})
-    //             }, 5000)
-    //         }
-    //     }
-    // }
-    // const handleCancleDelete = () => {
-    //     setIsPopupVisible(false)
-    //     setListToDelete(null)
-    // }
 
     const handleDelete = async(listId) => {
         try{
@@ -178,7 +162,13 @@ const BoardView=()=> {
             backgroundPosition:'center'
         }}
     >
+        
         <div className='nav-date'>
+        {cardAlert.show && (
+          <AlertTitle className='alert-position' severity={cardAlert.severity}>
+            {cardAlert.message}
+          </AlertTitle>
+        )}
             <h3 style={{marginBottom:'0', marginTop:'0'}}>
             <button  
                 onClick={handleBackToWorkspace} 
@@ -259,6 +249,7 @@ const BoardView=()=> {
                                 listName={list.name} 
                                 loadLists={loadLists}
                                 onDelete={() => handleDelete(list.id)}
+                                handleAlert={handleAlert}
                             />
                         </div>
                     </div>
