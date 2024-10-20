@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { getAllCardDescriptions, getAllMarketingData } from '../services/Api'
-import { FaFilter } from 'react-icons/fa';
+import { getAllCardDescriptions, getAllMarketingData, createMarketingData } from '../services/Api'
+import { FaFilter,FaPlus } from 'react-icons/fa';
 import '../style/MarketingStyle.css'
 import moment from 'moment';
+import AddDataMarketing from '../popup/AddDataMarketing';
 
 
 function Marketing() {
@@ -15,6 +16,55 @@ function Marketing() {
   const [currentPage, setCurrentPage] = useState(1);
   const [dataPerPage] = useState(10);
   const [member, setMember] = useState([]);
+  //CREATE DATA MARKETING
+  const [isDataOpen, setIsDataOpen] =  useState(false);
+  const [newData, setNewData] = useState({
+    nomer_active_order:'',
+    input_by:'',
+    buyer_name:'',
+    code_order:'',
+    jumlah_track:'',
+    order_number:'',
+    account:'',
+    deadline:'',
+    jumlah_revisi:'',
+    order_type:'',
+    offer_type:'',
+    jenis_track:'',
+    genre:'',
+    price:'',
+    required_file:'',
+    project_type:'',
+    duration:'',
+    reference:'',
+    file_and_chat:'',
+    detail_project:'',
+    progress:''
+  });
+
+  const handleChange = (e) => {
+    setNewData({
+      ...newData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) =>{
+    e.preventDefault();
+    try{
+      const response = await createMarketingData(newData);
+      console.log('Data successfully saved:'. response.data);
+    }catch(error){
+      console.log('Error creating marketing data:', error);
+    }
+  }
+
+  const handleCancleAddData = () => {
+    setIsDataOpen(false)
+  }
+
+  //END CREATE DATA MARKETING
+
 
   //category, handleCategoryChange, filterValue, handleFilterChange,filterMember
   const fetchingMaketingData = useCallback(async ()=>{
@@ -69,111 +119,143 @@ function Marketing() {
 
   return (
     <div>
-    <div className='container-marketing'>
-      <div className='filter-form'>
-        <label htmlFor='category' className='filter-label'>Filter by:</label>
-        <select 
-          id="category"
-          value={category}
-          onChange={handleCategoryChange}
-          className='filter-select'
-        >
-          <option value="all">All</option>
-          <option value="code_order">Code Order</option>
-          <option value="nomer_active_order">Active Order</option>
-          <option value="input_by">Input By</option>
-          <option value="buyer_name">Buyer Name</option>
-        </select>
+      <div className='container-marketing'>
 
-        {/* input untuk memasukkan nilai filter  */}
-        {category !== 'all' && (
-          <input 
-            type="text" 
-            placeholder={`Enter ${category}`}
-            value={filterValue}
-            onChange={handleFilterChange}
-            className='custom-input'
-          />
-        )}
-        <button
-          onClick={filterMember}
-          style={{
-            display:'flex',
-            alignItems:'center',
-            justifyContent:'center'
-          }}
-        >
-          <FaFilter style={{marginRight:'0.5vw'}}/>Filter
-        </button>
+        {/* FILTER COMPONENT  */}
+        <div className='filter-form'>
+          <label htmlFor='category' className='filter-label'>Filter by:</label>
+          <select 
+            id="category"
+            value={category}
+            onChange={handleCategoryChange}
+            className='filter-select'
+          >
+            <option value="all">All</option>
+            <option value="code_order">Code Order</option>
+            <option value="nomer_active_order">Active Order</option>
+            <option value="input_by">Input By</option>
+            <option value="buyer_name">Buyer Name</option>
+          </select>
 
-      </div>
-      <div className='tabel-data-marketing'>
-          {filteredMember.length > 0 ? (
-            <table>
-              <thead>
-                <tr>
-                  <th>Nomer Active Order</th>
-                  <th>Input By</th>
-                  <th>Buyer Name</th>
-                  <th>Code Order</th>
-                  <th>Jumlah Track</th>
-                  <th>Order Number</th>
-                  <th>Account</th>
-                  <th>Deadline</th>
-                  <th>Jumlah Revisi</th>
-                  <th>Order Type</th>
-                  <th>Offer Type</th>
-                  <th>Jenis Track</th>
-                  <th>Genre</th>
-                  <th>Price</th>
-                  <th>Required File</th>
-                  <th>Project Type</th>
-                  <th>Duration</th>
-                  <th>Reference</th>
-                  <th>File and Chat</th>
-                  <th>Detail Project</th>
-                  <th>Progress</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredMember.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.nomer_active_order}</td>
-                    <td>{item.input_by}</td>
-                    <td>{item.buyer_name}</td>
-                    <td>{item.code_order}</td>
-                    <td>{item.jumlah_track}</td>
-                    <td>{item.order_number}</td>
-                    <td>{item.account}</td>
-                    <td>{moment(item.deadline).format('D MMMM YYYY')}</td>
-                    <td>{item.jumlah_revisi}</td>
-                    <td>{item.order_type}</td>
-                    <td>{item.offer_type}</td>
-                    <td>{item.jenis_track}</td>
-                    <td>{item.genre}</td>
-                    <td>{item.price}</td>
-                    <td>{item.required_file}</td>
-                    <td>{item.project_type}</td>
-                    <td>{item.duration}</td>
-                    <td>{item.reference}</td>
-                    <td>{item.file_and_cha}</td>
-                    <td>{item.detail_project}</td>
-                    <td>{item.progress}</td>
-                    <td>
-                      <button className='btn-action'>Edit</button>
-                      <button className='btn-action'>Archive</button>
-                      <button className='btn-action'>Delete</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p>No data available.</p>
+          {/* input untuk memasukkan nilai filter  */}
+          {category !== 'all' && (
+            <input 
+              type="text" 
+              placeholder={`Enter ${category}`}
+              value={filterValue}
+              onChange={handleFilterChange}
+              className='custom-input'
+            />
+          )}
+          <button
+            onClick={filterMember}
+            style={{
+              display:'flex',
+              alignItems:'center',
+              justifyContent:'center'
+            }}
+          >
+            <FaFilter style={{marginRight:'0.5vw'}}/>Filter
+          </button>
+        </div>
+        {/* END FILTER COMPONENT  */}
+
+        {/* DROPDOWN CREATE COMPONENT  */}
+        <div className='dropdown-create'>
+          <button
+            onClick={()=> setIsDataOpen(!isDataOpen)}
+            style={{
+              display:'flex',
+              alignItems:'center',
+              justifyContent:'center'
+            }}
+          > 
+          <FaPlus style={{marginRight:'0.5vw'}}/>
+            NEW DATA
+          </button>
+          {isDataOpen && (
+            <AddDataMarketing
+              isOpen={isDataOpen}
+              newData={newData}
+              data={setNewData}
+              handleSubmit={handleSubmit}
+              handleChange={handleChange}
+              handleClose={handleCancleAddData}
+            />
           )}
         </div>
-      </div>
+        {/* END DROPDOWN CREATE COMPONENT  */}
+
+          {/* SHOW DATA MARKETING  */}
+        <div className='tabel-data-marketing'>
+            {filteredMember.length > 0 ? (
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nomer Active Order</th>
+                    <th>Input By</th>
+                    <th>Buyer Name</th>
+                    <th>Code Order</th>
+                    <th>Jumlah Track</th>
+                    <th>Order Number</th>
+                    <th>Account</th>
+                    <th>Deadline</th>
+                    <th>Jumlah Revisi</th>
+                    <th>Order Type</th>
+                    <th>Offer Type</th>
+                    <th>Jenis Track</th>
+                    <th>Genre</th>
+                    <th>Price</th>
+                    <th>Required File</th>
+                    <th>Project Type</th>
+                    <th>Duration</th>
+                    <th>Reference</th>
+                    <th>File and Chat</th>
+                    <th>Detail Project</th>
+                    <th>Progress</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredMember.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.nomer_active_order}</td>
+                      <td>{item.input_by}</td>
+                      <td>{item.buyer_name}</td>
+                      <td>{item.code_order}</td>
+                      <td>{item.jumlah_track}</td>
+                      <td>{item.order_number}</td>
+                      <td>{item.account}</td>
+                      <td>{moment(item.deadline).format('D MMMM YYYY')}</td>
+                      <td>{item.jumlah_revisi}</td>
+                      <td>{item.order_type}</td>
+                      <td>{item.offer_type}</td>
+                      <td>{item.jenis_track}</td>
+                      <td>{item.genre}</td>
+                      <td>{item.price}</td>
+                      <td>{item.required_file}</td>
+                      <td>{item.project_type}</td>
+                      <td>{item.duration}</td>
+                      <td>{item.reference}</td>
+                      <td>{item.file_and_cha}</td>
+                      <td>{item.detail_project}</td>
+                      <td>{item.progress}</td>
+                      <td>
+                        <button className='btn-action'>Edit</button>
+                        <button className='btn-action'>Archive</button>
+                        <button className='btn-action'>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p>No data available.</p>
+            )}
+          </div>
+          {/* END SHOW DATA MARKETING  */}
+
+        </div>
     </div>
   )
 }

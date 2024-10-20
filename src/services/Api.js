@@ -175,7 +175,7 @@ export const getCardLabels = (cardId) => axios.get(`${API_URL}/cards-labels/${ca
 export const updateCardLabels = (cardId, labels) => axios.put(`${API_URL}/cards/${cardId}/labels`, { labels });
 
 
-//cover
+//cover 
 export const getAllCover = () => axios.get(`${API_URL}/cover`);
 export const getCoverById = (id) => axios.get(`${API_URL}/cover/${id}`);
 export const updateCover = (id,data) => axios.put (`${API_URL}/cover/${id}`, data);

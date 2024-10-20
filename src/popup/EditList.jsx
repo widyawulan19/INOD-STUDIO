@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import '../style/WorkspaceEdit.css'
 import { updateList } from '../services/Api'
-
+ 
 const EditList=({list, listId, onClose, onSave}) =>{
     const [editList, setEditList] = useState({
         name: list.name || '',

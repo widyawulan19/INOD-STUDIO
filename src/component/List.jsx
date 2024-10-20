@@ -18,6 +18,8 @@ import DeleteListPopup from '../popup/DeleteListPopup.jsx';
 import ArchiveListPopup from '../popup/ArchiveListPopup.jsx';
 import EditList from '../popup/EditList.jsx';
 import EditCard from '../popup/EditCard.jsx';
+import DeleteCard from '../popup/DeleteCard.jsx';
+import ArchiveCard from '../popup/ArchiveCard.jsx';
 
 
 const List=({listId, listName, loadLists, onDelete, handleAlert })=> {
@@ -571,7 +573,7 @@ const List=({listId, listName, loadLists, onDelete, handleAlert })=> {
                           </div>
                         ))}
                       </div>
-                    )}
+                    )} 
                       <button className='add-btn' onClick={handleCreateCard}>Add Card</button>
                 </div>
               )}
@@ -634,6 +636,22 @@ const List=({listId, listName, loadLists, onDelete, handleAlert })=> {
                 card = {editCard}
                 onClose={handleCloseEditCard}
                 onSave={loadCards}
+              />
+            )}
+            {isCardPopupVisible && (
+              <DeleteCard
+                cardId={selectedCard}
+                isOpen={isCardPopupVisible}
+                onClose={handleCancleDeleteCard}
+                onDeleteConfirm={handleConfirmDeleteCard}
+              />
+            )}
+            {isCardArchivePopupVisible && (
+              <ArchiveCard
+                cardId={selectedCard}
+                isOpen={isCardArchivePopupVisible}
+                onClose={handleCancleArchiveCard}
+                onArchiveConfirm={handleConfirmArchiveCard}
               />
             )}
             {/* END CARD  */}

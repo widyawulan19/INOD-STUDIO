@@ -11,7 +11,7 @@ import { Data_Cover } from '../data/DataCover.js'
  
 const CardDetail = () => {
     const {workspaceId, boardId, listId, cardId} = useParams();
-    const [cardDetail,setCardDetail] = useState(null);
+    const [cardDetail,setCardDetail] = useState([]);
     const [labels, setLabels] = useState([]);
     const [selectedLabels, setSelectedLabels] = useState([])
     const navigate = useNavigate();
@@ -123,10 +123,6 @@ const CardDetail = () => {
   fetchCovers();
   }, []);
   
-    
-      if (!cardDetail) {
-        return <p>Loading...</p>;
-      }
 
       const handleLabelSelect = (e) =>{
         const labelId = e.target.value;
@@ -167,7 +163,7 @@ const CardDetail = () => {
                   <img src={selectCover.cover_image_url} alt={selectCover.name} />
                 </div>
               )}
-            </div>
+            </div> 
             <div className="container">
               <div className="description" style={{}}>
                 <h5 style={{textAlign:'left'}}> <HiOutlineCreditCard size={25}/>New Project-1track-alexxpiinksz-SWQUENCE-1D343 EXTRA FAST</h5>
