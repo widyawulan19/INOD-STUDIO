@@ -13,6 +13,13 @@ import cover12 from '../assets/cover/PINDAH_PRODUCER_(1).png';
 import cover13 from '../assets/cover/PINDAH_PRODUCER_(2).png';
 import cover14 from '../assets/cover/PRODUCE_MIXMAS_NEW.png';
 import cover15 from '../assets/cover/PRODUCE_MIXMAS_REVISI.png';
+import cover16 from '../assets/cover/pink.png';
+import cover17 from '../assets/cover/green.png';
+import cover18 from '../assets/cover/grey.png';
+import cover19 from '../assets/cover/orange.png';
+import cover20 from '../assets/cover/red.png';
+import cover21 from '../assets/cover/yellow.png';
+
 
 
 
@@ -91,7 +98,38 @@ export const Data_Cover = [
         "id": 15,
         "name": "PRODUCE_MIXMAS_REVISI",
         "cover_image_url": cover15
+    },
+    {
+        "id": 16,
+        "name": "PINK",
+        "cover_image_url": cover16
+    },
+    {
+        "id" :17,
+        "name":"GREEN",
+        "cover_image_url":cover17
+    },
+    {
+        "id":18,
+        "name":"GREY",
+        "cover_image_url":cover18
+    },
+    {
+        "id":19,
+        "name":"ORANGE",
+        "cover_image_url":cover19
+    },
+    {
+        "id":20,
+        "name":"RED",
+        "cover_image_url":cover20
+    },
+    {
+        "id":21,
+        "name":"YELLOW",
+        "cover_image_url":cover21
     }
+
 ]
 
 /*

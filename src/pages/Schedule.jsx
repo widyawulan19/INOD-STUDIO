@@ -51,12 +51,6 @@ function Schedule() {
           setFilteredMember(filtered)
         }
       };
-
-    //   const indexOfLastMember = currentPage * dataPerPage;
-    //   const indexOfFirstMember = indexOfLastMember = dataPerPage;
-    //   const currentMembers = member.slice(indexOfFirstMember, indexOfLastMember);
-    //   const totalPages = Math.ceil(member.length/dataPerPage);
-
       //date
     //mendapatkan nama, hari, tanggal saat ini
     const daysOfWeek2 = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
@@ -119,43 +113,58 @@ function Schedule() {
             <div className='btn-member'>
                 <button><Link to='/member'>View All Member</Link></button>
             </div>
-            <div className='schedule-table'>
-                {filteredMember.length > 0 ? (
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Divisi</th>
-                                <th>Shift</th>
-                                {daysOfWeek.map((day) => (
-                                    <th key={day}>{day}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredMember.map((user) => (
-                                <tr key={user.id}>
-                                    <td style={{textAlign:'left'}}>{user.name}</td>
-                                    <td>{user.divisi}</td>
-                                    <td>{user.shift}</td>
-                                    {daysOfWeek.map((day, index) => {
-                                        const isWorkDay = user.work_days.includes(day);
-                                        return (
-                                            <td 
-                                                key={day}
-                                                className='attent-status'
-                                            >
-                                                {isWorkDay ? <><p className='available'>Available</p></> : <><p className='notAvailable'>Not Available</p></>}
-                                            </td>
-                                        );
-                                    })}
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                ) : (
-                    <p>No employee data available.</p>
-                )}
+            <div className="schedule-tabel-container">
+              <div className='schedule-table'>
+                  {filteredMember.length > 0 ? (
+                      <table> 
+                          <thead>
+                              <tr>
+                                  <th style={{borderTopLeftRadius:'8px', borderBottomLeftRadius:'8px'}}>Name</th>
+                                  <th>Divisi</th>
+                                  <th>Shift</th>
+                                  {daysOfWeek.map((day) => (
+                                      <th
+                                      style={
+                                        day === daysOfWeek.length - 1
+                                          ? { borderTopRightRadius: '8px', borderBottomRightRadius: '8px' }
+                                          : {}
+                                      }
+                                        key={day}>
+                                          {day}
+                                        </th>
+                                  ))}
+                              </tr>
+                          </thead>
+                          <tbody>
+                              {filteredMember.map((user) => (
+                                  <tr key={user.id}>
+                                      <td style={{textAlign:'left', borderTopLeftRadius:'8px', borderBottomLeftRadius:'8px'}}>{user.name}</td>
+                                      <td>{user.divisi}</td>
+                                      <td>{user.shift}</td>
+                                      {daysOfWeek.map((day, index) => {
+                                          const isWorkDay = user.work_days.includes(day);
+                                          return (
+                                              <td 
+                                                  key={day}
+                                                  className='attent-status'
+                                                  style={
+                                                    day === daysOfWeek.length - 1
+                                                      ? { borderTopRightRadius: '8px', borderBottomRightRadius: '8px' }
+                                                      : {}
+                                                  }
+                                              >
+                                                  {isWorkDay ? <><p className='available'>Available</p></> : <><p className='notAvailable'>Not Available</p></>}
+                                              </td>
+                                          );
+                                      })}
+                                  </tr>
+                              ))}
+                          </tbody>
+                      </table>
+                  ) : (
+                      <p>No employee data available.</p>
+                  )}
+              </div>
             </div>
         </div>
     </div>

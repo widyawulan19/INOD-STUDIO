@@ -1,7 +1,46 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 
+.App2 {
+  display: flex; 
+  flex: 1;
+}
+
+.sidebar {
+  position: relative;
+  width: 250px;
+  background-color: #f4f4f4;
+  z-index: 10;
+}
+
+.main-content {
+  /* margin-left: 10px; */
+  position: relative;
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 1;
+  background-color: rgba(232, 232, 232, 0.414);
+}
+
+.navbar {
+  height: 60px;
+  background-color: #007bff;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+
+}
+
+
+/* 
 .App {
   text-align: center;
-  background-image: linear-gradient(to right, #000000, #1f0c10, #341118, #4b141c, #62161e, #76161f, #8a171e, #9e191b, #b51519, #cc1015, #e4080d, #fb0000);
+  background-color: white;
   font-family: "Nunito", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
@@ -16,4 +55,4 @@
 .App2{
   flex: 1;
   overflow: hidden;
-}
+} */

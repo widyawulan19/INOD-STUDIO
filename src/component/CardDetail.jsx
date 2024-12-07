@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getCardDescriptionById, getlabel, getCardLabels, getCardById, getAllCover,  } from '../services/Api';
-import { IoIosSend } from "react-icons/io";
-import { HiOutlineCreditCard,HiMenuAlt2,HiOutlineUserAdd,HiOutlinePaperClip,HiOutlineArrowRight,HiOutlineDuplicate, HiOutlineArchive, HiChevronDown, HiChevronUp } from "react-icons/hi";
-import { FaUserAstronaut, FaCcDiscover } from "react-icons/fa";
+import { getCardDescriptionById, getlabel,  getCardById, getAllCover, getCardDetails, getMarketingDataByCardId, getCards,updateCard } from '../services/Api';
+import {  IoIosCard } from "react-icons/io";
+import { HiOutlineUserAdd,HiOutlinePaperClip,HiOutlineArrowRight,HiOutlineDuplicate, HiOutlineArchive,HiOutlineX,HiOutlineCloud } from "react-icons/hi";
+import {  FaCcDiscover, FaRegEdit } from "react-icons/fa";
+import { TbTags } from "react-icons/tb";
 import '../style/CardDetail.css'
 import { Data_Cover } from '../data/DataCover.js'
-
-
+import { Data_Lable } from '../data/DataLabel.js';
+import { Data_User } from '../data/DateUser.js';
+import CustomeDate from './CustomeDate.jsx';
+import DescriptionActivities from './DescriptionActivities.jsx';
+import { BsPlus } from 'react-icons/bs';
+import profil3 from '../assets/profil/profil3.jpg'
+import DisplayDate from './DisplayDate.jsx';
+import EditCard from '../popup/EditCard.jsx';
+import CardMarketingDetail from './CardMarketingDetail.jsx';
  
 const CardDetail = () => {
     const {workspaceId, boardId, listId, cardId} = useParams();
@@ -15,12 +23,64 @@ const CardDetail = () => {
     const [labels, setLabels] = useState([]);
     const [selectedLabels, setSelectedLabels] = useState([])
     const navigate = useNavigate();
-    const [card, setCard] = useState(null)
+    const [card, setCard] = useState([]);
+    // const [cards, setCards] = useState([]);
     const [cover, setCover] = useState([]);
+    // const [covers, setCovers] = useState(Data_Cover);
     const [cardCover, setCardCover] = useState([]);
     const [showOption, setShowOption] = useState(false);
     const [showCover, setShowCover] = useState(false);
     const [selectCover, setSelectCover] = useState(null);
+    //select label
+    const [selectedLabel, setSelectedLabel] = useState([])
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+    //card description
+    const [cardData, setCardData] = useState(null);
+    const [marketingData, setMarketingData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    //state to edit card
+    const [editCard, setEditCard] = useState(null);
+    const [isEditCardOpen, setIsEditCardOpen] = useState(false);
+
+    //edit card
+    const handleCardEditClick = (cardId)=>{
+      setEditCard(cardId);
+      setIsEditCardOpen(true);
+      console.log('Card Id:', cardId);
+    }
+    const handleCloseEditCard = () => {
+      setEditCard(null);
+      setIsEditCardOpen(false);
+    }
+
+
+    // LABEl 
+    useEffect(()=>{
+      const saveLabel = localStorage.getItem(`selectedLabel_${cardId}`);
+      if(saveLabel){
+        try{
+          const parsedLabel = JSON.parse(saveLabel);
+          if(Array.isArray(parsedLabel)){
+            setSelectedLabel(parsedLabel);
+          }
+        }catch(error){
+          console.error('Error parsing selected Label:', error)
+        }
+      }
+    },[cardId]);
+    
+    const handleLabel = (label) => {
+      const isSelected = selectedLabel.some((lbl)=> lbl.id === label.id);
+      const updateSelection = isSelected
+      ?  selectedLabel.filter((lbl)=> lbl.id !== label.id)
+      :  [...selectedLabel, label]
+
+      setSelectedLabel(updateSelection);
+      localStorage.setItem(`selectedLabel_${cardId}`, JSON.stringify(updateSelection))
+    }
+
+    //END LABEL
 
     const hexToRgba = (hex, opacity) => {
       // Pastikan hex dimulai dengan '#' dan panjangnya 7 karakter
@@ -49,11 +109,7 @@ const CardDetail = () => {
     //cover
     const toggleCoverVisibility = () =>{
       setShowCover(!showCover);
-    }
-
-    const handleCoverSelect = (cover)=>{
-      setSelectCover(cover);
-      setShowCover(false);
+      console.log('data label', Data_Cover)
     }
 
     useEffect(() => {
@@ -65,13 +121,25 @@ const CardDetail = () => {
             console.error("Failed to fetch card: ", error);
         }
       };
-      const fetchCardDetail = async () => {
-          try {
-              const response = await getCardDescriptionById(cardId);
-              setCardDetail(response.data[0]);
-          } catch (error) {
-              console.error('Error fetching card detail:', error);
+     
+      const fetchCardDetails = async () => {
+        try {
+          const response = await fetch(`/api/cardDetails/${cardId}`);
+          
+          // Mengecek apakah respons berhasil
+          if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
           }
+  
+          const data = await response.json();
+          
+          // Menyimpan data ke state
+          setCardData(data.card);
+          setMarketingData(data.marketing);
+        } catch (err) {
+          setError('Gagal mengambil data card dan marketing');
+          console.error(err);
+        }
       };
   
       const fetchLabels = async () => {
@@ -82,33 +150,77 @@ const CardDetail = () => {
               console.error('Error fetching labels:', error);
           }
       };
-      
-      const fetchCover = async () => {
+
+      const fetchCover = () => {
         try{
-          const response = await getAllCover();
-          setCover(response.data);
-          console.log('Cover Data:', response.data)
+          const storedCoverData = localStorage.getItem('coverData');
+          if(storedCoverData){
+            const coverData = JSON.parse(storedCoverData);
+            setCover(coverData);
+          }else{
+            localStorage.setItem('coverData', JSON.stringify(Data_Cover));
+            setCover(Data_Cover);
+          }
+          const savedCover = localStorage.getItem(`cardCover_${cardId}`);
+          if(savedCover){
+            setSelectCover(JSON.parse(savedCover));
+          }
         }catch(error){
           console.error('Error fetching cover image:', error);
         }
+      };
+
+      const fetchMarketingData = async () => {
+        try {
+            const response = await getMarketingDataByCardId(cardId);
+            setMarketingData(response.data); // Store marketing data
+        } catch (error) {
+            console.error('Error fetching marketing data:', error);
+        }
+    };
+
+    const fetchCardsData = async () =>{
+      try{
+        const response = await getCards(listId);
+        console.log('Received cards data:', response.data);
+        setCard(response.data.filter(card => card.listId === Number(listId)))
+      }catch(error){
+        console.error('Failed to load cards:', error);
       }
+    }
+      
   
-      // const fetchCardLabels = async () => {
-      //     try {
-      //         const response = await getCardLabels(cardId);
-      //         const labelIds = response.data.map(label => label.id);
-      //         setSelectedLabels(labels.filter(label => labelIds.includes(label.id)));
-      //     } catch (error) {
-      //         console.error('Error fetching card labels:', error);
-      //     }
-      // };
-  
-      fetchCardDetail();
+      fetchCardDetails();
       fetchLabels();
       fetchCard();
+      fetchCardsData();
       fetchCover();
+      fetchMarketingData();
       //fetchCardLabels();
-  }, [cardId]);
+  }, [cardId],[listId]);
+
+
+  const handleSaveEditCard = async(updateCard) =>{
+    try{
+      const response = await updateCard();
+      if(response.ok){
+        const data = await response.json();
+        setEditCard(data);
+        setIsEditCardOpen(false);
+      }else{
+        console.error('Failed to update card data');
+      }
+    }catch(error){
+      console.error('Error saving card data:', error);
+    }
+  };
+
+
+
+  const handleCoverSelect = (cover) => {
+    setSelectCover(cover);
+    localStorage.setItem(`cardCover_${cardId}`, JSON.stringify(cover)); // Save selected cover to local storage
+};
 
   useEffect(()=> {
     const fetchCovers = async () => {
@@ -142,6 +254,17 @@ const CardDetail = () => {
       const handleBackToBoardView = () => {
         navigate(`/workspaces/${workspaceId}/boards/${boardId}`);
       };
+      
+      const handleToOther = () => {
+        localStorage.setItem(`selectedLabel_${cardId}`, JSON.stringify(selectedLabel));
+        navigate(`/workspaces/${workspaceId}/boards/${boardId}/lists/${listId}/cards/${cardId}/other-page`);
+      }
+      const handleToExample = () => {
+        navigate(`/example`);
+      }
+      const handleDesc = () => {
+        navigate(`/description`)
+      }
 
     const handleLabelChange = (e) => {
       const selectedOptions = Array.from(e.target.selectedOptions);
@@ -154,9 +277,15 @@ const CardDetail = () => {
   const handleLabelRemove = (labelId) => {
       setSelectedLabels(selectedLabels.filter((label) => label.id !== labelId));
   };
+
       return (
         <div className='card-detail-container'>
           <div className="description-container">
+            <div className='header-icon' >
+              <HiOutlineX className='header' size={20} onClick={handleBackToBoardView}/>
+              <h4>CARD DETAIL</h4>
+              <HiOutlineCloud className='header-cloud' size={20}/>
+            </div>
             <div className='cover'>
               {selectCover &&(
                 <div className='imgCover'>
@@ -166,274 +295,212 @@ const CardDetail = () => {
             </div> 
             <div className="container">
               <div className="description" style={{}}>
-                <h5 style={{textAlign:'left'}}> <HiOutlineCreditCard size={25}/>New Project-1track-alexxpiinksz-SWQUENCE-1D343 EXTRA FAST</h5>
-                <div className='select-option'>
-                  {/* <strong style={{marginRight:'1vw'}}>Select Label Here</strong> */}
-                  <div style={{display:'flex', flexDirection:'column', marginBottom:'2vh'}}>
+              {card.map((c)=>(
+                <div key={c.id} className="description-title">
+
+                <IoIosCard size={25} style={{marginRight:'0.5vw'}}/>
+                <h2>{c.title}</h2>
+              </div>
+              ))}
+                
+                {/* <hr style={{width:'100%', border:'0.1px solid grey'}}/> */}
+
+                <div className='sub-title'>
+                  <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', width:'27vw'}}>
+                    <p>Assignes </p>
+                    <div style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+                      {Data_User.map((user)=>(
+                        <div key={user.id}
+                          style={{
+                            
+                            borderRadius:'10px',
+                            padding:'8px',
+                            display:'flex',
+                            alignItems:'center',
+                            justifyContent:'center',
+                            height:'12px',
+                            marginRight:'2px',
+                            width:'85px',
+                            boxShadow:'0px 4px 8px rgba(0,0,0,0.1)',
+                            border:'0.3px solid #521422'
+                            // backgroundColor:'#ddd',
+                            
+                          }}
+                        >
+                            <img src={user.profil} alt={user.name} style={{
+                              width:'30px',
+                              height:'20px',
+                              borderRadius:'20px'
+                            }}/>
+                            <p  style={{margin:'0px', fontSize:'12px', fontWeight:'normal', color:'black'}}>{user.name}</p>
+                        </div>
+                      ))}
+                      <div
+                      style={{
+                        borderRadius:'50%',
+                        border:'0.3px solid #521422',
+                        boxShadow:'0px 4px 8px rgba(0,0,0,0.1)',
+                        padding:'5px',
+                        height:'15px'
+                      }}
+                      >
+                        <BsPlus size={15}/>
+                      </div>
+                    </div>
+                    
+                  </div>
+                  <div  style={{display:'flex', alignItems:'center', justifyContent:'space-between',width:'17vw'}}>
+                    <p>Due Date</p>
+                    <DisplayDate cardId={cardId}/>
+                  </div>
+                  
+                  <div style={{display:'flex', alignItems:'center', justifyContent:'space-between',width:'18vw', marginBottom:'10px'}}>
+                    <p>Create By</p>
                     <div
                       style={{
-                        position:'relative',
-                        padding:'5px',
-                        border:'1px solid grey',
-                        borderRadius:'5px',
-                        boxShadow:'0px 4px 8px rgba(0, 0, 0, 0.2)',
-                        width:'95%',
-                        cursor:'pointer',
-                        backgroundColor:'#f9f9f9',
-                        fontSize:'10px'
+                        borderRadius:'10px',
+                        boxShadow:'0px 4px 8px rgba(0,0,0,0.1)',
+                        border:'0.3px solid #521422',
+                        padding:'8px',
+                        display:'flex',
+                        alignItems:'center',
+                        justifyContent:'center',
+                        height:'12px',
+                        marginRight:'2px',
+                        width:'85px',
+                        // backgroundColor:'#ddd',
                       }}
-                      onClick={toggleOptionVisibility}
                     >
-                      {selectedLabels.length > 0 ? 'Select Another Label' : 'Select Label'}
+                      <img src={profil3} alt='profil 3' style={{width:'30px',height:'20px',borderRadius:'20px'}}/>
+                      <p  style={{margin:'0px', fontSize:'12px', fontWeight:'normal',color:'black'}}>John Doe</p>
                     </div>
-                      {/* DROPWDOWN  */}
-                    {showOption && (
-                      <div
-                        className='dropdown-options'
-                        style={{
-                          position:'absolute',
-                          top: '100%',
-                          left: '0',
-                          border: '1px solid grey',
-                          backgroundColor: '#fff',
-                          zIndex: 1000,
-                          width: '50%',
-                          boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
-                          borderRadius:'5px',
-                          maxHeight: '150px',
-                          overflowY: 'auto',
-                          marginLeft:''
-                        }}
-                      >
-                        {labels.map((label)=>(
-                          <div
-                            key={label.id}
-                            style={{
-                              backgroundColor: hexToRgba(label.color, 0.4),
-                              border:`1px solid ${label.text_color}`,
-                              padding: '10px',
-                              cursor:'pointer',
-                              color: label.text_color,
-                              fontWeight:'bold'
-                            }}
-                            onClick={()=> {
-                              handleLabelSelection(label);
-                              closeDropdown();
-                            }}
-                          >
-                            {selectedLabels.includes(label)? 'Unselect ' : 'Select '}{label.name}
-                          </div>
-                        ))}
-
+                  </div>
+                </div>
+                
+                {/* Display Selected Labels */}
+               <div className='selected-labels-container'>
+                  <div style={{display:'flex', alignItems:'center', justifyContent:'left'}}>
+                    <button className='btn' onClick={()=> setIsDropdownOpen(!isDropdownOpen)}>
+                        <TbTags size={15} className='action-icon'/>  
+                        {/* {selectedLabel ? selectedLabel.name : 'Select Label'} */}
+                        {selectedLabel.length > 0
+                          ? `${selectedLabel.length} label(s) selected`
+                          :  'Select Label'
+                        }
+                      </button>
+                      <CustomeDate cardId={cardId}/>
+                  </div>
+                  {/* Display label selected */}
+                  <div className='display-label'>
+                    <p>Labels </p>
+                      {isDropdownOpen && (
+                        <ul className='label-dropdown-list'>
+                            {Data_Lable.map((label)=>(
+                              <li 
+                              key={label.id} 
+                              onClick={() => handleLabel(label)} 
+                              style={{
+                                backgroundColor: `${label.bgColor}`,
+                                color: `${label.color}`,
+                                border: selectedLabel.some((lbl) => lbl.id === label.id)
+                                  ? '1px solid #521422'
+                                  : `1px solid ${label.color}`,
+                                borderRadius:'5px',
+                                marginBottom:'5px',
+                                fontSize:'8px',
+                                fontWeight:'bold'
+                              }}
+                            >
+                              {label.name} {/* Pastikan properti yang ditampilkan benar */}
+                            </li>
+                            ))}
+                        </ul>
+                      )}
+                    {selectedLabel.length > 0  && (
+                      <div>
+                        {/* <h3>Selected Label:</h3> */}
+                        <div style={{display:'flex',
+                                alignItems:'center',
+                                justifyContent:'left'
+                                }}>
+                          {selectedLabel.map((label)=> (
+                              <div  style={{
+                                backgroundColor: `${label.bgColor}`,
+                                // backgroundColor:'white',
+                                // border: `1px solid ${label.color}`,
+                                color: `${label.color}`,
+                                border:`1px solid ${label.color}`,
+                                borderRadius: '5px',
+                                padding: '10px',
+                                marginTop: '10px',
+                                marginRight:'5px',
+                                height:'10px',
+                                fontSize:'8px',
+                                fontWeight:'bold'
+                              }}>
+                                {label.name}
+                              </div>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
+                  
                 </div>
+                   
 
-                {/* Display Selected Labels */}
-               <div className='selected-labels-container'>
-                    <strong>Selected Labels:</strong>
-                    <div className='selected-labels'>
-                      <div style={{ margin:'0', height:'auto', width:'100%', display:'flex',flexWrap:'wrap'}}>
-                        {selectedLabels.map((label)=> (
-                          <span key={label.id} style={{ 
-                            backgroundColor: hexToRgba(label.color, 0.5), 
-                            color: label.text_color,
-                            fontSize:'12px',
-                            fontWeight:'bold',
-                            border: `2px solid ${label.text_color}`,
-                            display:'flex',
-                            borderRadius:'5px',
-                            padding:'4px',
-                            marginTop:'2px'
-                            }}>   
-                            {label.name}
-                          </span>
-                        ))}
-                      </div>
-                    </div> 
+                
+                <div >
+                  {/* <TextEditor/> */}
+                  <DescriptionActivities/>
                 </div>
-
-                <div className='description-attribute'>
-                  <h5><HiMenuAlt2 style={{marginRight:'0.5vw'}}/>DESCRIPTION</h5>
-                  <button className='btn-edit'>Edit</button>
+                <div>
+                  <CardMarketingDetail cardId={cardId}/>
                 </div>
-                <div className='container-desc'>
-                  <p><strong>Nomer Active Order: </strong>{cardDetail.nomer_active_order}</p><hr />
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>INPUT BY</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.input_by}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>BUYER NAME</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.buyer_name}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>CODE ORDER</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.code_order}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>JUMLAH TRACK</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.jumlah_track}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>ORDER NUMBER</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.order_number}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>ACCOUNT</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.account}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>DEADLINE</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.deadline}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>JUMLAH REVISI</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.jumlah_revisi}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>ORDER TYPE</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.order_type}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>OFFER TYPE</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.offer_type}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>JENIS TRACK</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.jenis_track}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>GENRE</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.genre}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>PRICE</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.price}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>PROJECT TYPE</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.project_type}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>REQUIRED FILE</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.required_file}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>DURATION</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.duration}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>REFERENCE</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.reference}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>FILE AND CHAT</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.file_and_chat}
-                  </div>
-
-                  <div className='detail-input'>
-                    <div className='detail-input1'>
-                      <p><strong>DETAIL PROJECT</strong></p>
-                      <p>:</p>
-                    </div>
-                    {cardDetail.detail_project}
-                  </div>
-                </div>
-
-                <div className='attachment'>
-                    <h5><HiOutlinePaperClip/>Attachment</h5>
-                    <button>Add</button>
-                </div>
- 
-                {/* FORM KOMENTAR */}
-                <div className='commentar'>
-                  <FaUserAstronaut size={25}/> {/*profil pengguna */}
-                  <input type="text" className='input-komentar' placeholder='Write a comment...'/>
-                  <IoIosSend size={25}/>
-                </div>
-
               </div>
+
               <div className="action">
                 <h4>ACTIONS</h4>
-                <button className='btn'><HiOutlineUserAdd className='action-icon'/>Add Member</button>
-                <button className='btn'><HiOutlinePaperClip className='action-icon'/>Attachment</button>
-                <button className='btn'><HiOutlineArrowRight className='action-icon'/>Move</button>
-                <button className='btn'><HiOutlineDuplicate className='action-icon'/>Copy</button>
-                <button className='btn'><HiOutlineArchive className='action-icon'/>Archive</button>
+                <button 
+                  className='btn'
+                  onClick={()=> handleCardEditClick(cardId) }
+                >
+                  <FaRegEdit className='action-icon'/>
+                  Edit Card
+                </button>
+                <button 
+                  className='btn'
+                >
+                  <HiOutlineUserAdd className='action-icon'/>
+                  Add Member
+                </button>
+                <button 
+                  className='btn'
+                >
+                  <HiOutlinePaperClip className='action-icon'/>
+                  Attachment
+                </button>
+                <button 
+                  className='btn'
+                >
+                  <HiOutlineArrowRight className='action-icon'/>
+                  Move
+                </button>
+                <button 
+                  className='btn'
+                >
+                  <HiOutlineDuplicate className='action-icon'/>
+                  Copy
+                </button>
+                <button 
+                  className='btn'
+                >
+                  <HiOutlineArchive className='action-icon'/>
+                  Archive
+                </button>
+                
+                
+                {/* End Display label  */}
                 <button className='btn' onClick={toggleCoverVisibility}>
                   {showCover ?
                  (<><FaCcDiscover className='action-icon'/>Pilih Cover</>):(<><FaCcDiscover className='action-icon'/>Cover</>)   
@@ -449,7 +516,7 @@ const CardDetail = () => {
                       height:'130px',
                       overflowY:'auto'
                   }}>
-                    {Data_Cover.map((cover)=>(
+                    {cover.map((cover)=>(
                       <div 
                         className='coverImg' 
                         key={cover.id}
@@ -466,12 +533,24 @@ const CardDetail = () => {
 
                 {/* {menampilkan hasil cover} */}
               </div>
+
+              {/* ACTION CALL  */}
+                {isEditCardOpen && (
+                  <EditCard
+                    cardId={cardId}
+                    card={editCard}
+                    onClose={handleCloseEditCard}
+                    onSave={handleSaveEditCard}
+                  />
+                )}
+              {/* END ACTION CALL  */}
+
             </div>
           </div>
-
-
         </div>
       );
 }
 
 export default CardDetail
+
+

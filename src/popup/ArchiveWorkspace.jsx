@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { AlertTitle } from '@mui/material'
-// import '../style/BoardStyle.css'
-import '../style/WorkspaceEdit.css'
+import '../style/ArchivePopup.css'
+import { RxArchive } from "react-icons/rx";
+import { IoCloseOutline } from "react-icons/io5";
 import storage from '../assets/storage.png'
 
 const ArchiveWorkspace=({workspaceId,isOpen,onClose,onArchiveConfirm})=> {
@@ -16,16 +17,23 @@ const ArchiveWorkspace=({workspaceId,isOpen,onClose,onArchiveConfirm})=> {
 
   return (
     isOpen && (
-        <div className="edit-popup-overlay">
-            <div className="edit-popup-content">
-                <h3>Confirm Archive Workspace</h3>
-                <img src={storage} alt={storage} />
-                <p className='archive-sub-title'>Dengan memindahkan workspace kedalam archive, <br />
-                    berarti <span>menghapus workspace</span> pada halaman ini <br />
-                    Apa anda yakin ?
-                </p>
-                <button className='archive-btn' onClick={(e)=> {e.stopPropagation(); onArchiveConfirm(workspaceId)}}>Archive</button>
-                <button className='cancle-btn' onClick={(e) => {e.stopPropagation(); onClose()}}>Cancle</button>
+        <div className="archive-popup-overlay">
+            <div className="archive-popup-content">
+                <div className="archive-title">
+                    <h5> <RxArchive style={{marginRight:'5px', color:'rgb(48, 48, 255)'}}/>Confirm Archive</h5>
+                    <IoCloseOutline style={{color:'grey', cursor:'pointer'}} size={20} onClick={(e)=>{e.stopPropagation(); onClose()}}/>
+                </div>
+                <div className="text-archive">
+                    {/* <RxArchive size={20} style={{color:'blue', margin:'5px',marginBottom:'15px'}} /> */}
+                    <p className='archive-sub-title'>Dengan memindahkan workspace kedalam archive, <br />
+                        berarti <span>menghapus workspace</span> pada halaman ini <br />
+                        Apa anda yakin ?
+                    </p>
+                </div>
+                <div className="archive-button">
+                    <button  onClick={(e)=> {e.stopPropagation(); onArchiveConfirm(workspaceId)}}><RxArchive style={{marginRight:'5px'}}/> Archive</button>
+                    {/* <button className='cancle-btn' onClick={(e) => {e.stopPropagation(); onClose()}}>Cancle</button> */}
+                </div>
             </div>
         </div>
     )

@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { duplicateList, getBoard } from '../services/Api';
 import '../style/DuplicateBoardStyle.css'
 import { AlertTitle } from '@mui/material';
-import duplicate from '../assets/duplication.png'
+// import duplicate from '../assets/duplication.png'
+import { IoCloseOutline } from 'react-icons/io5'
 
 const DuplicateListPopup=({listId, isOpen, onClose})=> {
     const [boards, setBoards] = useState([]);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [selectedBoardId, setSelectedBoardId] = useState('');
     const [alert, setAlert] = useState({
         show: false,
@@ -52,27 +54,45 @@ const DuplicateListPopup=({listId, isOpen, onClose})=> {
 
   return (
     isOpen && (
-        <div className='popup-overlay'>
-            <div className='popup-content'>
-                <h2>Duplicate List</h2>
-                <img src={duplicate} alt={duplicate} />
-                <label className='popup-label'>
-                    Select Board: <br />
-                    <select
-                        value={selectedBoardId}
-                        onChange={(e)=>setSelectedBoardId(e.target.value)}
-                        style={{border:'1px solid #491519'}}
-                    >
-                        <option value="">Select Board</option>
-                        {boards.map((board)=>(
-                            <option key={board.id} value={board.id}>
-                                {board.name}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-                <button className='duplicate-btn' onClick={handleDuplicateList} disabled={!selectedBoardId}>Duplicate List</button>
-                <button className='cancle-btn' onClick={onClose}>Cancle</button>
+        <div className='popup-board-overlay'>
+            <div className='popup-content' style={{border:'1px solid transparent'}}>
+                <div className="duplicate-header">
+                    <h5>Duplicate List</h5>
+                    <IoCloseOutline style={{color:'grey', cursor:'pointer', margin:'0'}} size={20} onClick={onClose}/>
+                </div>
+                <div className="duplicate-body">
+                    <label>
+                        Select Board :
+                    </label>
+                </div>
+                <div className="dropdown-container" onClick={()=> setDropdownOpen(!dropdownOpen)}>
+                    <div className="dropdown-selected">
+                        {selectedBoardId 
+                            ? boards.find((br) => br.id === selectedBoardId)?.name
+                            : 'Select Board'
+                        }
+                    </div>
+                    {dropdownOpen && (
+                        <ul className='dropdown-list'>
+                            {boards.map((board)=> (
+                                <li
+                                    key={board.id}
+                                    className='dropdown-item'
+                                    onClick={()=> {
+                                        setSelectedBoardId(board.id);
+                                        setDropdownOpen(false)
+                                    }}
+                                >
+                                    {board.name}
+                                </li>
+                            ))}
+
+                        </ul>
+                    )}
+                </div>
+                <div className="duplicate-btn">
+                    <button className='duplicate-btn' onClick={handleDuplicateList} disabled={!selectedBoardId}>Duplicate List</button>
+                </div>
             </div>
             {alert.show && (
                 <AlertTitle className='alert-position' severity={alert.severity} onClose={()=> setAlert({...alert, show:false})}>

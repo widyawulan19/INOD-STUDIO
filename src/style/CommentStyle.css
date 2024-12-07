@@ -1,0 +1,102 @@
+.comment-container{
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 10px;
+    /* border: 1px solid #e1e8ed; */
+    border-radius: 10px;
+    /* background-color: #f7f9fa; */
+}
+.comment-container h1{
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+.comment{
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    border-top: 1px solid #e1e8ed;
+}
+
+.comment:first-child{
+    border-top: none;
+}
+  /* Gaya teks komentar */
+  .comment p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #14171a;
+  }
+  
+  /* Gaya tombol reply */
+  .comment button {
+    align-self: start;
+    background: none;
+    border: none;
+    color: #1da1f2;
+    cursor: pointer;
+    padding: 5px 0;
+    font-size: 0.9em;
+    margin-top: 5px;
+  }
+  
+  .comment button:hover {
+    text-decoration: underline;
+  }
+
+  /* Gaya balasan */
+  .reply-container {
+    margin-top: 10px;
+    font-size: 12px;
+    /* border-left: 2px solid #e1e8ed; */
+    border-left: 1px solid #491519;
+    border-radius: 2px;
+    padding-left: 15px;
+  }
+  
+  .reply-container .comment {
+    padding-left: 0;
+  }
+  
+  /* Gaya formulir komentar */
+  .comment-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e1e8ed;
+    border-radius: 5px;
+    resize: none;
+    margin-bottom: 10px;
+  }
+  
+  .comment-form button {
+    background-color: #1da1f2;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .comment-form button:hover {
+    background-color: #0d8ddb;
+  }
+
+  textarea {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    border-radius: 4px;
+    resize: vertical;
+  }
+  
+  button {
+    margin-right: 8px;
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .emoji-mart {
+    position: absolute;
+    bottom: 40px; /* Atur sesuai kebutuhan */
+  }

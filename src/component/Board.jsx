@@ -1,16 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { getBoard, createBoard,getListsCountByBoard, updateBoardBackground, duplicateBoard, getBoardByWorkspace, deleteBoard, archiveBoard} from '../services/Api'
 import { useNavigate, useParams } from 'react-router-dom';
-import { HiArchive,HiPlus,HiOutlineX,HiDotsHorizontal, HiOutlineServer, HiOutlineCalendar,HiChevronRight,HiOutlineViewList  } from "react-icons/hi";
+import { HiArchive,HiPlus,HiOutlineX,HiDotsHorizontal, HiOutlineServer, HiOutlineCalendar,HiChevronRight,HiOutlineViewList,HiOutlineFire  } from "react-icons/hi";
+import { HiOutlineSquaresPlus,HiMiniCalendarDays } from "react-icons/hi2";
+import { MdOutlineImagesearchRoller } from "react-icons/md";
+import { LuLayoutDashboard } from "react-icons/lu";
+import { IoCloseOutline } from "react-icons/io5";
+import { BsArchive } from "react-icons/bs";
 import '../style/BoardStyle.css'
-import '../style/ImageSelector.css'
 import moment from 'moment'
-import { LuUsers } from "react-icons/lu"; 
-import { AiFillDelete } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 import { Data_Bg } from '../data/DataBg';
 import DuplicateBoardPopup from './DuplicateBoardPopup';
 import { AlertTitle } from '@mui/material';
-import { FaRegEdit } from 'react-icons/fa';
+import { FaEdit, FaRegEdit } from 'react-icons/fa';
 import DeleteCardPopup from '../popup/DeleteCardPopup';
 import ArchiveCardPopup from '../popup/ArchiveCardPopup';
 import BoardEdit from './BoardEdit';
@@ -172,19 +175,15 @@ const Board = () => {
       console.log('button berhasil di klik')
     }
 
-    const fetchBoards = async (workspaceId) => {
+    const fetchBoards = useCallback(async () => {
       try{
         const response = await getBoardByWorkspace(workspaceId);
         setBoards(response.data);
       }catch(error){
-        console.error('Error fetching boards:', error)
-        // alert('Gagal memuat boards')
-        setAlert({show:true, message:'Error fetching boards', severity:'error'})
+        console.error('Error fetching boards:', error);
+        setAlert({show:true, message:'Error fetching boards', severity:'error'});
+        setTimeout(()=> fetchBoards(), 3000)
       }
-    }
-
-    useEffect(()=> {
-      fetchBoards(workspaceId);
     }, [workspaceId]);
 
 
@@ -241,11 +240,12 @@ const Board = () => {
         }
       }, [workspaceId]);
       
-    //Hook, useEffect hook yang digunakan untuk menampilkan data boards berdasarkan workspaceID yang dipanggila
+   
     useEffect(()=>{
-      console.log('Fetching data boards from workspaceid:', workspaceId);
-      loadBoards();
-    },[workspaceId,loadBoards])
+      if(workspaceId){
+        loadBoards();
+      }
+    }, [workspaceId, loadBoards])
 
       useEffect(()=>{
         setLocalBoardId(boardId);
@@ -267,16 +267,6 @@ const Board = () => {
         }
       },[boardId])
 
- 
-      //handle backgorund
-      const handleBackgroundChange = async (newImageId) => {
-        try{
-          await updateBoardBackground(boardId,newImageId)
-          setBackgroundImage(`updateBoardBackground`)
-        }catch(error){
-          console.error('Error updating background', error)
-        }
-      }
 
       // create board 
       const [alert1, setAlert1] = useState({show:false, message:'', severity:''})
@@ -353,13 +343,7 @@ const Board = () => {
 
 
     return (
-      // <div 
-      //       className='board-container' 
-      //       style={{
-      //         backgroundImage: selectBg ? `url(${selectBg.image_url})`: 'none' ,
-      //         backgroundSize: 'cover', 
-      //         backgroundPosition:'center'
-      //         }}>
+      
       <div 
         className='board-container'
         style={{
@@ -370,32 +354,45 @@ const Board = () => {
           transition:'background-image 0.3s ease-in-out'
         }}
       >
-          <div className='nav-board' >
-            <div className='nav-board2' >
-              <h3 style={{display:'flex',textAlign:'left', color:'white', marginBottom:'0', margin:'0', width:'20vw', alignItems:'center', gap:'10px'}}>
-                <button onClick={handleBackToWorkspace} className='btn-nav' >Workspace</button> 
-                <HiChevronRight style={{ fontSize:'1.5rem', flexShrink:'0'}} />
-                <button className='btn-nav' style={{textAlign:'left'}}>Board</button>
-              </h3>
-               <div className='dropdown'>
-                    <button className='btn-bg' onClick={()=> setIsDropdownOpen(!isDropdownOpen)}>
-                      {selectedBackground ? selectedBackground.name: 'Select Background'}
-                    </button>
-                    {isDropdownOpen && (
-                      <ul className='dropdown-list'>
-                        {Data_Bg.map((bg)=>(
-                          <li key={bg.id} onClick={()=> handleBgSelect1(bg)}>
-                              <img src={bg.image_url} alt={bg.name} />
-                              {bg.name}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-               </div>
-              
-            </div>
-            <h5 style={{textAlign:'left', color:'white',paddingLeft:'10px', margin:'0'}}>Happy days, here your boards!</h5>
+        <div className="board-title">
+          <div className="board-title-navigation">
+            <button onClick={handleBackToWorkspace} className='back-button'>
+                <HiOutlineSquaresPlus style={{marginRight:'4px'}}/>
+                Workspace
+            </button>
+            /
+            <button>
+              Boards
+            </button>
           </div>
+          <div className="dropdown-right">
+            <div className='create-board-button'>
+              <button className='newBoard' onClick={toggleFormVisibility}>
+                {/* {showForm ? 
+                  (<><HiOutlineX size={12} style={{marginRight:'5px'}}/>Cancel</>) : 
+                  (<><HiPlus size={12} style={{marginRight:'5px'}}/>NEW BOARD</>)
+                } */}
+                <HiPlus size={12} style={{marginRight:'5px'}}/>
+                NEW BOARD
+              </button>
+            </div>
+            |
+            <button className='btn-bg' onClick={()=> setIsDropdownOpen(!isDropdownOpen)}>
+              {selectedBackground ? selectedBackground.name: 'Select Background'}
+              <MdOutlineImagesearchRoller style={{marginLeft:'5px'}}/>
+            </button>
+            {isDropdownOpen && (
+              <ul className='dropdown-list'>
+                {Data_Bg.map((bg)=>(
+                  <li key={bg.id} onClick={()=> handleBgSelect1(bg)}>
+                      <img src={bg.image_url} alt={bg.name} />
+                      {bg.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
           {alert.show && (
               <AlertTitle
                 severity={alert.severity}
@@ -405,112 +402,98 @@ const Board = () => {
               </AlertTitle>
             )}
 
-          <div className='board-list-container' >
+          <div className="board-list-content">
             {boards.map((board)=>{
-              return (
-              <div key={board.id} className='board-list' style={{overflow:'visible'}}>
-
-                <div className='board-card'  onClick={()=> handleNavigateToBoardView(board.id)}>
-                  <h4 style={{display:'flex', fontSize:'15px', fontWeight:'bold', justifyContent:'space-between', margin:'5px 0'}}>
-                    {board.name}
-                    <HiDotsHorizontal
-                      className='dot-btn'
-                      onClick={(e)=> toggleActionThreeDot(board.id, e)}
-                    />
-                  </h4>
-                  {showAction === board.id && (
-                    <div className='board-dropdown-menu-action'>
-                    <ul className='dropdown-ul'>
-                    <div style={{display:'flex', alignItems:'center', justifyContent:'space-between',color:'#491519'}}>
-                      Action 
-                      <HiOutlineViewList/>
-                    </div>
-                    <hr style={{color:'#491519'}}/>
-                      <li className='dropdown-li'>
-                        <AiFillDelete className='ikon' size={15} />
-                        <button className='btn-li' onClick={(e) => {e.stopPropagation(); handleDeleteClick(board.id)}}>
-                          Delete <br />
-                          <span style={{fontSize:'10px', fontWeight:'normal'}}>Delete Board</span>
-                        </button>
-
-                      </li>
-                       <li className='dropdown-li'>
-                        <HiArchive className='ikon' size={15} />
-                        <button className='btn-li' onClick={(e) => {e.stopPropagation(); handleArchive(board.id)}}>
-                          Archive <br />
-                          <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive your board</span>
-                        </button>
+              return(
+                <div key={board.id} className="list-boards">
+                  <div className="board-cards"  onClick={(e)=> handleNavigateToBoardView(board.id)} >
+                    <div className="board-card-title">
+                      <LuLayoutDashboard size={15} style={{color:'#97271C'}}/>
+                      <div className="tooltip-container">
+                        <HiDotsHorizontal
+                          className='dot-nav'
+                          onClick={(e)=> toggleActionThreeDot(board.id, e)}
+                        />
+                        <span className='tooltip-text'>More Settings</span>
                         
-                      </li>
-                      <li className='dropdown-li'>
-                        <HiPlus className='ikon' size={15}/>
-                        <button className='btn-li' onClick={(e) => { 
-                            e.stopPropagation(); 
-                            handleDuplicateClick(board.id)
-                        }}>
-                          Duplicate <br />
-                          <span style={{fontSize:'10px', fontWeight:'normal'}}>Duplicate your boards</span>
-                        </button>
-                      </li>
-                      <li className='dropdown-li'>
-                        <FaRegEdit className='ikon' size={15}/>
-                        <button className='btn-li' onClick={(e)=> {e.stopPropagation(); handleEditBoardClick(board)}}>
-                          Edit <br />
-                          <span style={{fontSize:'10px', fontWeight:'normal'}}>Edit your board</span>
-                        </button>
-
-                      </li>
-                    </ul>
+                      </div>
+                      {showAction === board.id && (
+                          <div className="dropdown-board-action active">
+                            <h5>View</h5>
+                            <div className="dropdown-action">
+                              <div className="action-btn" onClick={(e)=> {e.stopPropagation(); handleEditBoardClick(board)}}>
+                                <FaRegEdit className='ikon'/>
+                                <button>Edit Board</button>
+                              </div>
+                              <div className="action-btn" onClick={(e)=> {e.stopPropagation(); handleArchive(board.id)}}>
+                                <BsArchive className='ikon'/>
+                                <button>Archive Board</button>
+                              </div>
+                              <div className="action-btn" onClick={(e)=> {e.stopPropagation(); handleDuplicateClick(board.id)}}>
+                                <HiPlus className='ikon'/>
+                                <button>Duplicate Board</button>
+                              </div>
+                              <div className="action-btn-remove" onClick={(e)=> {e.stopPropagation(); handleDeleteClick(board.id)}}>
+                                <AiOutlineDelete className='ikon-remove'/>
+                                <button>Delete Board</button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                    </div>
+                    <div className="boards-text">
+                      <h4>{board.name}</h4>
+                      <p>{board.description}</p>
+                    </div>
+                    <div className="boards-icons">
+                      <p><HiOutlineServer size={12} style={{marginRight:'2px', color:'black'}}/>{listCount[board.id] || 0} lists</p>
+                      <p className='date'><HiOutlineCalendar size={12} style={{marginRight:'2px', color:'black'}}/>{moment(board.create_at).format(('D MMMM YYYY'))}</p>
+                    </div>
                   </div>
-                  )}
-
-                  <div style={{paddingRight:'5px', height:'4vh'}}>
-                    <p className='board-description'>{board.description}</p>
+                </div>
+              )
+            })}
+          </div>
+            
+            {showForm && (
+              <div className="popup-overlay-create-board">
+                <div className="popup-content-create-board">
+                  <div className="header-popup">
+                      <h5>Create Board</h5>
+                      <IoCloseOutline onClick={()=>setShowForm(false)} style={{color:'grey'}}/>
                   </div>
-                  <div className='board-icons'>
-                      <p><HiOutlineServer size={15} style={{marginRight:'2px', color:'black'}}/>{listCount[board.id] || 0} lists</p>
-                      <p><HiOutlineCalendar size={15} style={{marginRight:'2px', color:'black'}}/>{moment(board.create_at).format(('D MMMM YYYY'))}</p>
-                      <p><LuUsers size={15} style={{marginRight:'2px', color:'black'}}/>0 member</p>
+                  <div className='board-form'>
+                    <input 
+                      type="text" 
+                      placeholder='board name'
+                      value={newBoard.name}
+                      onChange={(e) => setNewBoard({ ...newBoard, name: e.target.value })}
+                      className='board-input'
+                    />
+                    <input 
+                      type="text" 
+                      placeholder='Description'
+                      value={newBoard.description}
+                      onChange={(e) => setNewBoard({ ...newBoard, description: e.target.value })}
+                      className='board-input'
+                    />
+                    <input 
+                      type="text" 
+                      placeholder='user id (manual)'
+                      value={newBoard.user_id}
+                      onChange={(e)=> setNewBoard({ ...newBoard, user_id: e.target.value})}
+                      className='board-input'
+                    />
+                  </div>
+                  <div className="board-button">
+                    <button className='board-button' onClick={handleCreateBoard}>Add Board</button>
                   </div>
                 </div>
               </div>
-              )
-            })}
-            <div className='board-card2'>
-              <button className='newBoard' onClick={toggleFormVisibility}>
-                {showForm ? 
-                  (<><HiOutlineX size={13} style={{marginRight:'1vw'}}/>Cancel</>) : 
-                  (<><HiPlus size={13} style={{marginRight:'1vw'}}/>NEW BOARD</>)
-                }
-              </button>
-              {showForm && (
-                    <div className='board-form'>
-                      <input 
-                        type="text" 
-                        placeholder='board name'
-                        value={newBoard.name}
-                        onChange={(e) => setNewBoard({ ...newBoard, name: e.target.value })}
-                        className='board-input'
-                      />
-                      <input 
-                        type="text" 
-                        placeholder='Description'
-                        value={newBoard.description}
-                        onChange={(e) => setNewBoard({ ...newBoard, description: e.target.value })}
-                        className='board-input'
-                      />
-                      <input 
-                        type="text" 
-                        placeholder='user id (manual)'
-                        value={newBoard.user_id}
-                        onChange={(e)=> setNewBoard({ ...newBoard, user_id: e.target.value})}
-                        className='board-input'
-                      />
-                      <button className='board-button' onClick={handleCreateBoard}>Add Board</button>
-                    </div>
-                  )}
-            </div>
-          </div>
+              
+              )}
+        
+          
           
         
         {isPopupOpen && (
@@ -548,14 +531,3 @@ const Board = () => {
 }
 
 export default Board
-
-{/* Alert  */}
-// {alert.show && (
-//   <AlertTitle
-//     severity={alert.severity}
-//     style={{marginBottom:'20px'}}
-//   >
-//     {alert.message}
-//   </AlertTitle>
-// )}
-{/* End Alert  */}

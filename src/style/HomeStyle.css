@@ -1,0 +1,35 @@
+/* Home container */
+.home-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Tinggi penuh layar */
+    overflow: hidden; /* Hindari scrollbar jika tidak diperlukan */
+  }
+
+  
+  /* Main area */
+  .main {
+    display: flex;
+    /* flex-direction: column; */
+    flex: 1; /* Sisa ruang digunakan oleh area utama */
+    margin-top: 0px;
+    overflow: hidden;
+    /* border: 1px solid grey; */
+    padding-top: 0;
+  }
+  
+  .home-container .main-main{
+    flex: 1;
+    width: fit-content;
+    height: fit-content;
+    border: 1px solid grey;
+  }
+
+  .main-main .main-content-show{
+    margin-left: 145px;
+    margin-top: 10px; 
+  }
+  .main-main .main-content-hide{
+    margin-left: 45px;
+    margin-top: 10px;
+  }

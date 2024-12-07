@@ -1,0 +1,20 @@
+.desc-container{
+    /* border: 1px solid red; */
+    margin-top: 3vh;
+    margin-bottom: 10vh;
+}
+.desc-btn button{
+    border: 1px solid white;
+    background-color: white;
+    height: 5vh;
+    margin-bottom: 0;
+}
+.desc-btn button:hover{
+    border-bottom: 1.5px solid black;
+    font-weight: bold;
+}
+.desc-btn button.active{
+    color: black;
+    font-weight: bold;
+    border-bottom: 1.5px solid black;
+}

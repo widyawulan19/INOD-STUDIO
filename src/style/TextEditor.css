@@ -1,0 +1,90 @@
+/* Container utama editor */
+.editor-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+  }
+  
+  /* Judul editor */
+  .editor-container h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  /* Area editor */
+  .ql-editor {
+    min-height: 200px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  
+  /* Styling toolbar */
+  .ql-toolbar {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px; /* Ukuran padding lebih kecil untuk toolbar */
+  }
+  
+  /* Membuat ukuran tombol toolbar lebih kecil */
+  .ql-toolbar button, .ql-toolbar select {
+    padding: 4px 6px;
+    margin-right: 5px;
+    border: none;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  
+  /* Efek hover untuk tombol toolbar */
+  .ql-toolbar button:hover, .ql-toolbar select:hover {
+    background-color: #e0e0e0; /* Warna berubah saat di-hover */
+  }
+  
+  /* Border untuk tombol yang aktif */
+  .ql-toolbar button.ql-active {
+    background-color: #d3e9ff;
+    border: 1px solid #491519;
+  }
+  
+  /* Styling untuk container editor */
+  .ql-container {
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    background-color: #fff;
+  }
+  
+  /* Tombol simpan */
+  .editor-container .save-btn {
+    background-color: #6b1c14;
+    color: white;
+    width: 100px;
+    height: 5vh;
+    border-radius: 5px;
+    border: 1px solid #491519;
+    margin-top: 1vh;
+    font-weight: bold;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    font-size: 12px;
+  }
+  
+  /* Efek hover pada tombol simpan */
+  .editor-container .save-btn:hover {
+    background-color: #491519;
+  }
+  
+  /* Mengatur ukuran ikon toolbar */
+  .ql-toolbar .ql-bold::before,
+  .ql-toolbar .ql-italic::before,
+  .ql-toolbar .ql-underline::before,
+  .ql-toolbar .ql-strike::before,
+  .ql-toolbar .ql-link::before,
+  .ql-toolbar .ql-image::before {
+    font-size: 12px; /* Mengatur ukuran ikon tombol */
+  }
+  

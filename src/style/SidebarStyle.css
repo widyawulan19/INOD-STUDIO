@@ -1,193 +1,295 @@
-.sidebar {
-    width: 250px;
-    color: white;
-    padding: 20px;
-    height: 100vh;
-    transition: width 0.3s ease;
-    /* border-radius: 15px; */
-  }
 
-  .sidebar.collapsed{
-    width: 80px;
-    color: white;
-  }
+.layout-container{
+  position: sticky;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+.sidebar-container{
+  position: relative;
+  transition: width 0.3s ease-in-out;
+  z-index: 10;
+}
 
-  .sidebar.collapsed.icon{
-    margin-right: 0;
-    color: white;
+.show-sidebar{
+  /* border: 1px solid green; */
+  padding-top: 10px;
+  width: 10vw;
+  height:100vh;
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+}
+.close-sidebar{
+  height: 100vh;
+  width: 5vw;
+  /* margin-right: 10px; */
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+  /* border: 1px solid #281b37; */
+  display: flex;
+  /* align-items: center;s */
+  justify-content: center;
+  /* transform: translateX(-100%); */
+}
+.show-sidebar button{
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  border: 0.1px solid white;
+  background-color: white;
+}
+.close-sidebar button{
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  border: 0.1px solid white;
+  background-color: white;
+}
+.sidebar-menu .sidebar-main{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding: 4px;
+  /* border: 1px solid grey; */
+  height: 20px;
+  margin: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.sidebar-menu .sidebar-main:hover{
+background-color: #ece1fa;
+}
+.sidebar-main:hover .sidebar-icon,
+.sidebar-main:hover h5 {
+color: #783fbf;
+/* background-color: #ece1fa; */
+}
+/* Active  */
+.sidebar-menu .sidebar-main.active{
+background-color: #ece1fa;
+}
+.sidebar-main.active .sidebar-icon,
+.sidebar-main.active h5 {
+color: #783fbf;
+font-weight: bolder;
+}
+
+.sidebar-main h5{
+  margin-left: 10px;
+  font-weight: normal;
+  font-size: 12px;
+  color: grey;
+  transition: color 0.3s ease-in-out;
+}
+
+.sidebar-main .sidebar-icon{
+  margin-right: 2px;
+}
+.sidebar-icon{
+  font-size: 13px;
+  color: grey;
+  transition: color 0.3s ease-in-out;
+}
+.tooltip {
+  position: absolute;
+  background-color: #311c4a;
+  color: #fff;
+  text-align: center;
+  font-size: 8px;
+  font-weight: normal;
+  border-radius: 5px;
+  padding: 3px;
+  bottom: 50%; /* Memindahkan tooltip ke atas elemen */
+  left: 50%; /* Menyelaraskan tooltip secara horizontal */
+  transform: translateX(-50%); /* Menyesuaikan agar berada di tengah */
+  white-space: nowrap;
+  z-index: 2000; /* Pastikan lebih tinggi daripada elemen lain */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  visibility: hidden;
+  margin-bottom: 5px; /* Jarak antara tooltip dan elemen */
+}
+
+
+/* Tooltip muncul saat hover */
+.sidebar-main:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.main-content{ 
+  flex: 1;
+  background-color: #f9f9f9;
+  /* border: 1px solid red; */
+  padding: 10px;
+  overflow-y: auto;
+  width: fit-content;
+  height: fit-content;
+  transition: margin-left 0.3s ease-in-out;
+}
+.close-sidebar .main-content{
+  margin-left: 45px;
+  margin-top: 10px;
+}
+.show-sidebar .main-content{
+  margin-left: 145px;
+  margin-top: 10px;
+}
+
+/* Link  */
+.sidebar-menu a{
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  color: inherit;
+}
+.sidebar-menu a:hover {
+  color: #783fbf; /* Warna saat hover */
+}
+/* end link  */
+
+
+/* Responsive : media query */
+/* Untuk layar tablet (lebar layar <= 1024px) */
+@media (max-width: 1024px) {
+  .show-sidebar {
+      width: 200px; /* Sidebar lebih kecil */
   }
-  
-  .sidebar-items {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    color: white;
-    text-decoration: none;
+  .show-sidebar .main-content {
+      margin-left: 200px; /* Menyesuaikan margin */
   }
-  
-  .sidebar-item-group {
-    margin-bottom: 0px;
+}
+
+/* Untuk layar ponsel (lebar layar <= 768px) */
+@media (max-width: 768px) {
+  .sidebar-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      height: 100%;
+      width: 100%;
   }
-  
-  .sidebar-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    color: white;
-    text-decoration: none;
-    transition: all 0.3s ease;
+  .show-sidebar {
+      width: 60px; /* Sidebar sangat sempit pada ponsel */
+  }
+  .close-sidebar {
+      width: 0;
+  }
+  .sidebar-menu .sidebar-main h5 {
+      display: none; /* Menyembunyikan nama menu pada ponsel */
+  }
+  .sidebar-menu .sidebar-main:hover .tooltip {
+      visibility: hidden; /* Menyembunyikan tooltip di ponsel */
+  }
+  .main-content {
+      margin-left: 0; /* Menghapus margin kiri untuk konten utama */
+  }
+}
+
+/* Untuk layar yang sangat kecil (<= 480px), seperti ponsel dengan layar kecil */
+@media (max-width: 480px) {
+  .show-sidebar {
+      width: 50px; /* Lebih sempit lagi */
+  }
+}
+
+
+/* .sidebar {
+  width: 250px;
+  color: rgb(100, 100, 100);
+  padding: 20px;
+  height:auto;
+  transition: width 0.3s ease;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: #f8f8f8;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.sidebar-items {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  height: 90%;
+  color: black;
+  text-decoration: none;
+}
+
+.sidebar-item-group {
+  margin-bottom: 10px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  color: black;
+  text-decoration: none;
+  transition: all 0.3s ease;
   white-space: nowrap;
   overflow: hidden;
   width: 100%;
   font-size: 15px;
-  /* background-color: #333; */
- /* Pindahkan Chevron ke ujung kanan */
-  }
-
-  .sidebar-item .icon {
-    margin-right: 10px;
-    font-size: 1.5rem;
-    transition: opacity 0.3s ease;
-    text-decoration: none;
-    color: white;
-  }
-
-  .menu-title{
-    flex-grow: 1;
-    margin-right: 60px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-decoration: none;
-    color: white;
-  }
-
-  /* SIDEBAR LINK */
-  .menu-title a{
-    text-decoration: none;
-    color: white;
-  }
-  /*menu yang telah dikunjungi*/
-  .menu-title a:visited{
-    color: rgb(211, 208, 208);
-  }
-  .menu-title a:hover {
-    color: #97271C; /* Warna teks link saat di-hover (contoh: biru) */
-  }
-  
-  .menu-title a:active {
-    color: #97271C; /* Warna teks link saat aktif (klik) */
-    /* text-decoration: underline; */
-  }
-  /* END SIDEBAR LINK */
-
-  .sidebar-item .menu-text {
-    flex-grow: 1;
-    transition: opacity 0.3s ease;
-  }
-
-  .sidebar-item .icon-dash{
-    margin-right: auto;
-    margin-left: 10px;
-  }
-  
-  .sidebar-item .icon-chevron {
-    margin-left: auto;
-    transition: transform 0.3s ease;
-    color: white;
-  }
-  
-
-  /*
-  coba
-  */
-
-  .sidebar.collapsed .sidebar-item .icon-chevron {
-    opacity: 0; /* Sembunyikan Chevron saat sidebar diperkecil */
-    margin-left: 0; /* Hilangkan margin agar tidak ada jarak */
-  }
-  
-  .sidebar.collapsed .sidebar-item {
-    justify-content: center; /* Tempatkan item di tengah */
-  }
-  
-  .sidebar.collapsed .sidebar-item .icon {
-    margin-right: 0;
-    text-decoration: none;
-    color: white;
-  }
-  
-  .sidebar-item:hover {
-    /* background-color: #444; */
-    color: white;
-    /* border-radius: 10px; */
-    border-bottom: 3px solid #97271C;
-  }
-  
-  .sidebar-collapse {
-    margin-top: 10px;
-  }
-  
-  .sidebar-label {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    padding: 2px;
-  }
-  
-  .sidebar-collapse-items {
-    margin-left: 20px; 
-  }
-  .sidebar-collapse-items:hover{
-    border-bottom: 3px solid #97271C;
-  }
-
-  .dropdown-h5{
-    display: flex;
-    align-items: center;
-  }
-
-
-  .icon-action {
-    margin-right: 10px;
-  }
-
-  .sidebar-dropdown-menu{
-    /* background-color: white; */
-
-  }
-  .sidebar-dropdown-menu h5{
-    font-size: 15px;
-    text-align: Left;
-    margin-left: 20px;
-    font-weight: 50;
-  }
-  .sidebar-dropdown-menu h5:hover{
-    border-bottom: 3px solid #97271C;
-  }
-
-  .sidebar.collapsed .sidebar-item {
-    justify-content: center;
-    text-decoration: none;
-  }
-  
-  .sidebar.collapsed .sidebar-item-group,
-  .sidebar.collapsed .sidebar-label,
-  .sidebar.collapsed .sidebar-collapse-items {
-    display: block;
-  }
-  
-  .sidebar.collapsed .sidebar-item a {
-    display: block;
-    text-align: center;
-  }
-
-  .sidebar-action{
-    border-top: 1px solid grey;
-  }
-
-  /*Marketing*/
-.sidebar-marketing .sidebar-label{
-  margin-bottom: 10px;
 }
+
+.sidebar-item .icon {
+  margin-right: 10px;
+  font-size: 1.5rem;
+  color: grey;
+}
+.sidebar-dashboard-item .icon{
+  margin-right: 10px;
+}
+
+.menu-title {
+  transition: opacity 0.3s ease;
+  opacity: 1;
+}
+
+.sidebar.collapsed .menu-title {
+  opacity: 0;
+  pointer-events: none;
+}
+.sidebar-dashboard-item{
+  width: 80%;
+  padding: 10px;
+}
+
+.sidebar-dashboard-item:hover {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  color: black;
+  font-size: bold;
+}
+
+.sidebar-dashboard {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  color: #747474;
+}
+
+.icon, .menu-title {
+  transition: color 0.3s ease;
+}
+
+.sidebar-dashboard-item:hover .icon,
+.sidebar-dashboard-item:hover .menu-title{
+  color: black;
+  font-weight: bold;
+}
+
+.sidebar-action{
+  margin-top: 40vh;
+} */

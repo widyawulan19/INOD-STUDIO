@@ -1,51 +1,47 @@
-/* .board-navbar{
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: #333;
-  z-index: 1000; 
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-} */
+
 .board-container {
-  display: flex;
+  display: flex; 
   flex-direction: column;
   height: 100%;
   width: 100%;
-  padding: 20px;
+  /* padding: 5px; */
   box-sizing: border-box;
   overflow: hidden;
-}
-.nav-board{
-  background-image: linear-gradient(to right, 
-  rgba(0, 0, 0, 0.8), 
-  rgba(31, 12, 16, 0.8), 
-  rgba(52, 17, 24, 0.8), 
-  rgba(75, 20, 28, 0.8), 
-  rgba(98, 22, 30, 0.8), 
-  rgba(118, 22, 31, 0.8), 
-  rgba(138, 23, 30, 0.8), 
-  rgba(158, 25, 27, 0.8), 
-  rgba(181, 21, 25, 0.8), 
-  rgba(204, 16, 21, 0.8), 
-  rgba(228, 8, 13, 0.8), 
-  rgba(251, 0, 0, 0.8)
-);
-border-radius: 10px;
-height: 9%;
-padding: 5px;
-margin-bottom: 5vh;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  position: relative;
+  overflow-y: auto;
+  border: 1px solid rgb(232, 232, 232);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+  background-color: white;
 }
 
-.nav-board2{
+/* new navbar for board  */
+.board-title{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
-  padding-right: 10px;
-  margin: 0;
-  padding: 0;
+  width: 100%;
+  padding:0px 10px;
+  border-bottom: 1px solid #eee;
+  background-color: white;
+}
+
+.back-button{
+  background-color: #fff;
+  border: 1px solid white;
+  padding: 5px;
+  font-size: 15px;
+}
+.back-button:hover{
+  background-color: #eee;
+  border-radius: 4px;
+}
+.board-title-navigation button{
+  background-color: white;
+  border: 0.1px solid white;
+  font-size: 15px;
+  padding: 5px;
 }
 
 .coverBg{
@@ -65,21 +61,7 @@ margin-bottom: 5vh;
   background-color: #6b1c14;
 }
 
-/*BACKGROUND*/
-.nav-board2 .btn-bg{
-  width: 150px;
-  height: 30px;
-  padding: 5px;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  background-color: #6b1c14;
-  color: white;
-  border: 1px solid #491510;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+
 .btn-icon{
   margin-left: 10px;
 }
@@ -95,24 +77,24 @@ margin-bottom: 5vh;
   max-height: 150vh;
 }
 
-.lists-container{
+/* .lists-container{
   flex: 1;
   display: flex;
   flex-direction: row;
-  gap: 20px;
   padding-bottom: 20px;
   overflow-x: auto;
   white-space: nowrap;
   max-height: 150vh;
-}
+  border: 1px solid red;
+} */
 .board-card {
   position: relative;
-  min-width: 280px;
+  width: fit-content;
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  border: 1px solid #491510;
+  /* border: 1px solid #491510; */
   border-radius: 8px;
-  padding: 10px;
+  /* padding: 10px; */
   display: inline-block;
   vertical-align: top;
   box-sizing: border-box;
@@ -120,16 +102,27 @@ margin-bottom: 5vh;
   white-space: nowrap;
   max-height: 100%;
   height: 20vh;
-  border: 1px solid #491519;
   margin-right: 10px;
+
+}
+.board-card .board-title{
+  border-bottom: 1px solid #eee;
+  margin: 0;
+  padding: 10px;
+  width: 100%;
+  display: center;
+  justify-content: space-between;
 }
 
-.board-card .dot-btn{
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
+/* .board-card .dot-btn{
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   cursor: pointer;
+  border: 1px solid green;
+} */
+.tooltip-container .dot-nav:hover{
+  color: #97271C;
 }
-
 .dropdown-menu{
   position: absolute;
   padding: 2px 4px;
@@ -142,83 +135,166 @@ margin-bottom: 5vh;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
 }
 
-.board-dropdown-menu-action{
-  position: absolute; /* Untuk memastikan dropdown muncul di atas konten lainnya */
-  background: white; /* Warna latar belakang dropdown */
-  border: 1px solid #ccc; /* Border dropdown */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Bayangan dropdown */
-  padding: 5px; /* Padding di dalam dropdown */
-  top: 30px; /* Jarak dari atas elemen yang mengandung dropdown */
-  right: 10px; /* Jarak dari kanan elemen yang mengandung dropdown */
-  /* z-index: 9999; Memastikan dropdown berada di atas konten lain */
-  /* z-index: 9999; */
+.board-list-content{
+  /* border: 1px solid blue; */
+  padding: 10px;
   display: flex;
-  flex-direction: column;
-  border-radius: 5px;
-  gap: 5px;
-  padding-bottom: 10px;
-  max-height: 100px; /* Atur tinggi maksimal */
-  overflow-y: auto;
+  align-items: center;
+  justify-content: start;
+  position: relative;
 }
-.board-card .board-dropdown-menu-action{
-  /* display: block; */
-  display:flex;
+.list-boards{
+  padding: 5px;
+  margin: 5px;
+  /* border: 1px solid green; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+}
+.board-cards{
+  background-color: white;
+  /* border: 1px solid #491510; */
+  width: 15vw;
+  /* height: 20vh; */
+  height: fit-content;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+.board-cards .board-card-title{
+  padding-bottom: 5px;
+  /* margin: 5px; */
+  margin-bottom: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  position: relative;
+}
+.dropdown-board-action{
+  display: none; /* Default disembunyikan */
+  position: absolute;
+  top: 20px; /* Sesuaikan ini untuk menempatkan tepat di bawah ikon */
+  right: 0px; /* Sesuaikan posisi horizontal jika diperlukan */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 1000;
+  min-width: 150px;
+}
+.dropdown-board-action.active {
+  display: block; /* Tampilkan saat aktif */
+}
+.dropdown-board-action h5{
+  /* background-color: white; */
+  color: grey;
+  font-weight: normal;
+  margin: 0px 5px;
+}
+.dropdown-action .action-btn{
+  padding:0px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  height: fit-content;
+  border: 1px solid white;
+}
+.dropdown-action .action-btn-remove{
+  border-top: 1px solid grey;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+.dropdown-action .action-btn:hover{
+  background-color: #eee;
+  border-radius: 4px;
+  border: 1px solid white;
+}
+.dropdown-action .ikon{
+  color: grey;
+  margin: 5px;
+  padding: 2px;
+  font-size: 15px;
+}
+.dropdown-action .ikon-remove{
+  color: rgb(180, 4, 4);
+  margin: 5px;
+  font-size: 15px;
 }
 
-.board-dropdown-menu-action .dropdown-ul{
-  padding: 0.5px;
-  font-size: 13px;
-  font-weight: bold;
-  margin: 0;
+.dropdown-action  .action-btn button{
   text-align: left;
+  padding: 5px;
+  border: 0.1px solid white;
+  background-color: white;
+  color: #000;
+  margin: 0px;
+  width: 100%;
+  height: 50%;
+}
+.dropdown-action .action-btn-remove:hover{
+  background-color: #eee;
+  border-radius: 4px;
+  border: 0.1px solid white;
+}
+.dropdown-action  .action-btn button:hover,
+.dropdown-action .action-btn-remove button:hover
+{
+  background-color: #eee;
+  border: 0.1px solid #eee;
+}
+.dropdown-action  .action-btn-remove button{
+  text-align: left;
+  padding-left: 5px;
+  border: 1px solid white;
+  background-color: white;
+  color: rgb(180, 4, 4);
   /* border: 1px solid blue; */
 }
 
-.dropdown-li{
-  margin-top: 5px;
-  padding: 2px;
-  cursor: pointer;
+/* END ACTION  */
+
+.boards-text {
+  margin-bottom: 10px;
+  display: block;
+  width: 100%;
+}
+.boards-text h4{
+  margin: 0px 5px;
+}
+.boards-text p{
+  margin: 10px 5px;
+  font-size: 10px;
+  word-wrap: break-word; /* Menjamin teks panjang akan terputus dan masuk ke baris berikutnya */
+  white-space: normal; /* Memastikan teks yang panjang tetap terbungkus dalam satu baris */
+  /* border: 1px solid green; */
+}
+.boards-icons{
   display: flex;
   align-items: center;
-  /* overflow-x: auto; */
+  justify-content: space-between;
+  font-size: 10px;
+  padding: 5px;
 }
-
-.dropdown-li:hover{
-  background-color: #ddcccc;
-  border-radius: 5px;
-  color: white;
-}
-
-.dropdown-li .ikon{
-  margin-right: 1vh;
-  color: #6b1c14;
-  padding: 4px;
-}
-
-.board-view-container {
-  padding: 10px 20px 20px;
+.boards-icons p{
+  margin: 5px 5px;
+  padding: 2px;
+  border-radius: 4px;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-  height: 150vh;
-  background-color: #ffffff14;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  overflow-y: auto;
+  align-items: center;
+  justify-content: left;
+  border: 0.3px solid #491510;
 }
-
-.board-list-container {
-  display: flex;
-  overflow-x: auto;
-  overflow-y: visible;
-  padding-top: 20px;
-  max-width: 100%;
-  height: 40vh;
-  box-sizing: border-box;
-  white-space: nowrap;
-  position: relative;
-  /* border: 1px solid yellow; */
+/*
+.board-list-container .board-card{
+  border: 1px solid #491510;
+  height: fit-content;
+  padding: 10px;
 }
 
 .board-container h3{
@@ -226,34 +302,49 @@ margin-bottom: 5vh;
   display: flex;
   align-items: center;
 }
-.board-list{
-  position: relative;
-  overflow: visible;
-}
+
 
 .board-list .board-card2{
   height: 100%;
   border-radius: 8px;
-}
+} */
 
-.board-card2 button.newBoard{
+.create-board-button .newBoard{
   background-color: #731e17;
+  /* border: 1px solid green; */
+  font-weight: normal;
+  font-size: 10px;
   color: white;
-  border-radius: 8px;
-  padding: 10px;
+  border-radius: 4px;
+  padding: 5px;
   margin-right: 10px;
-  width: 250px;
+  margin-top: 0;
+  width: fit-content;
+  height: fit-content;
   flex-shrink: 0; /* Prevent cards from shrinking */
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box; /* Ensure padding doesn't add to width */
 }
 .board-card2 button.newBoard:hover{
   background-color: #491510;
 }
 
-.board-description{
+.board-text{
+  /* border: 1px solid blue; */
+  padding: 0px 5px;
+  text-align: left;
+  height: 55%;
+}
+.board-text h4{
+  margin: 0;
+  padding-top: 5px;
+}
+
+.board-text p{
   font-size: 12px;
   text-align: left;
   /* border: 1px solid green; */
@@ -262,11 +353,21 @@ margin-bottom: 5vh;
   white-space: normal;
   height: auto;
 }
+.board-card h4{
+  display: flex;
+  font-size: 15px;
+  font-weight: bold;
+  justify-content: space-between;
+  margin: 5px 0;
+  /* border: 1px solid yellow; */
+  /* background-color: #ddcccc; */
+}
 
 .board-card .board-icons {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: left;
+  margin-bottom: 5px;
   /* padding-left: 5px;
   padding-right: 5px; */
 }
@@ -274,12 +375,30 @@ margin-bottom: 5vh;
 .board-icons p {
   margin-right: 10px;
   font-size: 10px;
-  color: #333;
+  font-weight: bold;
+  padding: 5px;
+  color: black;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid #491510;
+  border-radius: 5px;
+  background-color: #6b1d1455;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
-
+.board-icons .date {
+  margin-right: 10px;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 5px;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #491510;
+  border-radius: 5px;
+  background-color: white;
+}
 .board-form {
   margin-top: 20px;
   display: flex;
@@ -334,17 +453,7 @@ margin-bottom: 5vh;
   font-size: 12px;
 }
 
-.btn-nav {
-  width: 10vw;
-  height: 4vh;
-  margin-right: 5px;
-  background-color: #f4f5f700;
-  color: white;
-  font-size: 15px;
-  font-weight: bold;
-  border: 0.5px solid #f4f5f700;
-  cursor: pointer;
-}
+
 
 /*BG*/
 
@@ -380,6 +489,7 @@ margin-bottom: 5vh;
   font-weight: 300;
   padding: 20px;
   border-radius: 10px;
+  border: 1px solid red;
   /* display: flex;
   flex-direction: column;
   align-items: center;
@@ -408,3 +518,162 @@ margin-bottom: 5vh;
   color: white;
 }
 /* End Confirm delete*/
+/*BACKGROUND*/
+.dropdown-right{
+  padding: 10px;
+  position: relative;
+  /* border: 1px solid grey; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown-right .btn-bg{
+  padding: 8px;
+  border: 1px solid white;
+  border-radius: 4px;
+  font-weight: normal;
+  font-size: 13px;
+  color: black;
+  background-color: white;
+  /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); */
+}
+.dropdown-right .btn-bg:hover{
+  /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); */
+  background-color: #eee;
+  border-radius: 4px;
+  padding: 8px;
+  border: 1px solid #eee;
+}
+.dropdown-right .dropdown-list{
+  background-color: white; /* Set background color if needed */
+  /* border: 1px solid red; */
+  border-radius: 8px;
+  position: absolute;
+  margin: 0;
+  padding: 5px;
+  list-style-type: none;
+  z-index: 1;
+  width: 150px;
+  top: 45px;
+  right: 0;
+  max-height: 500px;
+  overflow-y: auto;
+  transform: translateX(-30px); /* Creates a 10px space on the right */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Optional for dropdown shadow */
+}
+.dropdown-right .dropdown-list li {
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dropdown-right .dropdown-list li:hover{
+  background-color: #97271C;
+  color: white;
+}
+
+.dropdown-list img{
+  border: 1px solid #491510;
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 1vh;
+}
+/*Image selector*/
+
+/* popup create board  */
+.popup-overlay-create-board{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  border: 1px solid #491519;
+}
+.popup-content-create-board{
+  background: white;
+    color: black;
+    font-weight: 300;
+    border-radius: 10px;
+    width: 30vw;
+    height: fit-content;
+    border: 1px solid #491519;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.popup-content-create-board .header-popup{
+  margin-top: 0;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.header-popup h5{
+  margin: 0;
+}
+
+.board-input:focus{
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  border:1px solid #491519;
+  background-color: #eee; 
+}
+.board-button{
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  padding: 7px;
+  border-top: 1px solid #eee;
+}
+.board-button .board-button{
+  border-radius: 4px;
+  color: white;
+  background-color: #491510;
+  border: 0.1px solid #491510;
+}
+/* end popup create board  */
+
+/* tooltop start  */
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip-container .tooltip-text {
+  visibility: hidden;
+  width: 80px; /* Lebar tooltip */
+  background-color: #333; /* Warna latar belakang */
+  color: #fff; /* Warna teks */
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 12px;
+
+  /* Posisi tooltip */
+  position: absolute;
+  bottom: 50%; /* Geser tooltip di atas elemen */
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 5px;
+  z-index: 1;
+
+  /* Animasi */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+/* tooltip end  */

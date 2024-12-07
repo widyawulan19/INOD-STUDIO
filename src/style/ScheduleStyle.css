@@ -1,5 +1,9 @@
 /* Schedule.css */
-table {
+.schedule-tabel-container{
+    overflow-x: auto;
+    width: 100%;
+}
+.schedule-table table {
     width: 100%;
     height: 100vh;
     border-collapse: collapse;
@@ -9,20 +13,51 @@ table {
     table-layout: fixed;
 }
 
-th, td {
+
+.schedule-table th, td {
     padding: 8px;
-    border: 1px solid #6b1c14;
-    text-align: center;
+    /* border: 1px solid #6b1c14; */
+    text-align: left;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-th {
-    background-color: #6b1c14;
-    color: white;
-    border: 1px solid black;
+.schedule-table th {
+    padding: 12px 15px;
+    text-align: left;
+    height: 20px;
+    /* border-bottom: 1px solid #ddd; */
+    margin-bottom: 10px;
+    background-color: #d7c9ca;
+    color: #333;
+    font-weight: bold;
 }
+.schedule-table td{
+    height: 20px;
+    padding: 12px 15px;
+    text-align: left;
+}
+.schedule-table tr:nth-child(even){
+    transition: transform 0.2s, box-shadow 0.2s;
+    background-color: #f7f7f7;
+}
+.schedule-table tr:nth-child(even):hover{
+    background-color: #d7c9ca;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+.schedule-table tr{
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .schedule-table tr:hover{
+    background-color: #d7c9ca;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    color: black;
+  }
+
 .schedule-table th:nth-child(1), .schedule-table td:nth-child(1){
     width: 150px;
 }

@@ -1,14 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { getLists, createList, getBoardById, deleteList } from '../services/Api'
+import { getLists, createList, getBoardById, deleteList, getCardCountByLists, archiveLists, getCards } from '../services/Api'
 import List from './List'
 import { useNavigate, useParams } from 'react-router-dom'
-import { HiChevronDown, HiChevronRight, HiChevronUp, HiPlus, } from 'react-icons/hi'
+import { HiPlus } from 'react-icons/hi'
+import { IoCloseOutline,IoSearch, } from "react-icons/io5";
+import { HiOutlineSquaresPlus } from "react-icons/hi2";
+import { MdOutlineImagesearchRoller } from "react-icons/md";
+import { TbLayoutKanban } from "react-icons/tb";
 import '../style/BoardViewStyle.css'
-import { LuUsers } from "react-icons/lu";
 import { Data_Bg } from '../data/DataBg'
 import { AlertTitle } from '@mui/material'
- 
-const BoardView=()=> {
+import { useDate } from '../context/DateContext'
+import SearchBar from '../fiture/SearchBar'
+
+const BoardView=({listId, cardId, onClose})=> {
+    //search filter
+    const {cards, setCards} = useDate();
+    const navigate = useNavigate();
     const {workspaceId, boardId} = useParams();
     const [lists,setLists] = useState([]);
     const [newListName, setNewListName] = useState('');
@@ -17,9 +25,107 @@ const BoardView=()=> {
     const currentDate = new Date();
     const [boardName, setBoardName] = useState('');
     //delete list
-    const [listToDelete, setListToDelete] = useState(null)
-    const [isPopupVisible, setIsPopupVisible] = useState(false)
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [listToDelete, setListToDelete] = useState(null);
     const [alert,setAlert] = useState({show:true, message:'', severity:''})
+    //background
+    const [selectedBackground, setSelectedBackground] = useState(null);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    // edit list 
+    const [editList, setEditList] = useState(null);
+    const [isEditListOpen, setIsEditListOpen] = useState(false);
+    //duplicate list
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [selectedList, setSelectedList] = useState(null);
+    //archive list
+    const [isArchivePopupVisible, setIsArchivePopupVisible] = useState(false);
+
+    //edit list
+    const handleEditListClick = (listId) =>{
+        setEditList(listId);
+        setIsEditListOpen(true);
+        console.log('List ID:', listId)
+    }
+    const handleCloseEditList = () =>{
+        setEditList(null);
+        setIsEditListOpen(false);
+    }
+    //end edit list
+
+    //Delete list
+    const handleDeleteClick = (listId) =>{
+        setListToDelete(listId);
+        setIsPopupVisible(true);
+        console.log('tombol delete berhasil di klik')
+    }
+    const handleConfirmDelete = async()=>{
+        if(listToDelete){
+            await handleDelete(listToDelete);
+            setIsPopupVisible(false);
+            setListToDelete(null);
+            setAlert({show:true, message:'Successfully deleted list ', severity:'success'})
+            console.log('list berhasil dihapus')
+        }
+    }
+    useEffect(()=>{
+        if(alert.show){
+            setTimeout(()=>{
+                setAlert({...alert,show:false})
+            }, 5000)
+        }
+    }, [alert])
+
+    const handleCancleDelete = () =>{
+        setIsPopupVisible(false)
+        setListToDelete(null)
+        setAlert({show:true, message:'batal menghapus list', severity:'success'})
+    }
+    //end delete list
+
+    //Duplicate list
+    const handleDuplicateClick = (listId)=>{
+        setSelectedList(listId);
+        setIsPopupOpen(true);
+    }
+    const handleClosePopupList =() =>{
+        setIsPopupOpen(false);
+        setSelectedList(null);
+    }
+    //end duplicate list
+
+    //archive list
+    const handleConfirmArchive = async (id) =>{
+        setIsArchivePopupVisible(false);
+        console.log('Archive list with ID:', listId)
+        try{
+            const response = await archiveLists(listId);
+            setAlert({show:true, message:'List has been successfully archived', severity:'success'})
+            setTimeout(()=>{
+            setAlert(prevState => ({ ...prevState, show:false}))
+            }, 5000)
+            loadLists();
+            console.log(response);
+        }catch(error){
+            setAlert({show:true, message:'Failed to archive list. Please try again later.', severity:'error'})
+            setTimeout(()=>{
+            setAlert(prevState => ({ ...prevState, show:false}))
+            }, 5000)
+            console.error('Error while archiving list:', error)
+        }
+    }
+    useEffect(()=>{
+        loadLists();
+    },[]);
+
+    const handleArchive = ()=>{
+        setIsArchivePopupVisible(true)
+        console.log('handleArchive success')
+    }
+    const handleCancleArchive = () =>{
+        setIsArchivePopupVisible(false)
+        console.log('Cancle archive works!')
+    }
+    //end archive list
     //CARD ALERT
     const [cardAlert, setCardAlert] = useState({show:false, message:'', severity:''})
     //const handleAlert
@@ -33,18 +139,21 @@ const BoardView=()=> {
 
     //END const handleAlert
 
-    //const for background
-    const [showBg, setShowBg] = useState(false)
-    const [selectBg, setSelectBg] = useState(null)
+    
+ //background function
+    useEffect(()=>{
+        const saveBg = localStorage.getItem('selectedBackground');
+        if(saveBg){
+            setSelectedBackground(JSON.parse(saveBg))
+        }
+    },[])
 
-    //backgoround
-    const toggleBgVisibility = () => {
-        setShowBg(!showBg);
+    const handleBgSelect = (bg) =>{
+        setSelectedBackground(bg);
+        localStorage.setItem('selectedBackground', JSON.stringify(bg));
+        setIsDropdownOpen(false);
     }
-    const handleBgSelect= (bg) => {
-        setSelectBg(bg);
-        setShowBg(false);
-    }
+ //end background function
 
 
     //boards
@@ -52,9 +161,6 @@ const BoardView=()=> {
         try{
             const response = await getBoardById(boardId) //memanggil api berdasar id nya
             console.log('Receive data:', response.data);
-
-            // if(response.data && response.data.length > 0) {
-            //     setBoardName(response.data[0].name)//simpan nama board dalam state;
             if(response.data){
                 setBoardName(response.data.name)
 
@@ -88,10 +194,24 @@ const BoardView=()=> {
         try {
             const response = await getLists(boardId);
             console.log('Received data:', response.data);
-    
             // Pastikan boardId dan board_id dalam data memiliki tipe data yang sama
             const filteredLists = response.data.filter(list => list.board_id === Number(boardId));
-            setLists(filteredLists);
+
+            //mengambil jumlah card untuk setiap list
+            const listsWithCardCount = await Promise.all(filteredLists.map(async (list)=>{
+                try{
+                    const cardCountResponse = await getCardCountByLists(list.id);
+                    return{
+                        ...list,
+                        cardCount: cardCountResponse.data.card_count  || 0//menambahkan card count pada data list
+                    };
+                }catch(error){
+                    console.error(`Failed to fetch card count for list ${list.id}`, error);
+                    return {...list, cardCount:0};
+                }
+            }));
+
+            setLists(listsWithCardCount);
         } catch (error) {
             console.error('Failed to load Lists', error);
         }
@@ -125,6 +245,12 @@ const BoardView=()=> {
     const handleBackToWorkspace = () => {
         navigasi('/')
     }
+    const handleToCardDetail = () =>{
+        navigasi(`/workspaces/${workspaceId}/boards/${boardId}/lists/${listId}/cards/${cardId}`)
+    }
+    const handleToExample = () => {
+        navigasi(`/example`)
+    }
      //END NAVIGASI
 
     //const handle form submission
@@ -154,88 +280,75 @@ const BoardView=()=> {
         setIsFormVisible(false);
     }
 
+      
+    
+
+
   return (
     <div className='boardView-container'
         style={{
-            backgroundImage: selectBg ? `url(${selectBg.image_url})`:'none',
+            minHeight:'100vh',
+            backgroundImage:selectedBackground ? `url(${selectedBackground.image_url})`:'none',
             backgroundSize:'cover',
-            backgroundPosition:'center'
+            backgroundPosition:'center',
+            transition:'background-image 0.3s ease-in-out',
+            // border:'1px solid blue'
         }}
-    >
         
-        <div className='nav-date'>
-        {cardAlert.show && (
-          <AlertTitle className='alert-position' severity={cardAlert.severity}>
-            {cardAlert.message}
-          </AlertTitle>
-        )}
-            <h3 style={{marginBottom:'0', marginTop:'0'}}>
-            <button  
-                onClick={handleBackToWorkspace} 
-                className='btn-nav'
-            >
-                Workspace
-            </button> <HiChevronRight className='nav-icon'/> 
-            <button 
-                onClick={handleBackToBoard}
-                className='btn-nav' 
-                style={{textAlign:'left', width:'5vw'}}
-            >
-                Board
-            </button><HiChevronRight className='nav-icon'/>
-            <button className='btn-nav' style={{textAlign:'left'}}>Lists</button>
-                
-            </h3>
+    > 
+        <div className='header-board'>
+            <div className="nav-date">
+                {cardAlert.show && (
+                <AlertTitle className='alert-position' severity={cardAlert.severity}>
+                    {cardAlert.message}
+                </AlertTitle>
+                )}
 
-            {/* Form for date  */}
-            <div className='form-container' style={{marginTop:'0'}}>
-                <div className='date'>
-                    <h4 style={{margin:'0'}}>{monthName}</h4>
-                    <p style={{margin:'0', fontSize:'13px'}}>Hari ini adalah hari {dayName}, {date} {monthName} {year}</p>
-                </div>
-                <div className='board'>
-                    <h4 style={{marginRight:'5px'}}>Board -</h4>
-                    <p style={{display:'flex', alignItems:'center'}}>{boardName} </p>
-                </div>
-                <div className='member'>
-                    <p><LuUsers/> : 10 member</p>
-                </div>
-                <div style={{display:'flex', alignItems:'flex-end', justifyContent:'right', position:'relative'}}>
-                    <button className='btn-bg' onClick={toggleBgVisibility}>
-                        {showBg? 
-                        (<>Background <HiChevronUp size={20} className='btn-icon'/></>):(<>Select Background <HiChevronDown size={20} className='btn-icon'/></>)
-                        }
+                <div className='header-navigation'>
+                    <button onClick={handleBackToWorkspace} >
+                        <HiOutlineSquaresPlus style={{marginRight:'4px'}}/>
+                        Workspace
                     </button>
-                    {showBg && (
-                        <div
-                            style={{
-                                backgroundColor:'white',
-                                border:'0.1px solif grey',
-                                borderRadius:'5px',
-                                boxShadow:'0px 4px 8px rgba(0,0,0,0.1)',
-                                padding:'5px',
-                                width:'100%',
-                                height: '100px',
-                                overflowY:'auto',
-                                position:'absolute',
-                                zIndex:'1000',
-                                top:'100%',
-                                right:'24px'
-                            }}
-                        >
-                            {Data_Bg.map((bg)=>(
-                                <div
-                                className='coverBg'
-                                key={bg.id}
-                                onClick={()=> handleBgSelect(bg)}
-                                >
-                                    {bg.name}
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                    /
+                    <button onClick={handleBackToBoard}>
+                        <TbLayoutKanban style={{marginRight:'4px'}}/>
+                        Boards
+                    </button>
+                    /
+                    <button className='non-active'>
+                        Lists
+                    </button>
+                    {/* <div>
+                        <p> | {dayName}, {date} {monthName} {year}</p>
+                    </div> */}
                 </div>
-            </div> 
+                <div className='form-container'>
+                    <div className="form-right">
+                        <div className='form-search'>
+                            <IoSearch className='search-icon'/>  
+                            <SearchBar card={cards}/> 
+                        </div>
+                        |
+                        <div className="bg-selector">
+                            <button onClick={()=> setIsDropdownOpen(!isDropdownOpen)}>
+                                {selectedBackground ? selectedBackground.name: 'Select Backgorund'}
+                                <MdOutlineImagesearchRoller style={{marginLeft:'5px'}}/>
+                            </button>    
+                            {isDropdownOpen && (
+                                <ul className='dropdown-list'>
+                                    {Data_Bg.map((bg)=>(
+                                        <li key={bg.id} onClick={()=> handleBgSelect(bg)}>
+                                            <img src={bg.image_url} alt={bg.name} />
+                                            {bg.name}
+                                        </li>
+                                    ))}
+                                </ul>
+                                )}  
+                            </div> 
+                        </div>
+                    </div>
+            </div>
+            
         </div>
         
         <div className="board-view-container">
@@ -250,13 +363,63 @@ const BoardView=()=> {
                                 loadLists={loadLists}
                                 onDelete={() => handleDelete(list.id)}
                                 handleAlert={handleAlert}
+                                cardCount={list.cardCount}
+                                //edit
+                                handleEditListClick ={handleEditListClick}
+                                handleCloseEditList={handleCloseEditList}
+                                isEditListOpen={isEditListOpen}
+                                editList ={editList}
+                                //delete
+                                isPopupVisible={isPopupVisible}
+                                handleDeleteClick={handleDeleteClick}
+                                onClose={handleCancleDelete}
+                                onDeleteConfirm={handleConfirmDelete}
+                                //duplicate
+                                handleDuplicateClick={handleDuplicateClick}
+                                handleClosePopupList={handleClosePopupList}
+                                selectedList={selectedList}
+                                isPopupOpen={isPopupOpen}
+                                //Archive
+                                handleArchive={handleArchive}
+                                handleCancleArchive={handleCancleArchive}
+                                isArchivePopupVisible={isArchivePopupVisible}
+                                handleConfirmArchive={handleConfirmArchive}
+                                
                             />
                         </div>
                     </div>
                 ))}
-                <div className="create-list-container">
+                <div className="form-create-list-container">
+                    <button onClick={()=> setIsFormVisible(true)}>
+                        {isFormVisible ? 'Add new list' : (<><HiPlus size={12} style={{ marginRight: '5px' }} />Create List</>)}
+                    </button>
+                    {isFormVisible && (
+                        <div className='visible-form'>
+                            {/* <div className="visible-header">
+                                <h5>New List</h5>
+                                <IoCloseOutline onClick={handleButtonCancle}/>
+                            </div> */}
+                            <div className="visible-body">
+                                <form onSubmit={handleCreateList} >
+                                    <input 
+                                        type="text" 
+                                        value={newListName}
+                                        onChange={(e)=> setNewListName(e.target.value)}
+                                        placeholder='Enter List Name'
+                                        required
+                                    />
+                                </form>
+                            </div>
+                            <div className="visible-button">
+                                <button className=''>Add List</button>
+                                <button className='btn-form' type='button' onClick={handleButtonCancle}>Cancel</button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+                {/* <div className="create-list-container">
                     <button className='btn-list' onClick={() => setIsFormVisible(true)}>
-                        {isFormVisible ? 'Add new list' : (<><HiPlus size={15} style={{ marginRight: '1vw' }} />Create List</>)}
+                        {isFormVisible ? 'Add new list' : (<><HiPlus size={12} style={{ marginRight: '5px' }} />Create List</>)}
                     </button>
                     {isFormVisible && (
                         <form onSubmit={handleCreateList} className='create-list-form'>
@@ -273,7 +436,7 @@ const BoardView=()=> {
                             </div>
                         </form>
                     )}
-                </div>
+                </div> */}
             </div>
         </div>
     </div>

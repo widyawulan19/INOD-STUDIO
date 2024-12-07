@@ -7,6 +7,8 @@ import bg5 from '../assets/bg/bg5.jpeg';
 import bg6 from '../assets/bg/bg6.jpeg';
 import bg7 from '../assets/bg/bg7.jpeg';
 import bg8 from '../assets/bg/bg8.jpeg';
+import bg9 from '../assets/bg/bg9.jpeg';
+import bg10 from '../assets/bg/bg10.jpeg';
  
 export const Data_Bg = [
         {
@@ -49,4 +51,14 @@ export const Data_Bg = [
             "name": "Background 8",
             "image_url": bg8
         },
+        {
+            "id": 9,
+            "name": "Background 9",
+            "image_url": bg9
+        },
+        {
+            "id": 10,
+            "name": "Background 10",
+            "image_url": bg10
+        }
 ]

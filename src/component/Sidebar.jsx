@@ -1,286 +1,101 @@
-import React, { useEffect, useState } from 'react'
-// import { Sidebar } from 'flowbite-react'
-import { HiArrowSmRight,HiOutlineCog,HiArchive, HiInbox, HiShoppingBag, HiTable, HiUser, HiChevronDown, HiChevronUp,HiArrowCircleRight, HiArrowCircleLeft, HiPlus,HiDesktopComputer, HiOutlineServer } from "react-icons/hi";
-import { HiOutlineCreditCard } from "react-icons/hi2";
-import { MdOutlineDashboardCustomize } from "react-icons/md";
-import { FaFileCircleQuestion } from "react-icons/fa6";
-import '../style/SidebarStyle.css'
-import { LuUsers, LuLayers } from "react-icons/lu";
-import { getWorkspaces } from '../services/Api';
-import { AiOutlineDatabase } from "react-icons/ai"
-import logo from '../assets/LOGO1.png'
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import { HiOutlineSquaresPlus } from "react-icons/hi2";
+import { LuUsers, LuArrowLeftCircle, LuArrowRightCircle } from "react-icons/lu";
+import { BsDatabaseCheck } from "react-icons/bs";
+import { GoArchive } from "react-icons/go";
+import { HiOutlineCog } from "react-icons/hi";
+import { BsQuestionSquare } from "react-icons/bs";
 import { Link } from 'react-router-dom';
+import '../style/SidebarStyle.css';
+import Workspace from './Workspace';
+import MainContent from '../pages/MainContent';
 
-const Sidebar = ()=> {
-  const [showSidebarMenu, setShowSidebarMenu] = useState(false)
-  const [showSidebar, setShowSidebar] = useState(false)
-  const [showAnotherMenu, setShowAnotherMenu] = useState(false) //member
-  const [showArchiveMenu, setShowArchiveMenu] = useState(false) //archive
-  const [showMarketingData, setShowMarketingData ] = useState(false) //marketing
-  const [showMarketingAction, setShowMarketingAction] = useState(false)//marketing archive
-  const [showAction, setShowAction] = useState(false)//toggle action
-  const navigate = useNavigate();
+const Sidebar=()=> {
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [itemActive, setItemActive] = useState('');
 
-  //navigate to member page
-  // const handleNavigation = () => {
-  //   navigate('/member')
-  // }
-
-  const toggleFormVisibility = () =>{
-    setShowSidebar(!showSidebar);
+  const handleOpenSidebar = () => {
+    setSidebarVisible(!sidebarVisible);
+  }
+  const handleItemActive = (itemName) => {
+    setItemActive(itemName);
+  }
+  const handleStopPropagation = (e) => {
+    e.stopPropagation();
   }
 
-  //member
-  const toggleFormVisibility2 = () => {
-    setShowAnotherMenu(!showAnotherMenu);
-  }
-  
-  //action
-  const toggleVisibilityAction = () => {
-    setShowArchiveMenu(!showArchiveMenu);
-  }
-
-  const toggleSidebarMenu = () => {
-    setShowSidebarMenu(!showSidebarMenu)
-  }
-
-  // Marketing data
-  const toggleMarketingData = () => {
-    setShowMarketingData(!showMarketingData);
-  }
-  //marketing archive
-  const toggleMarketingArchive = () => {
-    setShowMarketingAction(!showMarketingAction);
-  }
-
-  //action
-  const toggleAction = () => {
-    setShowAction(!showAction)
-  }
-
-  //workspace
-  const [workspace, setWorkspace] = useState([]);
-  //const [newWorkspace, setNewWorkspace] = useState({name:'', description:''})
-
-  //load workspaces
-  useEffect(()=>{
-    const loadWorkspace = async () => {
-      const response = await getWorkspaces();
-      setWorkspace(response.data)
-    };
-    loadWorkspace();
-  },[])
-
-  //propagation
-
-
-  return ( 
-    <div className={`sidebar ${showSidebarMenu ? 'collapsed': ''}`} aria-label="Sidebar with multi-level dropdown example">
-      <div className="sidebar-items">
-        <div className="sidebar-item-group">
-          <img src={logo} style={{width:'100%'}} alt="" />
-          <a href="#" className='sidebar-item' style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
-            <div style={{fontWeight:'bold'}}>
-              {!showSidebarMenu && 'INOD DASHBOARD'}
-            </div>
-            {showSidebarMenu ? (
-              <HiArrowCircleRight onClick={toggleSidebarMenu} size={25} className='icon-dash'/>
-            ):(
-              <HiArrowCircleLeft onClick={toggleSidebarMenu} size={25}/>
-            )}
-          </a>
-          <div className='sidebar-collapse'>
-              <div className="sidebar-label" onClick={toggleFormVisibility}>
-                <div style={{textAlign:'left', paddingLeft:'0'}} className='sidebar-item'>
-                  <Link to='/' style={{textDecoration:'none'}}>
-                    <HiDesktopComputer className='icon'/>
-                    {!showSidebarMenu && <span className='menu-title'>Workspace</span>}
-                  </Link>
-                    {!showSidebarMenu && ( 
-                      showSidebar? 
-                      (<HiChevronUp className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto'}}/>
-                      ):(
-                      <HiChevronDown className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible',marginLeft:'auto'}}/>)
-                      )}
-                    {/* </Link> */}
-                </div>
-              </div>
-              {showSidebar && (
-                <div className="sidebar-collapse-items">
-                  {workspace.length > 0 ? (
-                    workspace.map((ws) => (
-                      <a href='#' key={ws.id} className='sidebar-item'>{ws.name}</a>
-                    ))
-                  ):(
-                    <div className="sidebar-item">No workspace available</div>
-                  )}
-              </div>
-              )}
-              </div>
-
-              <div className='sidebar-label' onClick={toggleFormVisibility2}>
-                <div className='sidebar-item' style={{textAlign:'left', paddingLeft:'0'}}>
-                  <Link to='/member' style={{textDecoration:'none'}}>
-                    <LuUsers className='icon'/>
-                    {!showSidebarMenu && 
-                      <span className='menu-title'style={{textDecoration:'none'}}>
-                        Inod Member  
-                      </span>
-                    }
-                    </Link>
-                </div>
-              </div>
-
-              <div className='sidebar-label' onClick={toggleVisibilityAction}>
-                <div className='sidebar-item' style={{textAlign:'left', paddingLeft:'0'}}>
-                  <LuLayers className='icon'/>
-                  <Link to='' style={{textDecoration:'none'}}>
-                  {!showSidebarMenu && <span className='menu-title'>Action</span>}
-                  </Link>
-                  {!showSidebarMenu && (
-                      showArchiveMenu?
-                      (<HiChevronUp className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto' }}/>
-                      ):(
-                        <HiChevronDown className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto' }}/>
-                      )
-                    )}
-                </div>
-              </div>
-              {showArchiveMenu && (
-                <div className='sidebar-dropdown-menu'>
-                    <h5>Archive</h5>
-                    <h5>Another archive</h5>
-                </div>
-              )}
-              
-          
-          {/* MARKETING */}
-
-          <div className='sidebar-marketing'>
-            {/* <h5 style={{textAlign:'left'}}>MARKETING</h5> */}
-            <h5 style={{textAlign:'left'}}>
-              {!showSidebarMenu ? 'MARKETING':''}
-            </h5>
-              <div className='sidebar-label' onClick={toggleMarketingData}>
-                <div className='sidebar-item' style={{textAlign:'left', padding:'0'}}>
-                  <Link to='/marketing' style={{textDecoration:'none'}}>
-                  <AiOutlineDatabase className='icon'/>
-                  {!showSidebarMenu && 
-                    <span className='menu-title'>
-                      Data Marketing
-                    </span>}
-                    </Link>
-                  {!showSidebarMenu && (
-                      showMarketingData?
-                      (<HiChevronUp className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto' }}/>
-                      ):(
-                        <HiChevronDown className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto' }}/>
-                      )
-                    )}
-                </div>
-            </div>
-            {showMarketingData && (
-              <div className='sidebar-dropdown-menu'>
-                <h5>Data Marketing 1</h5>
-                <h5>Data Marketing 2</h5>
-                <h5>Data Marketing 3</h5>
-              </div>
-            )} 
-
-            <div className='sidebar-label' onClick={toggleMarketingArchive}>
-              <div className='sidebar-item' style={{textAlign:'left', padding:'0'}}>
-                <HiArchive className='icon'/>
-                {!showSidebarMenu && 
-                  <span className='menu-title'>
-                    <Link to='/archive-marketing'>Archive Data</Link>
-                  </span>}
-                  {!showSidebarMenu && (
-                      showMarketingAction?
-                      (<HiChevronUp className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto' }}/>
-                      ):(
-                        <HiChevronDown className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto' }}/>
-                      )
-                    )}
-              </div>
-            </div>
-            {showMarketingAction && (
-              <div className='sidebar-dropdown-menu'>
-                <h5>Archive data 1</h5>
-                <h5>Archive data 2</h5>
-                <h5></h5>
-              </div>
-            )}
+  return (
+    <div className='layout-container'>
+      <div
+        className={`sidebar-container ${
+          sidebarVisible ? 'show-sidebar' : 'close-sidebar'
+        }`} 
+        onClick={handleOpenSidebar}
+      >
+        <div className="sidebar-menu" onClick={handleStopPropagation}>
+          <div className={`sidebar-main ${itemActive === 'workspace' ? 'active' : ''}`}
+            onClick={()=> handleItemActive('workspace')}
+          >
+            <Link to='/'>
+              <HiOutlineSquaresPlus className='sidebar-icon'/>
+              {sidebarVisible && <h5>Workspace</h5>}
+              <span className='tooltip'>Workspace</span>
+            </Link>
           </div>
+          <div className={`sidebar-main ${itemActive === 'member' ? 'active' : ''}`}
+            onClick={()=> handleItemActive('member')}
+          >
+            <Link to='/member'>
+              <LuUsers className='sidebar-icon'/>
+              {sidebarVisible && <h5>Inod Member</h5>}
+              <span className='tooltip'>Inod Member</span>
+            </Link>
+          </div>
+
+          {/* MARKETING  */}
+          <div className={`sidebar-main ${itemActive === 'marketing' ? 'active' : ''}`}
+            onClick={()=> handleItemActive('marketing')}
+          >
+            <Link to='/marketing'>
+              <BsDatabaseCheck className='sidebar-icon'/>
+              {sidebarVisible && <h5>Data Marketing</h5>}
+              <span className='tooltip'>Data Marketing</span>
+            </Link>
+          </div>
+          <div className={`sidebar-main ${itemActive === 'archive' ? 'active' : ''}`}
+            onClick={()=> handleItemActive('archive')}
+          >
+            <Link to='/archive-marketing'>
+              <GoArchive className='sidebar-icon'/>
+              {sidebarVisible && <h5>Archive Data</h5>}
+              <span className='tooltip'>Archive Data</span>
+            </Link>
+          </div>
+
           {/* ACTION */}
-          <div className='sidebar-action' >
-            <h5 style={{textAlign:'left'}}>
-                {!showSidebarMenu ? 'ACTION' : ''}
-            </h5>
-            <div className="sidebar-label" style={{marginBottom:'1vh'}}>
-              <div className="sidebar-item" style={{textAlign:'left', padding:'0'}}>
-                <HiOutlineCog className='icon'/>
-                {!showSidebarMenu && 
-                  <span className='menu-title'>
-                    <Link to='/setting'>
-                      Setting
-                    </Link>
-                  </span>}
-              </div>
-            </div>
-            <div className="sidebar-label" style={{marginBottom:'1vh'}}>
-              <div className="sidebar-item" style={{textAlign:'left', padding:'0'}}>
-                <FaFileCircleQuestion className='icon'/>
-                {!showSidebarMenu && 
-                  <span className='menu-title'>
-                    <Link to='/faq'>
-                      FaQ
-                    </Link>
-                  </span>}
-              </div>
-            </div>
-            <div className="sidebar-label" onClick={toggleAction} >
-              <div className="sidebar-item" style={{textAlign:'left', padding:'0'}}>
-                <HiArchive className='icon'/>
-                {!showSidebarMenu && 
-                  <span className='menu-title'>
-                    <Link to='/archive'>
-                      Archive
-                    </Link>
-                  </span>}
-                {!showSidebarMenu && (
-                  showAction ?
-                  (<HiChevronUp className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto' }}/>
-                  ):(
-                    <HiChevronDown className='icon-chevron' style={{visibility: showSidebarMenu ? 'hidden': 'visible', marginLeft:'auto' }}/>
-                  )
-                )}
-              </div>
-            </div>
-            {showAction && (
-              <div className="sidebar-dropdown-menu">
-                <h5 className='dropdown-h5'>
-                  <HiDesktopComputer className='icon-action'/>
-                  {!showSidebarMenu && <span>Workspace</span>}
-                  
-                </h5>
-                <h5 className='dropdown-h5'>
-                  <MdOutlineDashboardCustomize className='icon-action'/>
-                  {!showSidebarMenu && <span> Board</span>}
-                </h5>
-                <h5 className='dropdown-h5'>
-                  <HiOutlineServer className='icon-action'/>
-                  {!showSidebarMenu && <span>list</span>}
-                </h5>
-                <h5 className='dropdown-h5'>
-                  <HiOutlineCreditCard className='icon-action'/>
-                  {!showSidebarMenu && <span>Card</span>}
-                </h5>
-              </div>
-            )}
+          <div className={`sidebar-main ${itemActive === 'setting' ? 'active' : ''}`}
+            onClick={()=> handleItemActive('setting')}
+          >
+            <Link to='/member'>
+              <HiOutlineCog className='sidebar-icon'/>
+              {sidebarVisible && <h5>Setting</h5>}
+              <span className='tooltip'>Setting</span>
+            </Link>
           </div>
-        </div>
-        
+          <div className={`sidebar-main ${itemActive === 'faq' ? 'active' : ''}`}
+            onClick={()=> handleItemActive('faq')}
+          >
+            <Link to='/member'>
+              <BsQuestionSquare className='sidebar-icon'/>
+              {sidebarVisible && <h5>FaQ</h5>}
+              <span className='tooltip'>FaQ</span>
+            </Link>
+          </div>
+
+          <button onClick={handleOpenSidebar}>
+            {sidebarVisible ? <LuArrowLeftCircle/>:<LuArrowRightCircle/>}
+          </button>
+        </div>  
       </div>
     </div>
   )

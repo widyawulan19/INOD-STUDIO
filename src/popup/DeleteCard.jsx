@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import '../style/WorkspaceEdit.css'
-import deleteIcon from '../assets/hapus.png';
+import '../style/DeletePopup.css'
+// import deleteIcon from '../assets/hapus.png';
 import { AlertTitle } from '@mui/material';
-import { AiFillDelete } from 'react-icons/ai';
+import { IoCloseOutline,IoWarningOutline } from "react-icons/io5";
+import { RiDeleteBin5Fill } from "react-icons/ri";
 
 const DeleteCard=({cardId,isOpen,onClose,onDeleteConfirm})=> {
     const [alert, setAlert] = useState({show:false, message:'', severity:''})
@@ -11,23 +12,25 @@ const DeleteCard=({cardId,isOpen,onClose,onDeleteConfirm})=> {
         return null;
     }
 
-    const stopPropagation =(e)=>{
-        e.stopPropagation();
-    }
+    // const stopPropagation =(e)=>{
+    //     e.stopPropagation();
+    // }
 
   return (
     isOpen && (
-        <div className="edit-popup-overlay">
-            <div className="edit-popup-content">
-                <div className="popup-title">
-                    <h3 style={{color:'#491519'}}>Confirm delete card</h3>
-                    <AiFillDelete style={{color:'#491519'}} size={20}/>
+        <div className="delete-popup-overlay">
+            <div className="delete-popup-content">
+                <div className="delete-title">
+                    <h5> <IoWarningOutline size={15} style={{color:'red', marginRight:'5px'}}/>Confirm delete card</h5>
+                    <IoCloseOutline style={{color:'grey', cursor:'pointer'}} size={20} onClick={(e)=> {e.stopPropagation(); onClose()}}/>
                 </div>
-                <img src={deleteIcon} alt={deleteIcon} />
-                <p className='sub-title'>Apakah anda yakin ingin menghapus board ini?</p>
-                <div className='popup-button'>
+                <div className="text-delete">
+                    <RiDeleteBin5Fill size={20} style={{color:'red', margin:'5px', marginBottom:'15px'}}/>
+                    <p>Apakah anda yakin ingin <span style={{color:'red'}}>menghapus</span>  card ini?</p>
+                </div>
+                <div className='delete-popup-button'>
                     <button className='delete-btn' onClick={(e)=> {e.stopPropagation(); onDeleteConfirm()}}>Ya, Hapus</button>
-                    <button className='cancle-btn' onClick={(e) => {e.stopPropagation(); onClose()}}>Cancle</button>
+                    {/* <button className='cancle-btn' onClick={(e) => {e.stopPropagation(); onClose()}}>Cancle</button> */}
                 </div>
             </div>
             {alert.show && (

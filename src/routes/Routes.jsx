@@ -8,6 +8,8 @@ import CardDetail from '../component/CardDetail'
 import BoardView from '../component/BoardView'
 import CardModal from '../component/CardModal'
 import Member from '../pages/Member'
+import OtherPage from '../pages/OtherPage'
+import Example from '../pages/Example'
 
 const AppRoutes=()=> {
 
@@ -21,6 +23,8 @@ const AppRoutes=()=> {
       <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId' element={<CardDetail/>}/>
       <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId/modal' element={<CardModal/>}/>
       <Route path='/member' element={<Member/>}/>
+      <Route path='/other-page' element={<OtherPage/>}/>
+      <Route path='/example' element={<Example/>}/>
     </Routes>
   ) 
 }

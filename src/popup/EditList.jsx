@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import '../style/WorkspaceEdit.css'
 import { updateList } from '../services/Api'
+import { IoClose, IoCloseOutline } from 'react-icons/io5'
  
 const EditList=({list, listId, onClose, onSave}) =>{
     const [editList, setEditList] = useState({
@@ -29,34 +30,30 @@ const EditList=({list, listId, onClose, onSave}) =>{
             console.error('Error updating list:', error)
         }
     }
-
+ 
   return (
-    <div className="edit-popup-overlay" onClick={stopPropagation} style={{margin:'0'}}>
+    <div className="edit-list-popup-overlay" onClick={stopPropagation} style={{margin:'0'}}>
         <div className="edit-popup-content">
-            <h2>Edit List</h2>
-            <div className="input-name">
-                <input 
-                    type="text" 
-                    name='name'
-                    value={editList.name}
-                    onChange={handleChange}
-                    placeholder='List Name'
-                    onClick={stopPropagation}
-                />
+            <div className="edit-title">
+                <h5>Edit List</h5>
+                <IoCloseOutline size={20} style={{color:'grey', cursor:'pointer'}} onClick={onClose}/>
             </div>
-            {/* <div className="input-desc">
-                <textarea
-                    type='number'
-                    name='position'
-                    value={editList.position}
-                    onChange={handleChange}
-                    placeholder='list position'
-                    onClick={stopPropagation}
-                />
-            </div> */}
-            <div className="modal-actions">
-                <button className='save-btn' onClick={handleSave}>Save</button>
-                <button className='cancle-btn' onClick={onClose}>Cancle</button>
+            <div className="edit-form">
+                <div className="input-name">
+                    <input 
+                        type="text" 
+                        name='name'
+                        value={editList.name}
+                        onChange={handleChange}
+                        placeholder='List Name'
+                        className='input-field'
+                        onClick={stopPropagation}
+                    />
+                </div>
+                <div className="edit-button">
+                    <button className='save-btn' onClick={handleSave}>Save</button>
+                    {/* <button className='cancle-btn' onClick={onClose}>Cancle</button> */}
+                </div>
             </div>
         </div>
     </div>

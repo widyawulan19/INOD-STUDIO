@@ -1,0 +1,20 @@
+ /* Main content styling */
+ .main-container {
+    display: flex;
+    flex: 1;
+    /* margin-top: 60px; */
+    margin-left: 1vw;
+    margin-top: 1vh;
+    overflow: hidden;
+   }
+ 
+   .main-container{
+     background-color: white;
+     height: 100%;
+     width: 100%;
+   }
+   .main-container p{
+     font-weight: normal;
+     font-size: 10px;
+   }
+   

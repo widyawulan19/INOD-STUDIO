@@ -1,3 +1,12 @@
+.list-container{
+  background-color: #eee;
+  /* background-color: red; */
+  /* border: 1px solid red; */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  border-radius: 8px;
+  width: 90%;
+}
 .list-container button{
   font-family: "Nunito", sans-serif;
   font-optical-sizing: auto;
@@ -13,17 +22,24 @@
   padding-right: 5px;
   /* border: 1px solid green; */
 }
+.title p{
+  font-size: 13px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
 
 /*titik tiga ikon*/
 .dot-btn{
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
-  /* border-radius: 5px; */
   cursor: pointer;
   font-size: 1.2rem;
   transition: color 0.3s ease;
 }
 .dot-btn:hover{
   color: #97271C;
+  /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); */
+  border-radius: 5px;
 }
 /*titik tiga ikon*/
 
@@ -39,9 +55,9 @@
 }
 .card-item-lists{
     background-color: #fff;
-    border: 1px solid grey;
+    /* border: 1px solid grey; */
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -51,97 +67,88 @@
 }
 /*Dropdwon-menu-action*/
 .dropdown-menu-action{
-  /* position: absolute;
-  background-color: white;
-  border: 1px solid #ccc;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 30px;
+  right: 5px;
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   padding: 10px;
   z-index: 1000;
-  right: 10px;
-  top: 40px;
-  height: 100px;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  max-height: 100px;
-  overflow-y: auto; */
-  position: absolute; /* Adjust as needed */
-  background-color: white; /* Set a background color */
-  border: 1px solid #ddd; /* Border styling */
-  width: 150px; /* Set a fixed width if necessary */
-  z-index: 1000; /* Ensure it appears above other elements */
-  /* max-height: none; Remove max height restriction */
-  height: 150px;
-  overflow: visible; /* Allow all content to be visible */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
-  /* Add padding and border radius for styling */
-  padding: 10px;
-  border-radius: 4px;
+  min-width: 150px;
 }
-.dropdown-ul{
-  list-style: none;
+.dropdown-menu-action .active{
+  display: block;
+}
+.dropdown-menu-action h5{
+  color: grey;
+  font-weight: normal;
+  margin: 0px 5px;
+}
+.dropdown-action .action-btn{
   padding: 0;
-  margin: 0;
-  text-align: left;
-  font-weight: bold;
-}
-.dropdown-li{
-  padding: 5px;
-  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 5px;
+  justify-content: start;
+  height: fit-content;
+  border: 0.1px solid white;
 }
-.dropdown-li:hover{
-  background-color: #ddcccc;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-/*list-dropdown-menu-action*/
-/* .lists-dropdown-menu-action{
-  position: absolute;
-  background: white; 
-  border: 1px solid #ccc; 
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
-  padding: 5px; 
-  top: 30px; 
-  right: 10px; 
-  z-index: 1000; 
-  display: flex;
-  flex-direction: column;
-  border-radius: 5px;
-  gap: 5px;
-}
-
-.lists-dropdown-menu-action .dropdown-ul{
-  padding: 0.5px;
-  font-size: 13px;
-  font-weight: bold;
-  margin: 0;
-  text-align: left;
-}
-
-.list-dropdown-menu-action.dropdown-li{
+.dropdown-action .action-btn-remove{
+  border-top: 0.1px solid grey;
   margin-top: 5px;
-  padding: 2px;
-  cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: start;
+}
+.dropdown-action .action-btn:hover{
+  background-color: #eee;
+  border-radius: 4px;
+  border: 0.1px solid white;
+}
+.dropdown-action .ikon{
+  color: grey;
+  margin: 5px;
+  padding: 2px;
+  font-size: 15px;
+}
+.dropdown-action .ikon-remove{
+  color: rgb(180, 4, 4);
+  margin-top: 5px;
+  font-size: 15px;
 }
 
-.list-dropdown-menu-action.dropdown-li:hover{
-  background-color: #ddcccc;
-  border-radius: 5px;
-  color: white;
+.dropdown-action  .action-btn button{
+  text-align: left;
+  padding: 5px;
+  border: 0.1px solid white;
+  background-color: white;
+  color: #000;
+  margin: 0px;
+  width: 100%;
+  height: 50%;
+}
+.dropdown-action .action-btn-remove:hover{
+  background-color: #eee;
+  border-radius: 4px;
+  border: 0.1px solid white;
+}
+.dropdown-action  .action-btn button:hover,
+.dropdown-action .action-btn-remove button:hover
+{
+  background-color: #eee;
+  border: 0.1px solid #eee;
+}
+.dropdown-action  .action-btn-remove button{
+  text-align: left;
+  padding-left: 5px;
+  border: 1px solid white;
+  background-color: white;
+  color: rgb(180, 4, 4);
+  /* border: 1px solid blue; */
 }
 
-.list-dropdown-menu-action.dropdown-li .ikon{
-  margin-right: 1vh;
-  color: #6b1c14;
-  padding: 4px;
-} */
-/*end list-dropdown-menu-action*/
-
+/* end Dropdown menu action */
 
 .list-container .cover{
   width: 100%;
@@ -160,7 +167,7 @@
 
 .list-container .card-description {
   color: #333;
-  font-size: 13px;
+  font-size: 15px;
   /* border: 1px solid black; */
   padding: 5px; /* Agar teks tidak terlalu rapat dengan border */
   word-wrap: break-word; /* Memastikan kata-kata yang terlalu panjang membungkus ke baris berikutnya */
@@ -169,7 +176,14 @@
   height: auto; /* Mengatur tinggi secara otomatis sesuai dengan konten */
 }
 
-
+.label-container{
+  padding: 5px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  height: auto;
+  /* border: 1px solid grey; */
+}
 
 .dot-icon{
   position: relative;
@@ -189,6 +203,19 @@
   justify-content: space-between;
   align-items: center;
   height: 30px;
+}
+.card-item-lists .card-cover{
+  /* border: 1px solid black; */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  /* padding: 5px; */
+}
+.card-item-lists img{
+  width: 100%;
+  height: 80px;
 }
 .card-item-lists .card-dropdown-menu-action{
   display: block;
@@ -231,7 +258,7 @@
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
-
+ 
 .card-dropdown-menu-action .ikon {
   margin-right: 8px;
   color: #6b1c14;
@@ -265,6 +292,31 @@
   border-radius: 5px;
 }
 
+.card-footer{
+  display: flex;
+  align-items: center;
+  /* border: 1px solid grey; */
+}
+.card-footer-content{
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+.card-footer-content-right{
+  display: flex;
+  align-items: center;
+  justify-content:end;
+  margin-left: auto;
+  padding: 2px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  height: 15px;
+  width: fit-content;
+  border: 1px solid #ddd;
+}
+.card-footer-text{
+  color:'grey';
+}
 .fiture-container{
   display: flex;
   justify-content: space-between;
@@ -284,7 +336,7 @@
   align-items: center;
   padding: 5px;
   margin: 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
 }
 .fitur2{
   /* border: 1px solid grey; */
@@ -293,7 +345,7 @@
   align-items: center;
   padding: 5px;
   margin: 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
 }
 
 .fiture .icon {
@@ -319,13 +371,32 @@
   transform: scale(1.2);
 }
 
+.card-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: fit-content;
+  /* border: 1px solid brown; */
+  padding: 10px;
+}
+
 .card-form .card-form-input{
   max-width: 90%;
+  height: 20px;
+  border-radius: 5px;
+  border: 0.5px solid #491519;
+  margin-bottom: 5px;
+  padding: 5px;
 }
 .card-form button.add-btn{
   background-color: #951A1A;
+  border-radius: 5px;
+  border: 1px solid #951A1A;
+  padding: 5px;
   color: white;
-  font-weight: bold;
+  font-weight: normal;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
@@ -337,24 +408,35 @@
 
 .addButton{
   /* background-color: blue; */
-  width: 265px;
-  height: 5vh;
-  padding: 10px;
+  width: fit-content;
+  height: fit-content;
+  padding: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
-  font-weight: bold;
-  font-family: "Roboto Serif", serif;
-  border: 0.1px solid #F4F5F7;
-  background-color: white;
+  font-size: 13px;
+  /* font-weight: bold; */
+  /* font-family: "Roboto Serif", serif; */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen','nunito',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  border: 0.1px solid #49151900;
+  background-color: rgba(255, 255, 255, 0);
   border-radius: 5px;
-  border: 1px solid grey;
+  /* border: 1px solid grey; */
   margin-top: 5px;
   color: #491519;
 }
 .addButton:hover{
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  /* box-shadow: 0 4px 8px rgba(108, 30, 30, 0.3); */
+  background-color: #eee;
+}
+
+.footer-list .ikon-list{
+  margin-right: 5px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #491519;
 }
 
 
@@ -422,3 +504,18 @@
 /* ALERT */
 /* 
 /* ALERT END  */
+
+/*list footer*/
+.footer-list{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* border: 1px solid blue; */
+}
+.card-count{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+}
+/*end list footer*/

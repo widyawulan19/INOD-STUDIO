@@ -1,0 +1,171 @@
+.archive-container{
+    height: 100%; 
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: left;
+    /* border: 1px solid grey; */
+}
+.archive-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 20px;
+    /* border: 1px solid grey; */
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+.button-header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+ /* Style untuk tombol Export */
+ .btn-ex button {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #6b1c14;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .btn-ex button:hover {
+    background-color: #491519;
+  }
+.archive-header .data-search{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid grey;
+    padding: 5px;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+.archive-header .data-search input{
+    padding: 5px;
+    border: 1px solid white;
+}
+.archive-title{
+    /* border: 1px solid red; */
+}
+.archive-data{
+    /* border: 1px solid blue; */
+}
+.archive-data .archive-button{
+    /* border-bottom: 0.1px solid #491519; */
+    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); */
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+.archive-button button{
+    background-color: white;
+    /* font-weight: bold; */
+    font-size: 13px;
+    border: 1px solid white;
+    padding: 8px 12px;
+    margin: 0px 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.archive-button button:hover{
+    color: #491519;
+    font-weight: bolder;
+    border-bottom: 2px solid #491519;
+}
+button.active{
+    color: #491519;
+    font-weight: bolder;
+    border-bottom: 2px solid #491519;
+}
+
+/* TABEL STYLE  */
+/* Style untuk tabel */
+.archive-show-data table {
+    width: 60%;
+    height: fit-content;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-left: 20px;
+    border: none;
+  }
+
+  .archive-show-data th{
+    padding: 12px 15px;
+    text-align: left;
+    height: 20px;
+    /* border-bottom: 1px solid #ddd; */
+    margin-bottom: 10px;
+    background-color: #d7c9ca;
+    color: #333;
+    font-weight: bold;
+  }
+
+  .archive-show-data td {
+    padding: 12px 15px;
+    text-align: left;
+    height: 20px;
+    /* border-bottom: 1px solid #ddd; */
+  }
+ 
+  .archive-show-data th:nth-child(1){
+    width: 50px;
+  }
+  .archive-show-data th:nth-child(2){
+    width: 60px;
+    font-size: 13px;
+  }
+  .archive-show-data th:nth-child(3){
+    width: 100px;
+  }
+  .archive-show-data th:nth-child(4){
+    width: 150px;
+  }
+  .archive-show-data th:nth-child(5){
+    width: 250px;
+  }
+
+  .archive-show-data tr {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+  
+  /* Hover effect untuk baris tabel */
+  .archive-show-data tr:hover {
+    background-color: #d7c9ca; /* Warna saat di-hover */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    color: black;
+}
+
+  /* Warna latar belakang untuk baris genap */
+  .archive-show-data tr:nth-child(even) {
+    transition: transform 0.2s, box-shadow 0.2s;
+    background-color: #f7f7f7;
+  }
+  .archive-show-data tr:nth-child(even):hover {
+    background-color: #d7c9ca;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+  }
+
+  
+  /* Style untuk input search */
+  .data-search input {
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+    margin-left: 8px;
+  }
+  
+  .data-search svg {
+    vertical-align: middle;
+    margin-right: 4px;
+  }
+  
+ 

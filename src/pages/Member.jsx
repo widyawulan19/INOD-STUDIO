@@ -9,7 +9,9 @@ import { Link } from 'react-router-dom';
 function Member() {
   const [member, setMember] = useState([]);
   const [filteredMember, setFilteredMember] = useState([]);
+  //caterory
   const [category, setCategory] = useState('all');
+  const [isOpen, setIsOpen] = useState(false);
   const [filterValue, setFilterValue] = useState('');
   const currentDate = new Date();
   //membatasi jumlah tampilan -> 10
@@ -108,8 +110,8 @@ function Member() {
     setCurrentPage(pageNumber);
   }
 
-  const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
+  const handleCategoryChange = (selectedCategory) => {
+    setCategory(selectedCategory);
     setFilterValue('');
     setCurrentPage(1); //mereset halaman ke 1 saat filter berubah
   }
@@ -139,7 +141,7 @@ function Member() {
 
   //date
     //mendapatkan nama, hari, tanggal saat ini
-    const daysOfWeek = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+    const daysOfWeek = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
     const dayName = daysOfWeek[currentDate.getDay()];
 
     //mendaptkan bulan dalam satu tahun 
@@ -149,6 +151,11 @@ function Member() {
     //mendapatkan tanggal, bulan, tahun
     const date = currentDate.getDate();
     const year = currentDate.getFullYear();
+
+    //pagination
+    const handlePagination = (e) => {
+      e.stopPropagation();
+    }
   
 
   return (
@@ -163,37 +170,49 @@ function Member() {
         </div> 
         {/* Filter Form  */}
         <div className='filter-form'>
-          <label htmlFor="category" className='filter-label'>Filter by:</label>
-          <select 
-            id="category"  
-            value={category} 
-            onChange={handleCategoryChange} 
-            className='filter-select'
-          >
-            <option value="all">All</option>
-            <option value="divisi">Divisi</option>
-            <option value="shift">Shift</option>
-            <option value="jabatan">Jabatan</option>
-          </select>
-
-          {/* Input untuk memasukkan nilai filter */}
-          {category !== 'all' && (
+          <label htmlFor="category" style={{width:'fit-content'}}>Filter:</label>
+          <div className="filter-dropdown" onClick={()=> setIsOpen(!isOpen)}>
+            <button>
+              {category === 'All'? 'All Data': category}
+            </button>
+            {isOpen && (
+              <ul className='filter-dropdown-menu'>
+                <li onClick={()=> handleCategoryChange('all')} className='drodpwon-item'>All</li>
+                <li onClick={()=> handleCategoryChange('divisi')} className='dropdown-item'>Divisi</li>
+                <li onClick={()=> handleCategoryChange('shift')} className='dropdown-item'>Shift</li>
+                <li onClick={()=> handleCategoryChange('jabatan')} className='dropdown-item'>Jabatan</li>
+              </ul>
+            )}
+            {category !== 'all' && (
             <input 
               type="text" 
               placeholder={`Enter ${category}`}
               value={filterValue}
               onChange={handleFilterChange}
               className='custom-input'
+              onClick={handlePagination}
             />
           )}
-          <button 
-            onClick={filterMember}
-            style={{
-              display:'flex',
-              alignItems:'center',
-              justifyContent:'center'
-            }}
-          ><FaFilter style={{marginRight:'0.5vw'}}/>Filter</button>
+          <div onClick={handlePagination}>
+            <button 
+              onClick={filterMember}
+              style={{
+                display:'flex',
+                alignItems:'center',
+                justifyContent:'center',
+                width:'fit-content',
+                marginRight:'0',
+                marginLeft:'5px',
+                color:'white',
+                backgroundColor:'#491519',
+                borderRadius:'5px',
+                padding:'15px'
+              }}
+            >
+              <FaFilter style={{marginRight:'0.5vw'}}/>Filter
+            </button>
+          </div>
+          </div>
         </div>
       </div>
 
@@ -267,52 +286,55 @@ function Member() {
 
       
       {/* TABEL FORM  */}
-      <div className='tabel-data'>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Nomor Telpn</th>
-              <th>Divisi</th>
-              <th>Shift</th>
-              <th>Jabatan</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredMember.map((m, index)=>(
-              <tr key={index}>
-                  <td>{m.name}</td>
-                  <td>{m.username}</td>
-                  <td>{m.email}</td>
-                  <td>{m.nomor_wa}</td>
-                  <td>{m.divisi}</td>
-                  <td>{m.shift}</td>
-                  <td>{m.jabatan}</td>
-                  <td>
-                    <button className='edit-btn' onClick={() => handleEditEmployee(m)}>Edit</button> |
-                    <button className='hapus-btn' onClick={() => handleDeleteEmployee(m.id)}>Hapus</button>
-                  </td>
+      <div className="tabel-data-container">
+        <div className='tabel-data'>
+          <table>
+            <thead>
+              <tr>
+                <th style={{borderTopLeftRadius:'8px', borderBottomLeftRadius:'8px'}}>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Nomor Telpn</th>
+                <th>Divisi</th>
+                <th>Shift</th>
+                <th>Jabatan</th>
+                <th style={{borderTopRightRadius:'8px', borderBottomRightRadius:'8px'}}>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredMember.map((m, index)=>(
+                <tr key={index}>
+                    <td style={{borderTopLeftRadius:'8px', borderBottomLeftRadius:'8px'}}>{m.name}</td>
+                    <td>{m.username}</td>
+                    <td>{m.email}</td>
+                    <td>{m.nomor_wa}</td>
+                    <td>{m.divisi}</td>
+                    <td>{m.shift}</td>
+                    <td>{m.jabatan}</td>
+                    <td style={{borderTopRightRadius:'8px', borderBottomRightRadius:'8px'}}>
+                      <button className='edit-btn' onClick={() => handleEditEmployee(m)}>Edit</button> |
+                      <button className='hapus-btn' onClick={() => handleDeleteEmployee(m.id)}>Hapus</button>
+                    </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-        {/* Pagination Control  */}
-        <div className="pagination">
-          {Array.from({length: totalPages}, (_, index)=>(
-            <button
-              key={index + 1}
-              onClick={()=> handlePageChange(index + 1)}
-              className={currentPage === index + 1 ? 'active' : ''}
-            >
-              {index + 1}
-            </button>
-          ))}
+          {/* Pagination Control  */}
+          <div className="pagination">
+            {Array.from({length: totalPages}, (_, index)=>(
+              <button
+                key={index + 1}
+                onClick={()=> handlePageChange(index + 1)}
+                className={currentPage === index + 1 ? 'active' : ''}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
+      
 
       {editingMember && (
         <div className="modal">

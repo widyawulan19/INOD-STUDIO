@@ -1,0 +1,36 @@
+.custom-date-conteiner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px;
+    border: 1px solid black;
+}
+.date-picker-input{
+    width: 90%;
+}
+.date-picker-input .MuiInputBase-root{
+    height: 33px;
+    font-size: 12px;
+    color: #521422;
+}
+.date-picker-input .MuiInputBase-input{
+    padding: 15px;
+    height: 0px;
+    width: 100%;
+    /* border: 1px solid black; */
+}
+.date-picker-input .MuiFormLabel-root{
+    font-size: 14px;
+    color: #521422;
+}
+.date-picker-input .MuiOutlinedInput-notchedOutline {
+    border: 0.1px solid #521422;
+}
+
+.date-picker-input:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #521422;
+}
+
+.date-picker-input.near-due-date {
+  background-color: #fbd8dd; /* Warna berbeda saat mendekati due date */
+}

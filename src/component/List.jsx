@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { getCards, createCard, deleteList, archiveLists, deleteCard, archiveCard} from '../services/Api'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import '../style/ListStyle.css'
-import { BsThreeDots } from "react-icons/bs";
-import { TfiCommentAlt } from "react-icons/tfi";
-import { FaPlus, FaRegEdit} from "react-icons/fa";
+import '../style/WorkspaceStyle.css'
+import { BsArchive, BsThreeDots } from "react-icons/bs";
+import { FiPlus } from "react-icons/fi";
+import { FaPlus, FaRegEdit,FaGripLinesVertical} from "react-icons/fa";
 import { GrAttachment } from "react-icons/gr";
 import { ImCross } from "react-icons/im";
-import { FaPlay } from "react-icons/fa6";
-import { HiDotsVertical, HiArchive, HiChevronUp, HiChevronDown, HiPlus,HiOutlineViewList } from "react-icons/hi";
-import { AiFillDelete } from "react-icons/ai";
-import { Data_Cover } from '../data/DataCover.js';
+import { IoCloseOutline } from "react-icons/io5";
+import { BsCalendar2Date } from "react-icons/bs";
+import { HiOutlineChatBubbleOvalLeftEllipsis} from "react-icons/hi2";
+import { HiDotsVertical, HiArchive, HiPlus, } from "react-icons/hi";
+import { AiFillDelete, AiOutlineDelete } from "react-icons/ai";
 import { AlertTitle } from '@mui/material';
 import DuplicateListPopup from './DuplicateListPopup.jsx';
 import DuplicateCardPopup from './DuplicateCardPopup.jsx';
@@ -20,9 +22,36 @@ import EditList from '../popup/EditList.jsx';
 import EditCard from '../popup/EditCard.jsx';
 import DeleteCard from '../popup/DeleteCard.jsx';
 import ArchiveCard from '../popup/ArchiveCard.jsx';
+import {  IoIosCard } from "react-icons/io";
+import { CiCreditCard2 } from "react-icons/ci";
+import { useDate } from '../context/DateContext.jsx';
+import DisplayDate from './DisplayDate.jsx';
+import SearchBar from '../fiture/SearchBar.jsx'; 
 
-
-const List=({listId, listName, loadLists, onDelete, handleAlert })=> {
+const List=({listId, 
+            listName, 
+            loadLists,
+            handleEditListClick, 
+            handleCloseEditList,
+            isEditListOpen,
+            editList, 
+            isPopupVisible,
+            onClose,
+            onDeleteConfirm,
+            handleDeleteClick,
+            // handleCancleDelete,
+            handleConfirmDelete, 
+            handleAlert,
+            cardCount,
+            handleDuplicateClick,
+            handleClosePopupList,
+            selectedList,
+            isPopupOpen,
+            handleArchive,
+            handleCancleArchive,
+            isArchivePopupVisible,
+            handleConfirmArchive,
+          })=> {
     const {workspaceId, boardId} = useParams();
     const navigate = useNavigate();
     const [cards, setCards] = useState([]);
@@ -32,104 +61,77 @@ const List=({listId, listName, loadLists, onDelete, handleAlert })=> {
     const [showAction, setShowAction] = useState(null);
     const [showCover, setShowCover] = useState(false);
     const [selectCover, setSelectCover] = useState(null);
-    //DELETE 
-    const [isPopupVisible, setIsPopupVisible] = useState(false)
-    const [listToDelete, setListToDelete] = useState(null);
     const [alert, setAlert] = useState({show:false, message:'', severity:''})
-    const [alert1, setAlert1] = useState({show:false, message:'', severity:''})
-    //ARCHIVE
-    const [isArchivePopupVisible, setIsArchivePopupVisible] = useState(false);
-    //list popup
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [selectedList, setSelectedList] = useState(null);
-    //edit list 
-    const [editList, setEditList] = useState(null)
-    const  [isEditListOpen, setIsEditListOpen] = useState(false);
+    //labels
+    const [selectedLabels, setSelectedLabels] = useState([]);
+    const location = useLocation();
+    //Search query
+    const {searchQuery, setSearchQuery} = useDate();
+    const [filteredCards, setFilteredCards] = useState([]);
+    const [showFilter, setShowFilter] = useState(false);
 
-    //EDIT LIST
-    const handleEditListClick = (listId) => {
-      setEditList(listId);
-      setIsEditListOpen(true);
-      console.log('List ID:', listId)
+    // Efek pencarian
+    useEffect(() => {
+      const result = cards.filter(card =>
+          card.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredCards(result);
+      setShowFilter(searchQuery.length > 0 && result.length > 0);
+  }, [searchQuery, cards]);
+
+  const handleCardSelect = (cardId) => {
+      setSearchQuery('');  // Clear search after selection
+      setShowFilter(false);  // Hide dropdown after selection
+      // Arahkan ke detail card
+      navigate(`/workspaces/${workspaceId}/boards/${boardId}/lists/${listId}/cards/${cardId}`);
+  };
+
+    //SELECT LABEL
+   useEffect(()=>{
+    if(location.state && location.state.selectedLabels){
+      const labelsByCardId = {};
+      location.state.selectedLabels.forEach((label)=>{
+        labelsByCardId[label.cardId] = label.labels;
+      });
+      setSelectedLabels(labelsByCardId);
+    }else{
+      const labelsByCardId = {};
+      cards.forEach((card)=>{
+        const savedLabels = localStorage.getItem(`selectedLabel_${card.id}`)
+        if(savedLabels){
+          labelsByCardId[card.id] = JSON.parse(savedLabels);
+        }
+      });
+      setSelectedLabels(labelsByCardId);
     }
+   }, [location, cards]);
 
-    const handleCloseEditBoard = () =>{
-      setEditList(null)
-      setIsEditListOpen(false);
+   //menyimpan label untuk setiap kartu secara individu
+   useEffect(()=>{
+    Object.keys(selectedLabels).forEach((cardId)=>{
+      localStorage.setItem(
+        `selectedLabel_${cardId}`,
+        JSON.stringify(selectedLabels[cardId] || [])
+      );
+    });
+   },[selectedLabels])
+
+   //SELECT COVER
+   const handleCoverSelect = (cover, cardId) => {
+    setSelectCover(cover);
+    localStorage.setItem(`cardCover_${cardId}`, JSON.stringify(cover));
+  };
+
+  const fetchSelectedCover = (cardId) => {
+    try {
+      const savedCover = localStorage.getItem(`cardCover_${cardId}`);
+      return savedCover ? JSON.parse(savedCover) : null;
+    } catch (error) {
+      console.error(`Error fetching cover for card ${cardId}:`, error);
+      return null;
     }
+  };
 
-
-    //FUNCION DELETE
-    const handleDeleteClick = (listId) =>{
-      setListToDelete(listId)
-      setIsPopupVisible(true)
-      console.log('tombol delete berhasil di klik')
-    }
-
-    const handleConfirmDelete = async()=>{
-      if(listToDelete){
-        await onDelete(listToDelete);
-        setIsPopupVisible(false);
-        setListToDelete(null);
-        setAlert({ show: true, message: 'Successfully deleted list', severity: 'success' });
-        console.log('list berhasil dihapus')
-      }
-    }
-
-    useEffect(()=>{
-      if (alert.show){
-        setTimeout(()=>{
-          setAlert({...alert, show:false})
-        }, 5000)
-      }
-    }, [alert])
-
-    const handleCancleDelete = () =>{
-     setIsPopupVisible(false)
-     setListToDelete(null)
-     setAlert1({show:true, message:'batal menghapus list', severity:'success'})
-    }
-    
-    const handleDelete = () =>{
-      onDelete(listToDelete);
-    }
-
-  
-    //END FUNCION DELETE
-
-    //ARCHIVE 
-    const handleConfirmArchive = async (id)=>{
-      setIsArchivePopupVisible(false);
-      console.log('Archiving list with ID:', listId);
-      try{
-        const response = await archiveLists(listId);
-        setAlert({show:true, message:'List has been successfully archived', severity:'success'})
-        setTimeout(()=>{
-          setAlert(prevState => ({ ...prevState, show:false}))
-        }, 5000)
-        loadLists();
-        console.log(response);
-      }catch(error){
-        setAlert({show:true, message:'Failed to archive list. Please try again later.', severity:'error'})
-        setTimeout(()=>{
-          setAlert(prevState => ({ ...prevState, show:false}))
-        }, 5000)
-        console.error('Error while archiving list:', error)
-      }
-    }
-    useEffect(()=>{
-      loadLists();
-    }, [])
-
-    const handleArchive = () =>{
-      setIsArchivePopupVisible(true)
-      console.log('handleArchive success')
-    }
-    const handleCancleArchive= () =>{
-      setIsArchivePopupVisible(false)
-      console.log('handleCancle works')
-    }
-    //END ARVHIVE
 
     const toggleFormVisibility = () => {
       setShowForm(!showForm)
@@ -138,15 +140,6 @@ const List=({listId, listName, loadLists, onDelete, handleAlert })=> {
     //cover
     const toggleCoverVisibility = ()=>{
       setShowCover(!showCover)
-    }
-
-    const handleCoverSelect = (cover) => {
-      setSelectCover(cover.cover_image_url);//edit1
-      setNewCard((prevCard) => ({
-         ...prevCard,
-          cover_image_url: cover.cover_image_url,//edit2
-        }));
-      setShowCover(false);
     }
 
     const toggleActionThreeDotList = (listId, event)=>{
@@ -183,6 +176,7 @@ const List=({listId, listName, loadLists, onDelete, handleAlert })=> {
     }
   }, [listId]);
 
+
       const handleCreateCard = async () => {
         try{
           await createCard({
@@ -212,18 +206,6 @@ const List=({listId, listName, loadLists, onDelete, handleAlert })=> {
         console.log(`Navigating to card detail with ID : ${cardId}`)
         navigate(`/workspaces/${workspaceId}/boards/${boardId}/lists/${listId}/cards/${cardId}`);
       };
-
-      //DUPLICATE LIST
-      const handleDuplicateClick = () =>{
-        setSelectedList(listId);
-        setIsPopupOpen(true);
-      }
-
-      //POPUP LIST
-      const handleClosePopupList=() =>{
-        setIsPopupOpen(false);
-        setSelectedList(null);
-      }
 
       //CARD 
       //CARD STATE
@@ -327,7 +309,7 @@ const List=({listId, listName, loadLists, onDelete, handleAlert })=> {
         setCards(prevCard => [...prevCard, newCard])
       };
 
-      //POPUP LIST
+      //POPUP CARD
       const handleClosePopupCard = ()=>{
         setIsPopupCardOpen(false);
         setSelectedCard(null);
@@ -350,10 +332,12 @@ const List=({listId, listName, loadLists, onDelete, handleAlert })=> {
       //END CARD 
 
       return (
+        <div>
+          <div className='search-bar'>
         <div className='list-container'>
           <div className='title'>
-            <p style={{display:'flex', alignItems:'center'}}>
-              <FaPlay style={{marginRight:'8px', color:'#333'}}/>
+            <p>
+              <FaGripLinesVertical style={{marginRight:'8px', color:'#6b1c14'}}/>
               {listName}
             </p>
             <p>
@@ -361,222 +345,186 @@ const List=({listId, listName, loadLists, onDelete, handleAlert })=> {
                 className='dot-btn'
                 onClick={(e)=> toggleActionThreeDotList(listId, e)}
               />
-              {showAction === listId && (
-                <div className='dropdown-menu-action' style={{height:'27vh'}}>
-                  <ul className='dropdown-ul'>
-                    <div style={{display:'flex', alignItems:'center', justifyContent:'space-between',color:'#491519'}}>
-                      Action 
-                      <HiOutlineViewList/>
-                    </div>
-                    <hr style={{color:'#491519'}}/>
-                    <li className='dropdown-li'>
-                      <AiFillDelete className='ikon' size={20}/>
-                      <button className='btn-li' onClick={(e)=> {e.stopPropagation(); handleDeleteClick(listId)}}>
-                        Delete <br />
-                        <span style={{fontSize:'10px', fontWeight:'normal'}}>Delete list</span>
-                      </button>
-                    </li>
-                     <li className='dropdown-li'>
-                      <HiArchive className='ikon' size={20}/>
-                      <button className='btn-li' onClick={(e)=> {e.stopPropagation(); handleArchive(listId)}}>
-                        Archive <br />
-                        <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive your list</span>
-                      </button>
-                    </li>
-                    
-                    <li className='dropdown-li'>
-                      <HiPlus className='ikon' size={20}/>
-                      <button className='btn-li' onClick={(e)=>  {e.stopPropagation(); handleDuplicateClick(listId)}}>
-                        Duplicate <br />
-                        <span style={{fontSize:'10px', fontWeight:'normal'}}>Duplicate your list</span>
-                      </button>
-                    </li>
-                    <li className='dropdown-li'>
-                        <FaRegEdit className='ikon' size={20}/>
-                        <button className='btn-li' onClick={(e)=> {e.stopPropagation();handleEditListClick(listId) }}>
-                          Edit <br />
-                          <span style={{fontSize:'10px', fontWeight:'normal'}}>Edit your list</span>
-                        </button>
-                    </li>
-                  </ul>
-                </div>
-              )}
             </p>
           </div>
-
-
-          <hr style={{opacity:'50%'}}/>
-          <div className='card-list-lists'>
-          {cards.map((card) => (
-            <div key={card.id} className='card-item-lists' onClick={() => handleToCardDetail(card.id)}>
-              <div>
-                <p style={{display: 'flex', justifyContent: 'space-between', margin: '0'}}>
-                  <strong>{card.title}</strong>
-                  <HiDotsVertical
-                    className='dot-btn'
-                    onClick={(e)=> toggleActionCard(card.id, e)}
-                  />
-                    {showAction === card.id && (
-                    <div className='card-dropdown-menu-action'>
-                      <ul className='dropdown-ul'>
-                      <div style={{display:'flex', alignItems:'center', justifyContent:'space-between',color:'#491519'}}>
-                        Action 
-                        <HiOutlineViewList/>
-                      </div>
-                      <hr style={{color:'#491519'}}/>
-                        <li className='dropdown-li'>
-                          <AiFillDelete className='ikon' size={20}/>
-                          <button className='btn-li' onClick={(e) => {e.stopPropagation(); handleDeleteCardClick(card.id)}}>
-                            Delete <br />
-                            <span style={{fontSize:'10px', fontWeight:'normal'}}>Delete card</span>
-                          </button>
-                          {isCardPopupVisible && (
-                            <div className='popup-overlay'>
-                              <div className='popup-content'>
-                                <h3>Konfirmasi Penghapusan</h3>
-                                <p>Apakah anda ingin menghapus card ini?</p>
-                                <button className='btn-confirm' onClick={(e)=> {e.stopPropagation(); handleConfirmDeleteCard()}}>Ya, hapus</button>
-                                <button className='btn-confirm' onClick={(e) =>{e.stopPropagation(); handleCancleDeleteCard()}}>Cancle</button>
-                              </div>
-                            </div>
-                          )}
-                        </li>
-                        <li className='dropdown-li'>
-                          <HiArchive className='ikon' size={20}/>
-                          <button className='btn-li' onClick={(e)=> {e.stopPropagation(); handleArchiveCard(card.id)}}>
-                            Archive <br />
-                            <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive this card</span>
-                          </button>
-                          {isCardArchivePopupVisible &&(
-                            <div className='popup-overlay'>
-                              <div className='popup-content'>
-                                <p>Dengan memindahkan card kedalam archive, <br /> berarti menghapus card pada halaman ini <br /> Apa anda yakin ? </p>
-                                <button className='btn-confirm' onClick={(e) => {e.stopPropagation(); handleConfirmArchiveCard(card.id)}}>Archive</button>
-                                <button className='btn-confirm' onClick={(e) => {e.stopPropagation(); handleCancleArchiveCard()}}>Batal</button>
-                              </div>
-                            </div>
-                          )}
-                        </li>
-                        <li className='dropdown-li'>
-                          <HiPlus className='ikon' size={20}/>
-                          <button className='btn-li' onClick={(e)=> {e.stopPropagation(); handleDuplicateCard(card.id)}}>
-                            Duplicate <br />
-                            <span style={{fontSize:'10px', fontWeight:'normal'}}>Duplicate this card</span>
-                          </button>
-                        </li>
-                        <li className='dropdown-li'>
-                          <FaRegEdit className='ikon' size={20}/>
-                          <button className='btn-li' onClick={(e)=> {e.stopPropagation(); handleCardEditClick(card.id) }}>
-                            Edit <br />
-                            <span style={{fontSize:'10px', fontWeight:'normal'}}>Edit your card</span>
-                          </button>
-
-                        </li>
-                      </ul>
-                    </div>
-                  )}
-                </p>
-              </div>
-
-              
-             
-              {cards.cover_image_url && (
-                <div className='cover'>
-                  <img src={cards.cover_image_url} alt={cards.name}/>
+          {showAction === listId && (
+            <div className="dropdown-menu-action active">
+              <h5>View</h5>
+              <div className="dropdown-action">
+                <div className="action-btn">
+                  <FaRegEdit className='ikon'/>
+                  <button 
+                    onClick={(e) => {e.stopPropagation(); handleEditListClick(listId)}}
+                  >Edit List</button>
                 </div>
-              )}
-             
-              <p className='card-description'>{card.description}</p>
-
-              <div style={{display: 'flex'}}>
-                <div className='label'>
-                  <button className='label1'>Ex 1</button>
-                  <button className='label2'>Ex 2</button>
-                  <button className='label3'>Ex 3</button>
+                <div className="action-btn">
+                  <BsArchive className='ikon'/>
+                  <button onClick={(e) => {e.stopPropagation(); handleArchive(listId)}}
+                  >Archive List</button>
                 </div>
-                <div className='fiture'>
-                  <div className='fitur1'>
-                    <TfiCommentAlt className='icon' size={13} />
-                    <h6 style={{margin: '0'}}>12</h6>
-                  </div>
-                  <div className='fitur2'>
-                    <GrAttachment className='icon' size={13} />
-                    <h6 style={{margin: '0'}}>3</h6>
-                  </div>
+                <div className="action-btn">
+                  <HiPlus className='ikon'/>
+                  <button
+                    onClick={(e)=> {e.stopPropagation(); handleDuplicateClick(listId)}}
+                  >Duplicate List</button>
                 </div>
-              </div>
-              <div className="fiture-container">
-                <div>
-                  <button onClick={(event) => handleToCardModal(card.id, event)} className='edit-btn'>
-                    Edit Card
-                  </button>
+                <div className="action-btn-remove">
+                  <AiOutlineDelete className='ikon-remove'/>
+                  <button
+                    onClick={(e)=> {e.stopPropagation(); handleDeleteClick(listId)}}
+                  >Delete List</button>
                 </div>
               </div>
             </div>
-          ))}
+          )}
+          <hr style={{ color:'grey',border:'0.5px solid grey',opacity: '50%' }} />
+          <div className='card-list-lists'>
+            {/* tempat render card  */}
+            {cards.map((card) => {
+              const cardCover = fetchSelectedCover(card.id); // Pindahkan ini di sini
+
+              return ( // Mengembalikan elemen JSX
+                <div key={card.id} className='card-item-lists' onClick={() => handleToCardDetail(card.id)}>
+                  
+
+                  <div>
+                    {cardCover ? (
+                      <img
+                        src={cardCover.cover_image_url}
+                        alt={cardCover.name}
+                        className='card-cover'
+                      />
+                    ) : (
+                      <div>
+                        <p></p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* DISPLAY LABEL  */}
+                  <p className='card-description'><strong>{card.title}</strong></p>
+                  <div className='label-container'>
+                    {(selectedLabels[card.id] || []).map((label) => (
+                      <div
+                        key={label.id}
+                        style={{
+                          backgroundColor: label.bgColor || 'lightgray',
+                          color: label.color || 'black',
+                          padding: '8px',
+                          borderRadius: '3px',
+                          border: `1px solid ${label.color}` || 'none',
+                          boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                          height: '3px',
+                          fontSize: '7px',
+                          fontWeight: 'bold',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          margin: '0'
+                        }}
+                      >
+                        {label.name}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className='card-footer'>
+                    <div className='card-footer-content'>
+                      <HiOutlineChatBubbleOvalLeftEllipsis />
+                      <span className='card-footer-text' style={{ fontSize: '10px' }}>{card.comments_count}0</span>
+                    </div>
+                    <div className='card-footer-content'>
+                      <GrAttachment size={12} />
+                      <span className='card-footer-text' style={{ fontSize: '10px' }}>{card.comments_count}2</span>
+                    </div>
+                    <div className="card-footer-content-right">
+                      <BsCalendar2Date size={10} style={{marginRight:'2px', marginBottom:'1px'}}/>
+                      <DisplayDate cardId={card.id}/>
+                    </div>  
+                    <div style={{ padding: '5px', position: 'relative' }}>
+                      <p style={{ display: 'flex', justifyContent: 'space-between', margin: '0' }}>
+                        <HiDotsVertical 
+                          size={13}
+                          className='dot-btn'
+                          onClick={(e) => toggleActionCard(card.id, e)}
+                          style={{ position: 'relative' }}
+                        />
+                        {/* edit her for action card  */}
+                        {showAction === card.id && (
+                          <div className="dropdown-menu-action active">
+                            <h5>View</h5>
+                            <div className="dropdown-action">
+                              <div className="action-btn" onClick={(e)=> {e.stopPropagation(); handleCardEditClick(card.id) }}>
+                                <FaRegEdit className='ikon' />
+                                <button>Edit Card</button>
+                              </div>
+                              <div className="action-btn" onClick={(e)=> {e.stopPropagation(); handleArchiveCard(card.id)}}>
+                                <BsArchive className='ikon'/>
+                                <button>Archive Card</button>
+                              </div>
+                              <div className="action-btn" onClick={(e)=> {e.stopPropagation(); handleDuplicateCard(card.id)}}>
+                                <HiPlus className='ikon'/>
+                                <button>Duplicate Card</button>
+                              </div>
+                              <div className="action-btn-remove" onClick={(e)=> {e.stopPropagation(); handleDeleteCardClick(card.id) }}>
+                                <AiOutlineDelete className='ikon-remove'/>
+                                <button>Delete Card</button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </p>
+                    </div>
+    
+                  </div>
+
+                </div>
+              );
+            })}
 
           </div>
 
-          {/* Form input */}
 
-          <button className='addButton' onClick={toggleFormVisibility}>
-            {showForm ? 
-              (<><ImCross style={{marginRight:'1vh'}}/>Cancle </>) : (<><FaPlus style={{marginRight:'1vh'}}/>Add Card</>)}
-          </button>
-              {showForm && (
-                  <div className='card-form'>
-                    <input
-                      className='card-form-input'
-                      type='text'
-                      placeholder='Card Title'
-                      value={newCard.title}
-                      onChange={(e) => setNewCard({ ...newCard, title: e.target.value })}
-                    />
-                    <input
-                      className='card-form-input'
-                      type='text'
-                      placeholder='Description'
-                      value={newCard.description}
-                      onChange={(e) => setNewCard({ ...newCard, description: e.target.value })}
-                    />
-                    <input
-                      className='card-form-input'
-                      type='text'
-                      placeholder='Position'
-                      value={newCard.position}
-                      onChange={(e) => setNewCard({ ...newCard, position: e.target.value })}
-                    />
-                    <button className='btn' onClick={toggleCoverVisibility}>
-                      {showCover ? 
-                      (<>Select Cover <HiChevronUp/></>):(<>Select Cover <HiChevronDown/></>)  
-                    }
-                    </button>
-                    {showCover && (
-                      <div 
-                      style={{
-                          border:'0.1px solid grey',
-                          borderRadius:'5px',
-                          boxShadow:'0px 4px 8px rgba(0,0,0,0.1)',
-                          padding:'5px',
-                          width:'100px',
-                          height:'130px',
-                          overflowY:'auto'
-                      }}>
-                        {Data_Cover.map((cover)=>(
-                          <div
-                            className='coverImg'
-                            key={cover.id}
-                            onClick={()=> handleCoverSelect(cover)}
-                            style={{marginBottom:'5px', cursor:'pointer'}}
-                          >
-                            <img src={cover.cover_image_url} alt={cover.name} />
-                          </div>
-                        ))}
-                      </div>
-                    )} 
-                      <button className='add-btn' onClick={handleCreateCard}>Add Card</button>
-                </div>
-              )}
+          {/* Form input */}
+          <div className="footer-list">
+            <div>
+              <button className='addButton' onClick={toggleFormVisibility}>
+                {showForm ? 
+                  (<><IoCloseOutline className='ikon-list' />Cancle </>) : (<><FiPlus className='ikon-list'/>Add Card</>)}
+              </button>
+                  {showForm && (
+                      <div className='card-form'>
+                        <input
+                          className='card-form-input'
+                          type='text'
+                          placeholder='Card Title'
+                          value={newCard.title}
+                          onChange={(e) => setNewCard({ ...newCard, title: e.target.value })}
+                        />
+                        <input
+                          className='card-form-input'
+                          type='text'
+                          placeholder='Description'
+                          value={newCard.description}
+                          onChange={(e) => setNewCard({ ...newCard, description: e.target.value })}
+                        />
+                        <input
+                          className='card-form-input'
+                          type='text'
+                          placeholder='Position'
+                          value={newCard.position}
+                          onChange={(e) => setNewCard({ ...newCard, position: e.target.value })}
+                        />
+                        <button className='add-btn' onClick={handleCreateCard}>Add Card</button>
+                    </div>
+                  )}
+            </div>
+            <div className='card-count'>
+              <IoIosCard className='ikon-list'/>
+              {cardCount}
+            </div>
+          </div>
+          
 
            {/* ALERT  */}
            {alert.show && (
@@ -590,8 +538,8 @@ const List=({listId, listName, loadLists, onDelete, handleAlert })=> {
               <DeleteListPopup
                 listId={selectedList}
                 isOpen={isPopupVisible}
-                onClose={handleCancleDelete}
-                onDeleteConfirm={handleConfirmDelete}
+                onClose={onClose}
+                onDeleteConfirm={onDeleteConfirm}
               />
             )}
             {isArchivePopupVisible && (
@@ -613,7 +561,7 @@ const List=({listId, listName, loadLists, onDelete, handleAlert })=> {
               <EditList
                 listId={listId}
                 list = {editList}
-                onClose={handleCloseEditBoard}
+                onClose={handleCloseEditList}
                 onSave={loadLists}
               />
             )}
@@ -655,7 +603,8 @@ const List=({listId, listName, loadLists, onDelete, handleAlert })=> {
               />
             )}
             {/* END CARD  */}
-            
+            </div>
+            </div>
           </div>
           
           

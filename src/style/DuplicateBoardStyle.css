@@ -1,3 +1,20 @@
+/* LIST DUPLICATE  */
+.popup-board-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1); /* Background semi-transparan */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* END LIST DUPLICATE  */
 .popup-overlay {
     position: fixed;
     top: 0;
@@ -14,59 +31,28 @@
 }
 
 .popup-content {
+    margin: 0;
     background-color: white; /* Latar belakang konten */
-    padding: 20px;
+    padding: 5px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bayangan untuk efek kedalaman */
     width: 400px; /* Lebar popup */
 }
+.popup-content .duplicate-header{
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+}
 
-.popup-content h2 {
-    margin-top: 0; /* Menghilangkan margin atas */
+.popup-content h5 {
+    margin: 0; /* Menghilangkan margin atas */
     color: #491519;
 }
 
-.popup-content img{
-    width: 30%;
-    height: 30%;
-}
 
-.popup-content label {
-    display: block; /* Menampilkan label sebagai blok */
-    margin-bottom: 10px; /* Jarak antara label dan elemen berikutnya */
-    font-weight: bold;
-    color: rgba(0, 0, 0, 0.5);
-}
-
-.popup-content select {
-    width: 100%; /* Lebar penuh */
-    height: 30px;
-    padding: 8px; /* Padding di dalam select */
-    margin-bottom: 20px; /* Jarak bawah untuk select */
-    border-radius: 2px; /* Sudut membulat */
-    border: 1px solid #ccc; /* Garis batas */
-    /* background-color: red; */
-    color: black;
-    margin-top: 10px;
-}
-.popup-content select option{
-    padding: 10px;
-    color: rgba(0, 0, 0, 0.5);
-}
-
-.popup-content button {
-    margin-right: 10px; /* Jarak antara tombol */
-    padding: 10px 15px; /* Padding dalam tombol */
-    border: none; /* Menghilangkan garis batas default */
-    border-radius: 4px; /* Sudut membulat */
-    cursor: pointer; /* Mengubah kursor saat hover */
-    background-color:#97271C ;
-    color: white;
-}
-
-.popup-content button:hover {
-    background-color: #491519; /* Warna latar belakang saat hover */
-}
 
 .popup-content .alert {
     margin-top: 15px; /* Jarak atas untuk alert */
@@ -78,21 +64,84 @@
     z-index: 1000;
     width: 300px;
 }
-.popup-label{
+.popup-content .duplicate-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* border: 1px solid #eee; */
+}
+.duplicate-body label{
     text-align: left;
-    /* border:  1px solid red; */
+    font-size: 12px;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 
-.popup-content button {
-    font-weight: bold;
-    box-shadow: rgba(117, 71, 71, 0.5);
-}
 .popup-content .duplicate-btn{
-    background-color: #97271C;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    color: white;
+    border-top: 1px solid #eee;
+    /* border: 1px solid #eee; */
+}
+.duplicate-btn button{
+    background-color: #491519;
+    border: 1px solid #491519;
     color: white;
 }
-.popup-content .cancle-btn{
-    background-color: white;
-    color: #491519;
+
+.popup-content .dropdown-container {
+    position: relative;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 8px;
+    cursor: pointer;
+    background-color: #eee;
+    text-align: left;
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+
+  .popup-content .dropdown-container:hover {
+    background-color: #eee;
     border: 1px solid #491519;
-}
+} 
+  
+  .dropdown-selected {
+    color: #333;
+  }
+  
+  .dropdown-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 20vh;
+    border: 1px solid #ddd;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background-color: #fff;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: 1000;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+  }
+  
+  .dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+  
+  .dropdown-container.open .dropdown-list {
+    display: block;
+  }
+  

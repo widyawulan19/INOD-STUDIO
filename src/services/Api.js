@@ -2,6 +2,24 @@ import axios from "axios";
 
 const API_URL = 'http://localhost:3002/api';
 
+//upload file
+export const uploadFile = async (cardId, file) => {
+    try{
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await axios.post(`${API_URL}/app/upload/${cardId}`, formData, {
+            headers:{
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
+    }catch (error){
+        console.error('Error while uploading file:',error);
+        throw error;
+    }
+}
+
 // Workspace APIs 
 export const getWorkspaces = () => axios.get(`${API_URL}/workspaces`);
 export const createWorkspace = (data) => axios.post(`${API_URL}/workspaces`, data);
@@ -31,6 +49,14 @@ export const archiveWorkspace = async (id) => {
     }
 };
 
+
+
+//archive 
+export const getArchiveWorkspace = () => axios.get(`${API_URL}/workspace/archives`);
+export const getArchiveBoard = () => axios.get(`${API_URL}/board/archives`);
+export const getArchiveList = () => axios.get(`${API_URL}/list/archives`);
+export const getArchiveCard = () => axios.get(`${API_URL}/card/archives`);
+export const getArchiveMarketing = () => axios.get(`${API_URL}/marketing/archive`);
 
 //image
 export const getAllImage = () => axios.get(`${API_URL}/images`);
@@ -64,6 +90,13 @@ export const getBoardCountByWorkspace = (workspaceId) => {
         }
     })
 }
+export const getCardCountByLists = (listId) => {
+    return axios.get(`${API_URL}/card-count`,{
+        params:{
+            list_id:listId
+        }
+    })
+}
 export const archiveBoard = async (id) =>{
     try{
         const response = await axios.post(`${API_URL}/boards/archive/${id}`);
@@ -89,6 +122,7 @@ export const duplicateBoard = async (boardId, {workspace_id})=>{
 }
 
 // List APIs
+export const getAllLists = () => axios.get(`${API_URL}/lists`);
 export const getLists = (boardId) => axios.get(`${API_URL}/lists?board_id=${boardId}`);
 export const createList = (data) => axios.post(`${API_URL}/lists`, data);
 export const updateList = (id, data) => axios.put(`${API_URL}/lists/${id}`, data);
@@ -154,6 +188,30 @@ export const duplicateCard = async (cardId, {list_id}) =>{
         throw error;
     }
 }
+//get card with card_description
+export const getCardWithDescription = (id) => axios.get(`${API_URL}/cards/${id}/description`, id);
+
+//buat card + card Description
+export const createCardWithDescription = async (data) => axios.post(`${API_URL}/cards/createWithDescription`, data);
+//get card description by card id
+export const getCardDetails = async (cardId) => {
+    try{
+        const response = await axios.get(`${API_URL}/cards/${cardId}/detail`);
+        return response.data;
+    }catch(error){
+        console.error('Error fetching card details:', error);
+        throw error;
+    }
+}
+export const getCardDescription = async (cardId) => {
+    try{
+        const response = await axios.get(`${API_URL}/cards/${cardId}/description`);
+        return response.data;
+    }catch(error){
+        console.error('Error fetching description data');
+        throw error;
+    }
+}
 
 
 // Card Description APIs
@@ -189,6 +247,43 @@ export const createMarketingData = (data) => axios.post(`${API_URL}/marketing_da
 export const deleteMarektingData = (id) => axios.delete(`${API_URL}/marketing_data/${id}`);
 export const getDataMarketingById = (id) => axios.get(`${API_URL}/marketing_data/${id}`);
 
+//data marketing
+
+export const getAllDataMarketing = () => axios.get(`${API_URL}/marketing`);
+export const createCardFromMarketing = async (marketing_id,listId)=>{
+    const response = await axios.post(`${API_URL}/create-card-from-marketing`,{
+        marketing_id,
+        listId
+    })
+    return response.data;
+};
+
+export const updateDataMarketing = (marketing_id, data) => axios.put(`${API_URL}/marketing/${marketing_id}`, data);
+export const createDataMarketing = (data) => axios.post(`${API_URL}/marketing`, data);
+export const getMarketingDataById = (marketing_id) => axios.get(`${API_URL}/marketing/${marketing_id}`);
+export const deleteDataMarketing = (marketing_id) => axios.delete(`${API_URL}/marketing/${marketing_id}`);
+//mengambil data marketing yang memiliki card_id yang sama
+export const getMarketingDataByCardId = async (cardId) =>{
+    try{
+        const response = await fetch(`${API_URL}${cardId}`);
+        if(!response.ok){
+            throw new Error('Data marketing tidak ditemukan');
+        }
+        return await response.json();
+    }catch(error){
+        throw new Error(error.message);
+    }
+}
+export const archiveMarketing = async (marketing_id) =>{
+    try{
+        const response = await axios.post(`${API_URL}/marketing/archive/${marketing_id}`);
+        return response.data;
+    }catch(error){
+        console.error('Error while archiving marketing:', error);
+        throw error;
+    }
+}
+
 //employees
 export const getAllDataEmployee = () => axios.get(`${API_URL}/employees`);
 export const getDataEmployeeById = (id) => axios.get(`${API_URL}/employees/${id}`);
@@ -199,47 +294,3 @@ export const deleteDataEmployee = (id) => axios.delete(`${API_URL}/employees/${i
 //work schedule
 export const getEmployeeScheduleById = (id) => axios.get(`${API_URL}/employees/${id}/schedule`);
 
-/* contoh conver menggunakan axios pada frontend
-
-import axios from 'axios';
-
-// Definisikan URL dasar API
-const API_URL = 'http://url-backend-kamu/api'; // Ganti dengan URL API backend kamu
-
-// 1. Mendapatkan semua board
-export const getAllBoards = () => {
-    return axios.get(`${API_URL}/boards`);
-};
-
-// 2. Membuat board baru
-export const createBoard = (data) => {
-    // `data` adalah objek yang berisi detail board baru: { name, description, user_id, workspace_id }
-    return axios.post(`${API_URL}/boards`, data);
-};
-
-// 3. Mendapatkan board berdasarkan ID
-export const getBoardById = (id) => {
-    return axios.get(`${API_URL}/boards/${id}`);
-};
-
-// 4. Memperbarui board berdasarkan ID
-export const updateBoard = (id, data) => {
-    // `data` adalah objek yang berisi data yang akan diperbarui: { name, description }
-    return axios.put(`${API_URL}/boards/${id}`, data);
-};
-
-// 5. Menghapus board berdasarkan ID
-export const deleteBoard = (id) => {
-    return axios.delete(`${API_URL}/boards/${id}`);
-};
-
-// 6. Mendapatkan jumlah board berdasarkan workspace ID
-export const getBoardCountByWorkspace = (workspaceId) => {
-    return axios.get(`${API_URL}/board-count`, {
-        params: {
-            workspace_id: workspaceId,
-        }
-    });
-};
-
-*/

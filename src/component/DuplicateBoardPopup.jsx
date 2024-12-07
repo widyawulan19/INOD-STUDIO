@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { duplicateBoard, getWorkspaces } from '../services/Api';
 import { AlertTitle, Alert } from '@mui/material';
 import '../style/DuplicateBoardStyle.css'
+import { IoCloseOutline } from 'react-icons/io5'
 import duplicate from '../assets/duplication.png'
-
+ 
 const DuplicateBoardPopup=({boardId, isOpen, onClose, onConfirm, selectedBoard})=> {
     const [workspaces, setWorkspaces] = useState([]);
     const [selectedWorkspaceId, setSelectedWorkspaceId] = useState('');
     const [alert, setAlert] = useState({show:false, message:'', severity:''})
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     useEffect(()=>{
         const fetchWorkspaces = async () => {
@@ -48,6 +50,68 @@ const DuplicateBoardPopup=({boardId, isOpen, onClose, onConfirm, selectedBoard})
   return (
     isOpen && ( // Pastikan popup hanya ditampilkan jika isOpen true
         <div className="popup-overlay">
+            <div className='popup-content' style={{border:'1px solid white'}}>
+                <div className="duplicate-header">
+                    <h5>Duplicate Board</h5>
+                    <IoCloseOutline style={{color:'grey', cursor:'pointer', margin:'0'}} size={20} onClick={onClose}/>
+                </div>
+                <div className="duplicate-body">
+                    <label>
+                        Select workspace:
+                    </label>
+                    <div 
+                        className="dropdown-container"
+                        onClick={()=> setDropdownOpen(!dropdownOpen)}
+                    >
+                        <div className="dropdown-selected">
+                            {selectedWorkspaceId
+                                ? workspaces.find((ws) => ws.id === selectedWorkspaceId)?.name
+                                : 'Select Workspace'
+                            }
+                        </div>
+                        {dropdownOpen && (
+                            <ul className='dropdown-list'>
+                                {workspaces.map((workspace)=>(
+                                    <li
+                                        key={workspace.id}
+                                        className='dropdown-item'
+                                        // style={{backgroundColor:'red'}}
+                                        onClick={()=>{
+                                            setSelectedWorkspaceId(workspace.id);
+                                            setDropdownOpen(false);
+                                        }}
+                                    >
+                                        {workspace.name}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                </div>
+                <div className="duplicate-btn">
+                <button onClick={handleDuplicateBoard} disabled={!selectedWorkspaceId}>Duplicate Board</button>
+                </div>
+                {/* <button className='cancle-btn' onClick={onClose}>Cancel</button> */}
+            </div>
+            {alert.show && (
+                <AlertTitle className='alert-position' severity={alert.severity} onClose={()=> setAlert({...alert, show:false})}>
+                    {/* <AlertTitle>{alert.severity === 'error' ? 'Error':'Success'}</AlertTitle> */}
+                    {alert.message}
+                </AlertTitle>
+            )}
+        </div>
+        
+    )
+  )
+}
+
+
+export default DuplicateBoardPopup
+
+/*
+return (
+    isOpen && ( // Pastikan popup hanya ditampilkan jika isOpen true
+        <div className="popup-overlay">
             <div className='popup-content'>
                 <h2>Duplicate Board</h2>
                 <img src={duplicate} alt={duplicate} />
@@ -71,7 +135,7 @@ const DuplicateBoardPopup=({boardId, isOpen, onClose, onConfirm, selectedBoard})
             </div>
             {alert.show && (
                 <AlertTitle className='alert-position' severity={alert.severity} onClose={()=> setAlert({...alert, show:false})}>
-                    {/* <AlertTitle>{alert.severity === 'error' ? 'Error':'Success'}</AlertTitle> */}
+                    {/* <AlertTitle>{alert.severity === 'error' ? 'Error':'Success'}</AlertTitle> 
                     {alert.message}
                 </AlertTitle>
             )}
@@ -79,7 +143,5 @@ const DuplicateBoardPopup=({boardId, isOpen, onClose, onConfirm, selectedBoard})
         
     )
   )
-}
 
-
-export default DuplicateBoardPopup
+*/

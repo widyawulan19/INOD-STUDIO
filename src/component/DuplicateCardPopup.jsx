@@ -3,9 +3,11 @@ import { duplicateCard, getCards, getLists } from '../services/Api';
 import { AlertTitle } from '@mui/material';
 import duplicate from '../assets/duplication.png'
 import '../style/DuplicateBoardStyle.css'
+import { IoCloseOutline } from 'react-icons/io5'
 
 const DuplicateCardPopup=({cardId,isOpenCard,onCloseCard, onCardDuplicated})=> {
     // const [cards, setCards] = useState([]);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [card, setCard]  = useState([]);
     const [lists, setList] = useState([]);
     const [selectedListId, setSelectedListId] = useState('')
@@ -68,26 +70,47 @@ const DuplicateCardPopup=({cardId,isOpenCard,onCloseCard, onCardDuplicated})=> {
   return (
     isOpenCard && (
         <div className='popup-overlay'>
-            <div className='popup-content'>
-                <h2>Duplicate Card</h2>
-                <img src={duplicate} alt={duplicate} />
-                <label className='popup-label' >
-                    Select List: <br />
-                    <select
-                        value={selectedListId}
-                        onChange={(e)=>setSelectedListId(e.target.value)}
-                        style={{border:'1px solid #491519'}}
+            <div className='popup-content' style={{border:'1px solid white'}}>
+                <div className="duplicate-header">
+                    <h5>Duplicate Card</h5>
+                    <IoCloseOutline style={{color:'grey', cursor:'pointer', margin:'0'}} size={20} onClick={onCloseCard}/>
+                </div>
+                <div className="duplicate-body">
+                    <label>
+                        Select List :
+                    </label>
+                    <div 
+                        className="dropdown-container"
+                        onClick={()=> setDropdownOpen(!dropdownOpen)}
                     >
-                        <option value="">Select Lists</option>
-                        {lists.map((list)=>(
-                            <option key={list.id} value={list.id}>
-                                {list.name}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-                <button className='duplicate-btn' onClick={handleDuplicateCard} disabled={!selectedListId}>Duplicate card</button>
-                <button className='cancle-btn' onClick={onCloseCard}>Cancle</button>
+                        <div className="dropdown-selected">
+                            {selectedListId
+                                ? lists.find((ls)=> ls.id === selectedListId)?.name
+                                : 'Selected List'
+                            }
+                        </div>
+                        {dropdownOpen && (
+                            <ul className='dropdown-list'>
+                                {lists.map((list)=>(
+                                    <li
+                                        key={list.id}
+                                        className='dropdown-item'
+                                        onClick={()=>{
+                                            setSelectedListId(list.id);
+                                            setDropdownOpen(false);
+                                        }}
+                                    >
+                                        {list.name}
+                                    </li>
+                                ))}
+
+                            </ul>
+                        )}
+                    </div>
+                </div>
+                <div className="duplicate-btn">
+                    <button className='duplicate-btn' onClick={handleDuplicateCard} disabled={!selectedListId}>Duplicate card</button>
+                </div>
             </div>
             {alert.show && (
                 <AlertTitle className='alert-position' severity={alert.severity} onClose={()=> setAlert({...alert, show:false})}>

@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { updateWorkspace, getWorkspaces } from '../services/Api';
 import '../style/WorkspaceEdit.css';
+import { IoCloseOutline } from "react-icons/io5";
 
 const WorkspaceEdit = ({ isOpen,workspace, onClose, onSave }) => {
     const [workspaces, setWorkspaces] =([])
@@ -11,7 +12,7 @@ const WorkspaceEdit = ({ isOpen,workspace, onClose, onSave }) => {
     const [alert, setAlert] = useState({
         show: false,
         message:'',
-        severity:''
+        severity:'' 
     })
 
     const stopPropagation = (e) => {
@@ -38,34 +39,40 @@ const WorkspaceEdit = ({ isOpen,workspace, onClose, onSave }) => {
     return (
         isOpen && (
             <div className='edit-popup-overlay' onClick={stopPropagation} style={{margin:'0'}}>
-            <div  className='edit-popup-content' onClick={stopPropagation}>
-                <h2>Edit Workspace</h2>
-                <div className='input-name'>
-                    <label>Name :</label>
-                    <input 
-                    type="text" 
-                    name='name'
-                    value={editedWorkspace.name}
-                    onChange={handleChange}
-                    placeholder='Workspace Name'
-                    onClick={stopPropagation} // Menghentikan propagasi saat input diklik
-                />
-                </div>
-                <div className='input-desc'>
-                    <label>Description :</label>
-                    <textarea
-                        name='description'
-                        value={editedWorkspace.description}
-                        onChange={handleChange}
-                        placeholder='Workspace Description'
-                        onClick={stopPropagation} // Menghentikan propagasi saat textarea diklik
-                    />
-                </div>
-                
-                <div className='modal-actions'>
-                    <button className='save-btn' onClick={handleSave}>Save</button>
-                    <button className='cancle-btn' onClick={onClose}>Cancel</button>
-                </div>
+                <div  className='edit-popup-content' onClick={stopPropagation}>
+                    <div className="edit-title">
+                        <h5>Edit Workspace</h5>
+                        <IoCloseOutline size={20} style={{color:'grey'}} onClick={onClose}/>
+                    </div>
+                    <div className="edit-form">
+                        <div className='input-name'>
+                            <label>Name </label>
+                            <input 
+                            type="text" 
+                            name='name'
+                            value={editedWorkspace.name}
+                            onChange={handleChange}
+                            className='input-field'
+                            placeholder='Workspace Name'
+                            onClick={stopPropagation} // Menghentikan propagasi saat input diklik
+                        />
+                        </div>
+                        <div className='input-desc'>
+                            <label>Description </label>
+                            <input
+                                name='description'
+                                value={editedWorkspace.description}
+                                onChange={handleChange}
+                                className='field-input'
+                                placeholder='Workspace Description'
+                                onClick={stopPropagation} // Menghentikan propagasi saat textarea diklik
+                            />
+                        </div>
+                    </div>
+                    <div className='edit-button'>
+                        <button className='save-btn' onClick={handleSave}>Save Change</button>
+                        {/* <button className='cancle-btn' onClick={onClose}>Cancel</button> */}
+                    </div>
             </div>
         </div>
         )

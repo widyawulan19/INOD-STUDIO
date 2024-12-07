@@ -18,10 +18,20 @@
     margin-bottom: 20px;
     display: flex;
     align-items: center;
+    /* border: 1px solid grey; */
+    width: fit-content;
+    padding: 10px;
 }
 
 .filter-form label {
     margin-right: 10px;
+    width: 100px;
+    /* border: 1px solid blue; */
+}
+.filter-dropdown button{
+  padding: 10px;
+  color:#491510;
+  border-radius: 10px;
 }
 
 .filter-select {
@@ -59,17 +69,6 @@
     border-radius: 4px;
 }
 
-.filter-form button {
-    background-color: #6b1c14; /* Warna biru */
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.filter-form button:hover {
-    background-color: #491510; /* Warna biru yang lebih gelap saat hover */
-}
-
 /*button new member*/
 .create-new-member{
     display: flex;
@@ -80,10 +79,10 @@
     width: 10vw;
     height: 30px;
     margin-top: 1vh;
-    border: 1px solid #491510;
+    border: 1px solid #6b1c14;
     border-radius: 5px;
-    background-color: #6b1c14;
-    color: white;
+    background-color: white;
+    color: #6b1c14;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -92,11 +91,15 @@
 }
 .create-new-member button:hover{
     background-color: #491510;
+    color: white;
 }
 
 .add-member a{
     text-decoration: none;
-    color: white;
+    color: #6b1c14;
+}
+.add-member a:hover{
+  color: white;
 }
 /* .add-member a:visited{
     color: rgb(211, 208, 208);
@@ -104,24 +107,59 @@
 
 
 /*style tabel*/
-.tabel-data{
-  overflow-y: auto;
+.tabel-data-container{
   overflow-x: auto;
+  width: 100%;
 }
+
 .tabel-data table{
   width: 100%;
+  min-width:1200px;
   border-collapse: collapse;
   table-layout: fixed;
+  height: fit-content;
 }
 
 
 .tabel-data th, .tabel-data td{
-  border: 1px solid #491510;
+  /* border: 1px solid #491510; */
   padding: 8px;
   text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.tabel-data th{
+  padding: 12px 15px;
+  text-align: left;
+  height: 20px;
+  margin-bottom: 10px;
+  background-color: #d7c9ca;
+  color: #333;
+  font-weight: bold;
+}
+.tabel-data td{
+  height: 20px;
+  padding: 12px 15px;
+  text-align: left;
+}
+.tabel-data tr:nth-child(even){
+  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: #f7f7f7;
+}
+.tabel-data tr:nth-child(even):hover{
+  background-color: #d7c9ca;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+.tabel-data tr{
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.tabel-data tr:hover{
+  background-color: #d7c9ca;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+  color: black;
 }
 
 
@@ -156,21 +194,6 @@
 
 .tabel-data th:nth-child(8), .tabel-data td:nth-child(8) {
   width: 110px; /* Action */
-}
-
-.tabel-data th {
-  background-color: #6b1c14;
-  font-weight: bold;
-  text-align: center;
-}
-
-tbody tr:nth-child(even) {
-    background-color: #f9f9f9; /* Warna latar belakang untuk baris genap */
-}
-
-tbody tr:hover {
-    background-color: #d09a94; /* Warna latar belakang saat hover pada baris */
-    color: white;
 }
 
 .pagination{

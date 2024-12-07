@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { updateBoard } from '../services/Api'
 import '../style/WorkspaceEdit.css'
+import { IoCloseOutline } from 'react-icons/io5'
 
 const BoardEdit=({board,onClose,onSave})=> {
     const [boards, setBoards] = ([])
@@ -25,35 +26,44 @@ const BoardEdit=({board,onClose,onSave})=> {
             onClose(); //close modal
         } catch (error){
             console.error('Error updating board:', error)
-        }
+        } 
     }
 
   return (
     <div className='edit-popup-overlay' onClick={stopPropagation} style={{margin:'0'}}>
         <div className='edit-popup-content' onClick={stopPropagation}>
-            <h2>Edit Board</h2>
-            <div className='input-name'>
-                <input 
-                    type="text"
-                    name='name'
-                    value={editedBoard.name}
-                    onChange={handleChange}
-                    placeholder='Board name'
-                    onClick={stopPropagation}
-                />
+            <div className="edit-title">
+                <h5>Edit Board</h5>
+                <IoCloseOutline size={20} style={{color:'grey', cursor:'pointer'}} onClick={onClose}/>
             </div>
-            <div className='input-desc'>
-                <textarea  
-                    name="description" 
-                    value={editedBoard.description}
-                    onChange={handleChange}
-                    placeholder='Board Description'
-                    onClick={stopPropagation}
-                />
+            <div className='edit-form'>
+                <div className="input-name">
+                    <label>Name</label>
+                    <input 
+                        type="text"
+                        name='name'
+                        value={editedBoard.name}
+                        onChange={handleChange}
+                        placeholder='Board name'
+                        onClick={stopPropagation}
+                        className='input-field'
+                    />
+                </div>
+                <div className="input-desc">
+                    <label>Description</label>
+                    <input 
+                        name="description" 
+                        value={editedBoard.description}
+                        onChange={handleChange}
+                        placeholder='Board Description'
+                        onClick={stopPropagation} 
+                        className='field-input'
+                    />
+                </div>
             </div>
-            <div className="modal-actions">
+            <div className="edit-button">
                 <button className='save-btn' onClick={handleSave}>Save</button>
-                <button className='cancle-btn' onClick={onClose}>Cancle</button>
+                {/* <button className='cancle-btn' onClick={onClose}>Cancle</button> */}
             </div>
         </div>
     </div>

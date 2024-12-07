@@ -1,4 +1,5 @@
 import './App.css';
+import './style/HomeStyle.css';
 //import CardModal from './component/CardModal';
 import Navbar from './component/Navbar';
 import Sidebar from './component/Sidebar';
@@ -18,60 +19,118 @@ import Setting from './pages/Setting'
 import Faq from './pages/Faq'
 import ArchiveMarketing from './pages/ArchiveMarketing'
 import Schedule from './pages/Schedule';
+import Example from './pages/Example';
+import OtherPage from './pages/OtherPage';
+import ExampleCard from './pages/ExampleCard';
+import CardDescription from './pages/CardDescription';
+import Marketing2 from './pages/Marketing2';
+import MarketingForm from './pages/MarketingForm';
+import CardMarketingDetail from './component/CardMarketingDetail';
+import PopupMarketingDetail from './popup/PopupMarketingDetail';
+import PopupEditDataMarketing from './popup/PopupEditDataMarketing';
+import Home from './pages/Home';
+// import './style/SidebarStyle.css'
+
+function Layout({children}){
+  return(
+    <div className='home-container'>
+      <Navbar/>
+      <div className='main'>
+        <Sidebar className='sidebar'/>
+        <main className="main-content">{children}</main>
+      </div>
+    </div>
+  )
+}
 
 function App(){
   return(
     <Router>
-      <div className='App'>
-        <Sidebar className='sidebar'/>
-        <div className='App2'>
-          <Routes>
-            <Route path='/' element={<Workspace/>}/>
-            <Route path='/workspaces/:workspaceId/boards' element={<Board/>}/>
-            <Route path='/workspaces/:workspaceId/boards/:boardId' element={<BoardView/>}/>
-            <Route path='/workspaces/:workspaceId/boards/:boardId/lists' element={<List/>}/>
-            <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards' element={<Card/>}/>
-            <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId' element={<CardDetail/>}/>
-            <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId/modal' element={<CardModal/>}/>
-            <Route path='/member' element={<Member/>}/>
-            <Route path='/marketing' element={<Marketing/>}/>
-            <Route path='/archive' element={<Archive/>}/>
-            <Route path='/archive-marketing' element={<ArchiveMarketing/>}/>
-            <Route path='/setting' element={<Setting/>}/>
-            <Route path='/faq' element={<Faq/>}/>
-            <Route path='/schedule' element={<Schedule/>}/>
-          </Routes>
-        </div>
-      </div>
+            <Routes>
+              <Route
+                path='*'
+                element={
+                  <Layout>
+                    <Routes>
+                      <Route path='/home' element={<Home/>}/>
+                      <Route path='/' element={<Workspace/>}/>
+                      <Route path='/workspaces/:workspaceId/boards' element={<Board/>}/>
+                      <Route path='/workspaces/:workspaceId/boards/:boardId' element={<BoardView/>}/>
+                      <Route path='/workspaces/:workspaceId/boards/:boardId/lists' element={<List/>}/>
+                      <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards' element={<Card/>}/>
+                      <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId' element={<CardDetail/>}/>
+                      <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId/modal' element={<CardModal/>}/>
+                      <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId/other-page' element={<OtherPage/>}/>
+                      <Route path='/member' element={<Member/>}/>
+                      <Route path='/marketing' element={<Marketing/>}/>
+                      <Route path='/marketing2' element={<Marketing2/>}/>
+                      <Route path='/marketingForm' element={<MarketingForm/>}/>
+                      <Route path='/marketing-detail' element={<CardMarketingDetail/>}/>
+                      <Route path='/popup-detail-marketing/:marketing_id' element={<PopupMarketingDetail/>}/>
+                      <Route path="/popup-detail-marketing/:marketing_id/edit-data-marketing" element={<PopupEditDataMarketing />} />
+
+                      <Route path='/archive' element={<Archive/>}/>
+                      <Route path='/archive-marketing' element={<ArchiveMarketing/>}/>
+                      <Route path='/setting' element={<Setting/>}/>
+                      <Route path='/faq' element={<Faq/>}/>
+                      <Route path='/schedule' element={<Schedule/>}/>
+                      {/* <Route path='other-page' element={<OtherPage/>}/> */}
+                      <Route path='/example' element={<Example/>}/>
+                      <Route path='/example-card' element={<ExampleCard/>}/>
+                      <Route path='/description' element={<CardDescription/>}/>
+                      {/* <Route path='/navbar' element={<Navbar/>}/> */}
+                    </Routes>
+                  </Layout>
+                }
+              />
+            </Routes>
+      {/* </div> */}
     </Router>
   )
 }
 export default App;
 
-// function App() {
-//   const location = useLocation();
-//   const isMemberPage = location.pathname === '/member'
-//   return (
-//       <div className="App">
-//         {isMemberPage && <Sidebar className='sidebar'/>}
-//         <Sidebar className='sidebar'/>
-//           <div className='App2'>
-//             {/* <Navbar/> */}
-//             <AppRoutes className='routes'/>
-//           </div>  
-//       </div>
-//   );
-// }
-
-// export default App;
 
 /*
-<div className="App">
-      <Navbar/>
+
+function App(){
+  return(
+    <Router>
+      <div className='App'>
         <div className='App2'>
-          <Sidebar className='sidebar'/>
-          <AppRoutes className='routes'/>
-        </div>  
-    </div>
+            <Routes>
+              <Route path='/home' element={<Home/>}/>
+              <Route path='/' element={<Workspace/>}/>
+              <Route path='/workspaces/:workspaceId/boards' element={<Board/>}/>
+              <Route path='/workspaces/:workspaceId/boards/:boardId' element={<BoardView/>}/>
+              <Route path='/workspaces/:workspaceId/boards/:boardId/lists' element={<List/>}/>
+              <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards' element={<Card/>}/>
+              <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId' element={<CardDetail/>}/>
+              <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId/modal' element={<CardModal/>}/>
+              <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId/other-page' element={<OtherPage/>}/>
+              <Route path='/member' element={<Member/>}/>
+              <Route path='/marketing' element={<Marketing/>}/>
+              <Route path='/marketing2' element={<Marketing2/>}/>
+              <Route path='/marketingForm' element={<MarketingForm/>}/>
+              <Route path='/marketing-detail' element={<CardMarketingDetail/>}/>
+              <Route path='/popup-detail-marketing/:marketing_id' element={<PopupMarketingDetail/>}/>
+              <Route path="/popup-detail-marketing/:marketing_id/edit-data-marketing" element={<PopupEditDataMarketing />} />
+
+              <Route path='/archive' element={<Archive/>}/>
+              <Route path='/archive-marketing' element={<ArchiveMarketing/>}/>
+              <Route path='/setting' element={<Setting/>}/>
+              <Route path='/faq' element={<Faq/>}/>
+              <Route path='/schedule' element={<Schedule/>}/>
+              {/* <Route path='other-page' element={<OtherPage/>}/> 
+              <Route path='/example' element={<Example/>}/>
+              <Route path='/example-card' element={<ExampleCard/>}/>
+              <Route path='/description' element={<CardDescription/>}/>
+              // {/* <Route path='/navbar' element={<Navbar/>}/> 
+            </Routes>
+          </div>
+        </div>
+      {/* </div>
+    </Router>
+  )
 
 */

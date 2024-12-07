@@ -1,4 +1,5 @@
-.dropdown {
+  
+ .dropdown {
     position: relative;
     display: inline-block;
   }
@@ -9,19 +10,19 @@
     border-radius: 5px;
     background-color: #f9f9f9;
     cursor: pointer;
-    width: 200px; /* Atur sesuai kebutuhan */
+    width: 200px; 
   }
   
   .dropdown-list {
     position: absolute;
-    background-color: white;
+    background-color: red;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin: 0;
     padding: 5px;
     list-style-type: none;
     z-index: 1;
-    width: 150px; /* Atur sesuai kebutuhan */
+    width: 150px; 
     max-height: 500px;
     overflow-y: auto;
   }
@@ -35,7 +36,7 @@
   }
   
   .dropdown-list li:hover {
-    background-color: #ddcccc; /* Efek hover */
+    background-color: #ddcccc; 
     border-radius: 5px;
   }
   

@@ -1,27 +1,25 @@
 .workspace-main-container{
   display: flex;
   height: 100%;
-  /* max-width: 100%;
-  min-width: 100%; */
+  width: 100%;
 }
 
 .workspace-container {
-    padding: 20px;
+    padding: 5px;
     /* padding-right: 30px; */
     height: 100vh;
     /* width: 80vw; */
     min-width: 100%;
     max-width: 100%;
     flex-grow: 1;
-    /* background-repeat: no-repeat;
-    background-size: cover; */
-    /* border-radius: 10px; */
     border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     border-bottom-left-radius: 10px;
     position: relative;
     overflow-y: auto;
-    /* border: 1px solid; */
-
+    border: 1px solid rgb(232, 232, 232);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+    background-color: white;
   }
 
 
@@ -29,10 +27,60 @@
     display: flex;
     justify-content: space-between;
     /* margin-left: 2vw; */
-    margin-right: 2vw;
+    /* margin-right: 2vw; */
+    width: 99%;
+    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); */
+    padding: 10px;
+    border-bottom: 1px solid rgb(232, 232, 232);
+    /* border-radius: 10px; */
   }
 
+  .workspace-title .workspace-title-navigation button{
+    background-color: white;
+    border: 0.1px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    padding: 4px;
+  }
+  .workspace-title-navigation button:hover{
+    background-color: rgb(226, 225, 225);
+    padding: 4px;
+    border-radius: 4px;
+  }
 
+  .workspace-title .gretting-setting{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .workspace-title .gretting-setting button{
+    padding: 4px;
+    font-size: 15px;
+    background-color: white;
+    border: 0.1px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 5px;
+  }
+  .gretting-setting button:hover{
+    background-color: rgb(226, 225, 225);
+    padding: 4px;
+    border-radius: 4px;
+  }
+
+  .gretting-setting .button-create button{
+    background-color: #491519;
+    color: white;
+    padding: 5px;
+    border-radius: 6px;
+    width: fit-content;
+    height: fit-content;
+    font-size: 10px;
+  }
 
   .filter-button{
     display: flex;
@@ -62,13 +110,14 @@
     background-color: white;
     padding: 5px;
     margin-right: 5px;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    /* box-shadow: 0 4px 8px rgba(0,0,0,0.2); */
     animation: transit;
     /* border: 1px solid grey; */
   }
 .workspace-icons:hover{
-  background-color: #F8D0D0;
+  /* background-color: #F8D0D0; */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
   .workspace-icons-user{
@@ -88,15 +137,90 @@
     /* background-color: #0056b3; */
     margin-right: 30px;
     padding: 10px;
+    padding-bottom: 40px;
     height: auto;
     overflow-y: auto;
   }
 
+  .workspace-card-title{
+    /* border: 1px solid red; */
+    /* width: 100%; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    margin: 2px;
+    padding: 0px 15px;
+    border-radius: 5px;
+    /* color:#6b1c14; */
+    /* background-color:  white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); */
+  }
+  .workspace-card-main{
+    padding: 0px 15px;
+    border-radius: 5px;
+    background-color: white;
+    margin: 5px;
+    max-height: 20vh;
+    /* height: 20vh; */
+    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); */
+    /* border: 1px solid grey; */
+  }
+  .workspace-card-main p{
+    font-size: 12px;
+    padding: 0px;
+    margin: 5px 0px;
+  }
+  .workspace-card-main .workspace-card-bottom{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    margin-top: 5px;
+  }
+  .workspace-card-main .workspace-card-bottom button{
+    padding: 5px;
+    font-size: 10px;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #491519;
+    background-color: white;
+    border: 1px solid white;
+  }
+  .workspace-card-bottom button:hover{
+    padding: 5px;
+    background-color: #491519;
+    border-radius: 4px;
+    color:white;
+  }
+
+  .workspace-card-bottom .card-icon{
+    margin-right: 5px;
+  }
   
   .action-workspace{
     display: flex;
     flex-direction: row;
     font-size: 13px;
+    margin: 0;
+    min-width:15vw ;
+    width: 15vw;
+    /* border: 1px solid grey; */
+  }
+  .action-workspace p{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    border: 1px solid #491519;
+    color: black;
+    background-color: #6b1d1455;
+    border-radius: 8px;
+    padding: 4px;
+    margin-right: 5px;
+    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); */
   }
 
   .action-workspace .btn-workspace{
@@ -116,106 +240,161 @@
   
   .workspace-card {
     position: relative;
-    background-color: #f5f3f3;
-    padding: 15px;
-    height: 170px;
+    height: 25vh;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    border: 1px solid #6b1c14;
+    /* border: 1px solid #6b1c14; */
     transition: transform 0.4s;
   }
   
-  .workspace-card:hover {
+  /* .workspace-card:hover {
     transform: translateY(-5px);
-  }
+  } */
   
   .workspace-card h3 {
     margin: 0 0 10px 0;
   }
-  .workspace-card .dot-btn{
-    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    border-radius: 5px; */
+  /* .workspace-card .dot-btn{
+    color:#6b1c14;
     cursor: pointer;
-  }
+  } */
 
   .workspace-card p {
     margin-bottom: 15px;
     color: #555;
   }
-
-  .dropdown-menu-action{
-    background-color: white;
-    border: 1px solid #6b1c14;
-    position: fixed;
-    padding: 2px 4px;
-    top: 35px;
-    right:0;
-    height: 70%;
-    border-radius: 10px;
+  .workspace-card .card-btn{
+    color:#6b1c14;
+    cursor: pointer;
   }
-  
+  .tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip-container .tooltip-text {
+    visibility: hidden;
+    width: 80px; /* Lebar tooltip */
+    background-color: #333; /* Warna latar belakang */
+    color: #fff; /* Warna teks */
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 12px;
+
+    /* Posisi tooltip */
+    position: absolute;
+    bottom: 50%; /* Geser tooltip di atas elemen */
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 5px;
+    z-index: 1;
+
+    /* Animasi */
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+  /* MENU ACTION  */
+
   .workspace-card .dropdown-menu-action{
     display: block;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+    top: 35px;
+    right: 0;
+    height: fit-content;
+    width: fit-content;
+    padding: 8px;
   }
 
-  .dropdown-ul{
-    padding: 1px;
-    font-size: 13px;
-    font-weight: bold;
-    margin: 0;
+  .dropdown-menu-action h5{
+    background-color: white;
+    color: grey;
+    font-weight: normal;
+    margin: 0px 5px;
+  }
+  .dropdown-container{
+    padding: 5px;
+    /* border: 1px solid green; */
+  }
+
+  .dropdown-container .action-btn
+  {
+    padding:0px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    height: fit-content;
+    border: 1px solid white;
+  }
+
+
+  .dropdown-container .action-btn-remove{
+    border-top: 1px solid grey;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+  }
+
+  .dropdown-container .action-btn:hover{
+    background-color: #eee;
+    border-radius: 4px;
+    border: 1px solid white;
+  }
+
+  .dropdown-container .action-btn-remove:hover{
+    background-color: #eee;
+    border-radius: 4px;
+    border: 1px solid white;
+  }
+  .dropdown-container .ikon{
+    color: grey;
+    margin: 5px;
+    padding: 2px;
+    font-size: 15px;
+    /* border: 1px solid red; */
+  }
+  .dropdown-container .ikon-remove{
+    color: rgb(180, 4, 4);
+    margin: 5px;
+    font-size: 15px;
+  }
+  .dropdown-container  .action-btn button{
+    text-align: left;
+    padding: 5px;
+    border: 1px solid white;
+    background-color: white;
+    color: #000;
+    margin: 0px;
+    width: 100%;
+    height: 50%;
+  }
+  .dropdown-container  .action-btn button:hover,
+  .dropdown-container .action-btn-remove button:hover
+  {
+    background-color: #eee;
+    border: 1px solid #eee;
+  }
+  .dropdown-container  .action-btn-remove button{
+    text-align: left;
+    padding-left: 5px;
+    border: 1px solid white;
+    background-color: white;
+    color: rgb(180, 4, 4);
     /* border: 1px solid blue; */
   }
 
-  .dropdown-li{
-    margin-top: 5px;
-    padding: 2px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-  }
+  /* END MENU ACTION  */
+ 
 
-  .dropdown-li:hover{
-    background-color: #ddcccc;
-    /* border: 1px solid yellow; */
-    border-radius: 5px;
-    color: white;
-    height: 30px;
-  }
-
-  .dropdown-li .ikon{
-    margin-right: 1vh;
-    color: #6b1c14;
-    padding: 4px;
-    /* border: 1px solid red; */
-  }
-
- .dropdown-li .btn-li{
-  background-color: rgba(255, 255, 255, 0);
-  color: #491519;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 30px;
-  font-weight: bold;
- }
-
- button .btn-li{
-  background-color: rosybrown;
- }
-
- .dropdown-li .btn-li:hover{
-  background-color: #ddcccc;
- }
-/* .dropdown-menu-action{
-  position: absolute;
-  background-color: white;
-  border: 1pz solid #ddd;
-  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-  z-index: 1;
-  padding: 8px;
-  display: none;
-} */
 
   
   .workspace-card button {
@@ -227,9 +406,9 @@
     cursor: pointer;
   }
   
-  .workspace-card button:hover {
+  /* .workspace-card button:hover {
     background-color: #0056b3;
-  }
+  } */
   
   .workspace-form {
     margin-top: 10px;
@@ -272,66 +451,136 @@
     padding-left: 2vh;
   }
 
-  .workspace-card-input{
-    /* background-color: white; */
-    padding: 10px;
-    /* height: 10%; */
-    /* max-height: 100%;
-    min-height: 10%; */
-    border-radius: 8px;
-    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
-    transition: transform 0.4s, height 0.4s;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* justify-content: center; */
-  }
+  /* Background overlay */
+.popup-overlay-create-card {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* Transparansi */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000; /* Pastikan di atas semua elemen */
+}
 
-  .workspace-card-input button.new{
-    border-radius: 5px;
-    background-color: #97271C;
-    border: 1px solid #97271C;
-    color: white;
-    font-size: 15px;
-    font-weight: bold;
-    height: 40px;
-    width: 80%;
-    margin-top: 1vh;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  }
+/* Konten popup */
+.popup-content-create-card {
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  height: 27vh;
+  width: 40vw; /* Lebar popup */
+  max-width: 90%;
+  position: relative;
+  z-index: 100001;
+}
+.popup-content .workspace-form{
+  border: 1px solid yellow;
+}
+.popup-content-create-card .header-popup-create{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0px;
+  margin: 0;
+  border-bottom: 1px solid #e1dfdf;
+}
+.header-popup-create h5{
+  margin: 0;
+  font-weight: normal;
+  /* border-bottom: 1px solid #491519; */
+}
+.workspace-form-create-card{
+  padding: 10px;
+  margin: 10px 0px;
+  /* border: 1px solid grey; */
+}
 
-  .workspace-card-input button.new:hover{
-    background-color: #6b1c14;
-  }
+/* Input group styling */
+.input-group {
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  font-weight: bold;
+}
+.input-group-desc{
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding: 0px 5px;
+  border: 0.1px solid white;
+  border-radius: 8px;
+  /* background-color: #eee; */
+}
+.input-group-desc input{
+  width: 100%;
+  height: 100%;
+  border: 0.1px solid #eeeeee00;
+}
+.input-group-desc:hover,
+.input-group-desc input:hover{
+  background-color: #eee;
+  border: 0.1px solid #eee;
+}
 
-  .workspace-form{
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin-top: 5px;
-  }
+.input-group .input-field::placeholder{
+  font-weight: 500;
+  font-size: 15px;
+}
+.input-group-desc .input-field::placeholder{
+  font-weight: normal;
+  font-size: 13px;
+}
 
-  .workspace-form input{
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
+.input-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
 
-  .workspace-form button{
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #97261c76;
-    color: #6b1c14;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    border: 1px solid #6b1c14;
-  }
 
-  .workspace-form button:hover{
-    background-color: #6b1c14;
-  }
+.input-field {
+  width: 80%;
+  padding: 8px;
+  border: 1px solid white;
+  border-radius: 4px;
+}
+
+.input-field:focus{
+  border: 1px soid transparent;
+  outline: none;
+}
+/* Button group */
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 10px 0px;
+  padding: 10px;
+  border-top: 1px solid #e1dfdf;
+}
+
+.button-group button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.button-group button:hover{
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.button-group button:first-child {
+  background-color: #491519;
+  color: white;
+}
+
+
 
   /* bg select style  */
   .workspace-container .btn-bg{

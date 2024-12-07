@@ -3,20 +3,24 @@ import { getWorkspaces, createWorkspace, getBoardCountByWorkspace, getAllImage,d
 import { useNavigate } from 'react-router-dom';
 import '../style/WorkspaceStyle.css'
 import { BiSolidCalendarEdit } from "react-icons/bi";
-import { HiArchive,HiPlus,HiOutlineX , HiDotsHorizontal, HiOutlineSearch, HiOutlineViewList} from "react-icons/hi";
-import { IoMdNotificationsOutline } from "react-icons/io";
+import { HiArchive,HiPlus,HiOutlineX , HiDotsHorizontal, HiOutlineSearch,HiQrcode} from "react-icons/hi";
+import { IoCloseOutline } from "react-icons/io5";
+import { HiOutlineCog } from "react-icons/hi";
+import { BsArchive } from "react-icons/bs";
 import { FaTags } from "react-icons/fa6";
-import { FaUserCircle, FaRegEdit } from "react-icons/fa";
-import { AiFillDelete } from "react-icons/ai";
+import { FaRegEdit } from "react-icons/fa";
+import { AiOutlineDelete } from "react-icons/ai";
 import moment from 'moment';
-import { Data_Bg } from '../data/DataBg';
 import CheckIcon from '@mui/icons-material/Check';
-import { AlertTitle, Snackbar } from '@mui/material';
+import { AlertTitle} from '@mui/material';
 import WorkspaceEdit from './WorkspaceEdit';
 import '../style/WorkspaceEdit.css'
 import DeleteWorkspace from '../popup/DeleteWorkspace';
 import ArchiveWorkspace from '../popup/ArchiveWorkspace';
-import ImageSelector from './ImageSelector';
+import { HiOutlineSquaresPlus,HiMiniCalendarDays } from "react-icons/hi2";
+import Greeting from './Greeting';
+import { TiPin,TiPinOutline } from "react-icons/ti";
+import { CiFileOn } from "react-icons/ci";
 
  
 
@@ -41,7 +45,13 @@ const Workspace=({workspaceId})=> {
     const [isEditingModalVisible, setIsEditModalVisible] = useState(false);
     //background selector
     const [backgroundImage, setBackgroundImage] = useState(null)
-
+    //gretting
+    const [isGreeting, setIsGreeting] = useState(true);
+   
+    //gretting
+    const handleGretting = () =>{
+        setIsGreeting(!isGreeting);
+    }
     
 
     //edit
@@ -273,30 +283,38 @@ const Workspace=({workspaceId})=> {
     style={{
         backgroundImage: selectBg ? `url(${selectBg.image_url})`: 'none' ,
         backgroundSize: 'cover', 
-        backgroundPosition:'center'
-        }}
+        backgroundPosition:'center',
+        }} 
     >
             <div className="workspace-title">
-                <h4 style={{textAlign:'left', color:'white'}}>WORKSPACE DASHBOARD</h4>
-                <div style={{ display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <HiOutlineSearch size={20} className='workspace-icons'/>
-                    <IoMdNotificationsOutline size={20} className='workspace-icons'/>
-                    <FaUserCircle size={25} className='workspace-icons-user'/>
+                <div className="workspace-title-navigation">
+                    <button>
+                        <HiOutlineSquaresPlus style={{marginRight:'4px'}}/> 
+                        Workspace
+                    </button>
+                </div>
+                <div style={{display:'flex', flexDirection:'column', height:'100%', marginTop:'0'}}>
+                    <div className='gretting-setting'>
+                        <div className="button-create">
+                            <button className='new' onClick={toggleFormVisibility}>
+                                {showForm ?
+                            (<><HiOutlineX size={10} style={{marginRight:'5px'}}/>Cancle</>): (<><HiPlus size={10} style={{marginRight:'5px'}}/> New Workspace</>)    
+                            }
+                            </button>   
+                        </div>
+                        |
+                        <button onClick={handleGretting}>
+                            Gretting 
+                            <HiOutlineCog style={{marginLeft:'5px'}}/>
+                        </button>
+                    </div>
                 </div>
             </div>
-
-            {/* <ImageSelector onSelectImage={handleImageSelect}/>
-            {backgroundImage && (
+            {isGreeting && (
                 <div>
-                    <h3>Selected Background Images:</h3>
-                    <img
-                        src={backgroundImage.image_url}
-                        alt={backgroundImage.name}
-                        style={{width:'100%', maxWidth:'500px'}}
-                    />
-                    <p>{backgroundImage.name}</p>
+                    <Greeting/>
                 </div>
-            )} */}
+            )}
 
             {alert.show && (
                 <AlertTitle
@@ -309,90 +327,143 @@ const Workspace=({workspaceId})=> {
             )}
 
             {/* WORKSPACE CARD */}
-                <div className='workspace-grid' style={{textAlign:'left'}}>
+                <div className='workspace-grid' style={{textAlign:'left',}}>
                     {workspaces.map((workspace) =>(
                         <div onClick={()=>handleNavigateToBoard(workspace.id)} key={workspace.id} className='workspace-card' >
-                            <h3 style={{display:'flex', justifyContent:'space-between'}}>
-                                {workspace.name} 
-                                <HiDotsHorizontal 
-                                    className='dot-btn' 
-                                    onClick={(e)=> {e.stopPropagation(); toggleActionVisibility(workspace.id, e)}}/>
-                            </h3>
-
+                            <div className='workspace-card-title'>
+                                <h4 style={{display:'flex', justifyContent:'space-between'}}>
+                                    {/* {workspace.name}  */}
+                                    <TiPinOutline size={20} style={{color:'#6b1c14'}}/>
+                                </h4>
+                                <div className="tooltip-container">
+                                    <HiDotsHorizontal 
+                                        className='card-btn'
+                                        // data-tooltip="More Setting" 
+                                        onClick={(e)=> {e.stopPropagation(); toggleActionVisibility(workspace.id, e)}}
+                                    />
+                                    <span className='tooltip-text'>More Settings</span>
+                                </div>
+                            </div>
+                            <hr style={{marginTop:'0px', border:'0.2px solid rgb(232, 232, 232)', height:'0.2px'}}/>
+ 
                             {showAction === workspace.id && (
-                                <div className='dropdown-menu-action' style={{height:'150px'}}>
-                                    <ul className='dropdown-ul'>
-                                    <div style={{display:'flex', alignItems:'center', justifyContent:'space-between',color:'#491519'}}>
-                                        Action 
-                                        <HiOutlineViewList/>
+                                <div className='dropdown-menu-action'>
+                                    <h5>View</h5>
+                                    <div className="dropdown-container">
+                                      <div className="action-btn">
+                                            <FaRegEdit className='ikon' />
+                                            <button
+                                                onClick={(e)=> {e.stopPropagation(); handleEditWorkspaceClick(workspace)}}
+                                            >
+                                                Edit Workspace
+                                            </button>
+                                        </div>
+                                        <div className="action-btn">
+                                            <BsArchive className='ikon'/>
+                                            <button
+                                                onClick={(e)=>{e.stopPropagation(); handleArchive(workspace.id)}}
+                                            >
+                                                Archive Workspace
+                                            </button>
+                                        </div>
+                                        <div className="action-btn-remove">
+                                            <AiOutlineDelete className='ikon-remove'/>
+                                            <button
+                                                onClick={(e)=> {e.stopPropagation(); handleDeleteClick(workspace.id)}}
+                                            >
+                                                Delete Workspace
+                                            </button>
+                                        </div>
                                     </div>
-                                    <hr style={{color:'#491519'}}/>
-                                        <li className='dropdown-li'>
-                                            <AiFillDelete className='ikon' size={20}/>
-                                            <button onClick={(e)=> {e.stopPropagation(); handleDeleteClick(workspace.id)}} className='btn-li' style={{ padding:'0'}}>
-                                                Delete <br />
-                                                <span style={{fontSize:'10px', fontWeight:'normal'}}>Delete Workspace</span>
-                                            </button>
-                                        </li>
-                                        <li className='dropdown-li'>
-                                            <HiArchive className='ikon' size={20}/>
-                                            <button className='btn-li' onClick={(e)=> {e.stopPropagation(); handleArchive(workspace.id)}} style={{ padding:'0'}}>
-                                                Archive <br />
-                                                <span style={{fontSize:'10px', fontWeight:'normal'}}>Archive workspace</span>
-                                            </button>    
-                                        </li>
-                                        <li className='dropdown-li'>
-                                            <FaRegEdit className='ikon' size={20}/>
-                                            <button className='btn-li' onClick={(e)=>{e.stopPropagation(); handleEditWorkspaceClick(workspace)}} style={{ padding:'0'}}>
-                                                Edit <br />
-                                                <span style={{fontSize:'10px', fontWeight:'normal'}}>Edit workspace</span>
-                                            </button>
-                                        </li> 
-                                    </ul>
                                 </div>
                              )}
-                            
 
-                            <p style={{fontSize:'13px'}}>{workspace.description}</p>
-                            <h5>Create by USERNAME</h5>
-                            <div  className='action-workspace'>
-                                <p style={{display:'flex', alignItems:'center', justifyContent:'center', fontSize:'10px'}}><FaTags size={13} style={{marginRight:'0.5vw'}}/> {workspace.boardCount} Boards</p>
-                                <p style={{display:'flex', alignItems:'center', justifyContent:'center', fontSize:'10px'}}><BiSolidCalendarEdit size={15} style={{marginLeft:'1vw', marginRight:'0.5vw'}}/>
-                                    {moment(workspace.create_at).format('D MMMM YYYY')}
-                                </p>
-                                {/* <button className='btn-workspace'><HiChevronRight size={20}/></button> */}
-                            </div>
-
+                             <div className='workspace-card-main'>
+                                <div className="workspace-card-mid">
+                                    <h4 style={{marginTop:'0', marginBottom:'0'}}>{workspace.name}</h4>
+                                    <p>{workspace.description}</p>
+                                </div>
+                                <div className='workspace-card-bottom'>
+                                    <button>
+                                        <FaTags className='card-icon'/>
+                                        {workspace.boardCount} Boards
+                                    </button>
+                                    <button>
+                                        <HiMiniCalendarDays className='card-icon'/>
+                                        {moment(workspace.create_at).format('D MMMM YYYY')}
+                                    </button>
+                                </div>
+                             </div>
                         </div>
                     ))}
 
-
-                    <div className='workspace-card-input'>
-                        {/* Create your new workspace here! */}
-                        <button className='new' onClick={toggleFormVisibility}>
-                            {showForm ?
-                        (<><HiOutlineX size={13} style={{marginRight:'1vh'}}/>Cancle</>): (<><HiPlus size={13} style={{marginRight:'1vh'}}/> NEW WORKSPACE</>)    
-                        }
-                        </button>
-                        {showForm && (
-                            <div className='workspace-form'>
-                            <input 
-                                type="text"
-                                placeholder='Workspace name'
-                                value={newWorkspace.name}
-                                onChange={(e) => setNewWorkspace({ ...newWorkspace, name: e.target.value})}
-                            />
-                            <input 
-                                type="text"
-                                placeholder='Description'
-                                value={newWorkspace.description}
-                                onChange={(e)=> setNewWorkspace({ ...newWorkspace, description: e.target.value})}
-                            />
-                            
-                            <button onClick={handleCreateWorkspace}>Add Workspace</button>
+                    {showForm && (
+                        <div className="popup-overlay-create-card">
+                        <div className="popup-content-create-card">
+                            <div className="header-popup-create">
+                                <h5>Create Workspace</h5>
+                                <IoCloseOutline onClick={()=> setShowForm(false)} style={{color:'grey'}} size={20}/>
+                            </div>
+                            <div className="workspace-form-create-card">
+                                <div className="input-group">
+                                    {/* <label>Workspace Name</label> */}
+                                    <input 
+                                        type="text"
+                                        value={newWorkspace.name}
+                                        onChange={(e) => setNewWorkspace({ ...newWorkspace, name: e.target.value })}
+                                        className="input-field"
+                                        placeholder='WORKSPACE NAME'
+                                    />
+                                </div>
+                                <div className="input-group-desc">
+                                    {/* <label>Workspace Description</label> */}
+                                    <CiFileOn size={15} style={{color:'grey', marginRight:'5px'}}/>
+                                    <input 
+                                        type="text"
+                                        value={newWorkspace.description}
+                                        onChange={(e) => setNewWorkspace({ ...newWorkspace, description: e.target.value })}
+                                        className="input-field"
+                                        placeholder='Workspace description'
+                                    />
+                                </div>
+                            </div>
+                                <div className="button-group">
+                                    <button onClick={handleCreateWorkspace}>Create Workspace</button>
+                                    {/* <button onClick={() => setShowForm(false)}>Cancel</button> */}
+                                </div>
+                           
                         </div>
-                        )}
                     </div>
+                    )}
+
+
+                    {/* <div className='workspace-card-input'>
+                        <div className="workspace-create-form">
+                            {showForm && (
+                                <div className='workspace-form'>
+                                    <div className='input-group'>
+                                        Workspace Name 
+                                        <input 
+                                            type="text"
+                                            value={newWorkspace.name}
+                                            onChange={(e) => setNewWorkspace({ ...newWorkspace, name: e.target.value})}
+                                            className='input-field'
+                                        />
+                                    </div>
+                                    <div className='input-group' >
+                                        Workspace Description
+                                        <input 
+                                            type="text"
+                                            value={newWorkspace.description}
+                                            onChange={(e)=> setNewWorkspace({ ...newWorkspace, description: e.target.value})}
+                                            className='input-field'
+                                    />
+                                    </div> 
+                                <button onClick={handleCreateWorkspace}>Create Workspace</button>
+                            </div>
+                            )}
+                        </div>
+                    </div> */}
 
                    {/* ALERT  */}
                    {/* success alert  */}
@@ -448,24 +519,3 @@ const Workspace=({workspaceId})=> {
  
 export default Workspace
 
-//create select backgoround
-
-/*
-1. toggleBgVisibility
-2. buat state showBg
-3. import data bg 
-4. mapping data bg
-5. buat const handleBgSelect
-
-
-{isArchivePopupVisible && (
-          <ArchiveCardPopup
-            boardId ={selectedBoard}
-            isOpen={isArchivePopupVisible}
-            onClose={handleCancleArchive}
-            onArchiveConfirm={handleConfirmArchive}
-          />
-        )}
-
-        const [selectedWorkspace,setSelectedWorkspace] = useState(null)
-*/
