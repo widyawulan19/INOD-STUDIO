@@ -1,36 +1,49 @@
-.custom-date-conteiner{
+/* Kontainer utama */
+.date-picker-container {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 13px;
-    border: 1px solid black;
-}
-.date-picker-input{
-    width: 90%;
-}
-.date-picker-input .MuiInputBase-root{
-    height: 33px;
-    font-size: 12px;
-    color: #521422;
-}
-.date-picker-input .MuiInputBase-input{
-    padding: 15px;
-    height: 0px;
-    width: 100%;
-    /* border: 1px solid black; */
-}
-.date-picker-input .MuiFormLabel-root{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    /* padding: 5px; */
+    /* border: 1px solid #ccc; */
+    border-radius: 8px;
+    width: 300px;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Label untuk input */
+  .date-picker-label {
+    font-weight: bold;
     font-size: 14px;
-    color: #521422;
-}
-.date-picker-input .MuiOutlinedInput-notchedOutline {
-    border: 0.1px solid #521422;
-}
-
-.date-picker-input:hover .MuiOutlinedInput-notchedOutline {
-  border-color: #521422;
-}
-
-.date-picker-input.near-due-date {
-  background-color: #fbd8dd; /* Warna berbeda saat mendekati due date */
-}
+    color: #333;
+  }
+  
+  /* Input tipe date */
+  .date-picker-input {
+    width: 110%;
+    padding: 2px;
+    font-size: 10px;
+    border: 1px solid white;
+    border-radius: 4px;
+    color: #333;
+    transition: border-color 0.3s;
+  }
+  .date-picker-input:hover{
+    background-color: #eee;
+    border: 1px solid #eee;
+  }
+  
+  /* Efek fokus pada input */
+  .date-picker-input:focus {
+    border-color: #540c1e;
+    outline: none;
+  }
+  
+  /* Teks untuk tanggal yang dipilih */
+  .selected-date {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+  }
+  

@@ -40,12 +40,14 @@ const PostComment=()=> {
 
   return (
     <div className='comment-container'>
-        <h3>Comment Section</h3>
-        <CommentForm onSubmit={addComment}/>
-        <div>
+        {/* <h3>Comment Section</h3> */}
+        <div className='comment-reply'>
             {comments.map((comment)=>(
                 <Comment key={comment.id} comment={comment} addReply={addComment}/>
             ))}
+        </div>
+        <div className="comment-form" >
+            <CommentForm onSubmit={addComment}/>
         </div>
     </div>
   )

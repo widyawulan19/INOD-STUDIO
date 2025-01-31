@@ -1,39 +1,64 @@
-.detail-popup-overlay{
+ .detail-popup-overlay{
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+    z-index: 10;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 1pc solid #491519;
-}
+    border: 1px solid #491519;
+    padding-top: 10px;
+} 
+
 .detail-popup{
     background-color: white;
     font-weight: 300;
-    padding: 20px;
+    /* padding: 20px; */
     border-radius: 10px;
-    height: 80%;
-    width: 80%; /* Adjust width as needed */
-    max-width: 600px; /* Optional max-width for better responsiveness */
+    height: 90%;
+    width: 80%; 
+    /* max-width: 600px;  */
     border: 1px solid #491519;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Shadow for better visibility */
-    position: relative; /* Ensures it stacks properly within overlay */
-    z-index: 1010; /* Slightly higher than overlay */
-    overflow-x: auto; /* Allows horizontal scrolling */
-    overflow-y: auto; /* Optional: disables vertical scrolling */
-    white-space: nowrap; /* Prevents text wrapping */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+    position: relative; 
+    z-index: 1010; 
+    overflow-x: auto; 
+    overflow-y: auto; 
+    white-space: nowrap; 
 }
-.detail-popup h2{
-    text-align: center;
+.detail-popup .title{
+    position: sticky;
+    top: 0; /* Menentukan jarak dari atas ketika elemen sticky */
+    background-color: white; /* Agar elemen sticky tidak transparan dan bisa terbaca */
+    z-index: 10; /* Memastikan elemen tetap berada di atas konten lainnya */
+    padding: 10px 0; /* Menambahkan sedikit ruang di sekitar teks */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Memberikan efek bayangan agar lebih terlihat */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
     margin-bottom: 20px;
-    font-size: 24px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+.title .ikon-title{
+    font-size: 25px;
+    cursor: pointer;
+}
+.detail-popup h3{
+    text-align: center;
+    margin: 3px;
+    font-size: 15px;
     color: #333;
+}
+.detail-popup .mp-form{
+    padding: 20px;
+    /* border: 1px solid yellow; */
 }
 .detail-popup form{
     display: flex;
@@ -47,15 +72,16 @@
 }
 .detail-popup label{
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
     color: #555;
     text-align: left;
+    font-size: 13px;
     /* border: 1px solid red; */
     padding-left: 5px;
 }
 .detail-popup input,
 .detail-popup textarea{
-    padding: 18px;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 14px;
@@ -84,38 +110,78 @@
     align-items: left;
     justify-content: center;
     margin-top: 10px;
+    /* width: 100%; */
 }
 .detail-project label{
     margin-bottom: 0;
 }
 .detail-project textarea{
-    width: 95%;
+    width: 98%;
 }
 .popup-button{
-    margin-top:10px ;
+    margin:10px 0px ;
 }
 .popup-button button{
     width: fit-content;
-    padding: 12px;
-    background: #491519;
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
+    padding: 5px;
+    /* background: #491519; */
+    background-color: white;
+    color: #491519;;
+    font-size: 12px;
+    font-weight: normal;
+    border: 1px solid #491519;
+    border-radius: 4px;
     cursor: pointer;
     transition: background 0.3s;
 }
 .popup-button button:hover{
     background: #491519;
+    color: white;
 }
-
+.form-create-card{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .create-card-fiture{
     background-color: white;
-    border: 1px solid #491519;
-    border-radius: 8px;
-    padding-left: 10px;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 4px;
+    width: 300px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
+.create-card-fiture button{
+    padding: 5px;
+    border: 1px solid #491519;
+    border-radius: 4px;
+    color: #491519;
+    background-color: #fff;
+    margin-left: 5px;
+    height: 30px;
+}
+.create-card-fiture button:hover{
+    background-color: #491519;
+    color: white;
+}
+.create-card-fiture select{
+    /* border: 1px solid white; */
+    border: 1px solid #491519;
+    height: 30px;
+    background-color: #fff;
+}
+
+.create-card-fiture select option{
+    padding: 5px;
+    height: 40px;
+    background-color: #fff;
+}
+.create-card-fiture select:focus{
+    outline: none;
+    border: 1px solid #491519;
+}
+
+
 
 /* const [openFormCreate, setOpenFormCreate] = useState(false)
 

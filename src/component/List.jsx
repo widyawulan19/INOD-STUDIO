@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getCards, createCard, deleteList, archiveLists, deleteCard, archiveCard} from '../services/Api'
+import { getCards, createCard, deleteList, archiveLists, deleteCard, archiveCard, getCardById, getCardLabels, getSelectedCoverForCard} from '../services/Api'
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import '../style/ListStyle.css'
 import '../style/WorkspaceStyle.css'
@@ -23,10 +23,14 @@ import EditCard from '../popup/EditCard.jsx';
 import DeleteCard from '../popup/DeleteCard.jsx';
 import ArchiveCard from '../popup/ArchiveCard.jsx';
 import {  IoIosCard } from "react-icons/io";
-import { CiCreditCard2 } from "react-icons/ci";
 import { useDate } from '../context/DateContext.jsx';
 import DisplayDate from './DisplayDate.jsx';
-import SearchBar from '../fiture/SearchBar.jsx'; 
+import { IoIosCloseCircleOutline } from "react-icons/io";
+import { CiShoppingTag } from "react-icons/ci";
+import LabelDisplay from '../fiture/LabelDisplay.jsx';
+import SelectedLabel from './SelectedLabel.jsx';
+import DisplayLabel from '../fiture/DisplayLabel.jsx';
+import DisplayCover from '../fiture/DisplayCover.jsx';
 
 const List=({listId, 
             listName, 
@@ -51,6 +55,7 @@ const List=({listId,
             handleCancleArchive,
             isArchivePopupVisible,
             handleConfirmArchive,
+            card
           })=> {
     const {workspaceId, boardId} = useParams();
     const navigate = useNavigate();
@@ -60,15 +65,54 @@ const List=({listId,
     const [showForm, setShowForm] = useState(false);
     const [showAction, setShowAction] = useState(null);
     const [showCover, setShowCover] = useState(false);
-    const [selectCover, setSelectCover] = useState(null);
-    const [alert, setAlert] = useState({show:false, message:'', severity:''})
-    //labels
-    const [selectedLabels, setSelectedLabels] = useState([]);
+    //cover 
+    // const {selectedCover} = useDate();
+    const {covers} = useDate();
+
+    
     const location = useLocation();
     //Search query
     const {searchQuery, setSearchQuery} = useDate();
     const [filteredCards, setFilteredCards] = useState([]);
     const [showFilter, setShowFilter] = useState(false);
+    
+    const [coverImage, setCoverImage] = useState(null);
+    // const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedImage, setSelectedImage] = useState({});
+    const [cover, setCover] = useState({});
+    const [alert, setAlert] = useState({show:false, message:'', severity:''})
+
+    //labels
+    const {selectedLabels} = useDate();
+
+    useEffect(()=>{
+      console.log('Selected Labels:', selectedLabels);
+    },[selectedLabels]);
+    // const [labels, setLabels] = useState([]);
+
+    // COVER 
+    useEffect(() => {
+      // Fetch cover data for each card on component mount
+      cards.forEach((card) => {
+        const savedCover = getCoverFromLocalStorage(card.id);
+        if (savedCover) {
+          setSelectedImage((prevState) => ({
+            ...prevState,
+            [card.id]: savedCover,
+          }));
+        }
+      });
+    }, [cards]);
+
+    const getCoverFromLocalStorage = (cardId) => {
+      const cover = localStorage.getItem(`cover_${cardId}`);
+      return cover ? JSON.parse(cover) : null;
+    };
+
+    const isImage = (coverData) => {
+      // Check if the cover is a valid image (data URL or image URL)
+      return coverData.startsWith("data:image") || /\.(jpeg|jpg|png|gif)$/.test(coverData);
+};
 
     // Efek pencarian
     useEffect(() => {
@@ -86,51 +130,34 @@ const List=({listId,
       navigate(`/workspaces/${workspaceId}/boards/${boardId}/lists/${listId}/cards/${cardId}`);
   };
 
-    //SELECT LABEL
-   useEffect(()=>{
-    if(location.state && location.state.selectedLabels){
-      const labelsByCardId = {};
-      location.state.selectedLabels.forEach((label)=>{
-        labelsByCardId[label.cardId] = label.labels;
-      });
-      setSelectedLabels(labelsByCardId);
-    }else{
-      const labelsByCardId = {};
-      cards.forEach((card)=>{
-        const savedLabels = localStorage.getItem(`selectedLabel_${card.id}`)
-        if(savedLabels){
-          labelsByCardId[card.id] = JSON.parse(savedLabels);
-        }
-      });
-      setSelectedLabels(labelsByCardId);
+ 
+   
+  //NEW SELECT COVER
+
+  const fetchImageForCard = (cardId) =>{
+    try{
+      const savedImage = localStorage.getItem(`cover_${cardId}`);
+      if(savedImage){
+        setSelectedImage(prevState => ({
+          ...prevState,
+          [cardId]: JSON.parse(savedImage)
+        }));
+      }
+    } catch(error){
+      console.error('Error loading card cover image:', error);
+      setSelectedImage(prevState => ({
+        ...prevState,
+        [card.id]:null
+      }))
     }
-   }, [location, cards]);
+  }
 
-   //menyimpan label untuk setiap kartu secara individu
-   useEffect(()=>{
-    Object.keys(selectedLabels).forEach((cardId)=>{
-      localStorage.setItem(
-        `selectedLabel_${cardId}`,
-        JSON.stringify(selectedLabels[cardId] || [])
-      );
-    });
-   },[selectedLabels])
+  useEffect(()=>{
+    cards.forEach(card =>{
+      fetchImageForCard(card.id);
+    })
+  },[cards]);
 
-   //SELECT COVER
-   const handleCoverSelect = (cover, cardId) => {
-    setSelectCover(cover);
-    localStorage.setItem(`cardCover_${cardId}`, JSON.stringify(cover));
-  };
-
-  const fetchSelectedCover = (cardId) => {
-    try {
-      const savedCover = localStorage.getItem(`cardCover_${cardId}`);
-      return savedCover ? JSON.parse(savedCover) : null;
-    } catch (error) {
-      console.error(`Error fetching cover for card ${cardId}:`, error);
-      return null;
-    }
-  };
 
 
     const toggleFormVisibility = () => {
@@ -165,6 +192,10 @@ const List=({listId,
           const response = await getCards(listId);
           console.log('Received cards data:', response.data);
           setCards(response.data.filter(card => card.list_id === Number(listId)));
+
+          // Pastikan setiap kartu memiliki cover_id
+          // const validCards = filteredCards.filter(card => card.cover_id);
+          // setCards(validCards);
       } catch (error) {
           console.error('Failed to load cards:', error);
       }
@@ -329,12 +360,39 @@ const List=({listId,
         setIsEditCardOpen(false);
       }
 
+      const [labelCard, setLabelCard] = useState([]);
+      useEffect(() => {
+        console.log('Current cardId:', cardId)
+        if (!cardId || cardId === "null") {
+          console.error('Invalid card ID', cardId);
+          setLabelCard([]);
+          return;
+        }
+
+        const fetchLabelCard = async () => {
+          
+          try {
+            const response = await getCardLabels(cardId);
+            if(response && response.data){
+              setLabelCard(response.data);
+            }else{
+              console.error('Invalid card data', response);
+              setLabelCard([]);
+            }
+          } catch (error) {
+            console.error('Failed to fetch card label', error);
+          }
+        };
+        fetchLabelCard();
+      }, [cardId]);
+
+
       //END CARD 
 
       return (
         <div>
           <div className='search-bar'>
-        <div className='list-container'>
+        <div className='list-container' >
           <div className='title'>
             <p>
               <FaGripLinesVertical style={{marginRight:'8px', color:'#6b1c14'}}/>
@@ -378,55 +436,27 @@ const List=({listId,
             </div>
           )}
           <hr style={{ color:'grey',border:'0.5px solid grey',opacity: '50%' }} />
-          <div className='card-list-lists'>
+          <div className='card-list-lists' >
             {/* tempat render card  */}
-            {cards.map((card) => {
-              const cardCover = fetchSelectedCover(card.id); // Pindahkan ini di sini
+            {cards.map((card, index) => {
+              // const cover = covers.find(c => c.id === card.cover_id)
 
               return ( // Mengembalikan elemen JSX
-                <div key={card.id} className='card-item-lists' onClick={() => handleToCardDetail(card.id)}>
+                <div key={card?.id|| index} className='card-item-lists' onClick={() => handleToCardDetail(card.id)}>
+                  <div className="card-cover-container">
+                  <DisplayCover cardId={card.id}/>
+                </div>
+                
                   
-
-                  <div>
-                    {cardCover ? (
-                      <img
-                        src={cardCover.cover_image_url}
-                        alt={cardCover.name}
-                        className='card-cover'
-                      />
-                    ) : (
-                      <div>
-                        <p></p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* DISPLAY LABEL  */}
+                   
+                {/* DISPLAY LABEL */}
                   <p className='card-description'><strong>{card.title}</strong></p>
-                  <div className='label-container'>
-                    {(selectedLabels[card.id] || []).map((label) => (
-                      <div
-                        key={label.id}
-                        style={{
-                          backgroundColor: label.bgColor || 'lightgray',
-                          color: label.color || 'black',
-                          padding: '8px',
-                          borderRadius: '3px',
-                          border: `1px solid ${label.color}` || 'none',
-                          boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                          height: '3px',
-                          fontSize: '7px',
-                          fontWeight: 'bold',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          margin: '0'
-                        }}
-                      >
-                        {label.name}
-                      </div>
-                    ))}
+                  <div className="labels">
+                    {/* <h5>Selected label:</h5> */}
+                    <DisplayLabel cardId={card.id}/>
                   </div>
+                    
+
 
                   <div className='card-footer'>
                     <div className='card-footer-content'>

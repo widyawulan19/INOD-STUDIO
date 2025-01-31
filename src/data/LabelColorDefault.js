@@ -1,0 +1,35 @@
+export const defaultColors = [
+    {
+        id:1,
+        color:'#F29F58'
+    },
+    {
+        id:2,
+        color:'#A8CD89'
+    },
+    {
+        id:3,
+        color:'#78B3CE'
+    },
+    {
+        id:4,
+        color:'#FEEE91'
+    },
+    {
+        id:5,
+        color:'#FF2929'
+    },
+    {
+        id:6,
+        color:'#4B5945'
+    },
+    {
+        id:7,
+        color:'#685752'
+    },
+    {
+        id:8,
+        color:'#A59D84'
+    }
+
+]

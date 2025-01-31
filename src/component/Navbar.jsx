@@ -7,11 +7,17 @@ import { HiMiniCalendarDays } from "react-icons/hi2";
 import { CgNotes } from "react-icons/cg";
 import logo2 from '../assets/logo2.png';
 import '../style/NavbarStyle.css';
+import { useNavigate} from 'react-router-dom';
 
 const Navbar=()=> { 
+    const navigate = useNavigate();
+
+    const navigateToWorkspace = ()=>{
+        navigate('/')
+    }
   return ( 
     <div className='navbar-container'>
-        <div className="logo">
+        <div className="logo" onClick={navigateToWorkspace}>
             <img src={logo2} alt={logo2}/>
         </div>
         <div className="search-fitur">

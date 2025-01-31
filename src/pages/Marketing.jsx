@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import '../style/MarketingStyle.css'
 import { getAllDataMarketing ,createDataMarketing,deleteDataMarketing, archiveMarketing} from '../services/Api';
 import moment from 'moment';
-import { CiEdit } from 'react-icons/ci';
 import { IoSearch, IoArchiveOutline } from 'react-icons/io5';
 import { AiOutlineDelete } from 'react-icons/ai';
 import MarketingForm from './MarketingForm';
@@ -155,66 +153,61 @@ const Marketing = ({marketing_id}) => {
   return (
     <div>
       <div className="container-marketing">
-        <div className="filter-form">
-          <h3>DATA MARKETING</h3>
-        </div>
-        <div className="dropdown-create"> 
-          <div className="date">
-            <h4 style={{ margin: 0 }}>{monthName}</h4>
-            <p style={{ margin: '0', fontSize: '13px' }}>Hari ini adalah hari {dayName}, {date} {monthName} {year}</p>
-          </div>
-          <div className='search'>
-            <label htmlFor="category" className='filter-label'>Search by:</label>
-            <div className="filter-dropdown" onClick={() => setIsOpen(!isOpen)}>
-              <button className='dropdown-search'>
-                {category === 'all' ? 'All Data' : category}
-              </button>
-              {isOpen && (
-                <ul className='filter-dropdown-menu'>
-                  <li onClick={() => handleCategoryChange('all')} className="dropdown-item">All</li>
-                  <li onClick={() => handleCategoryChange('code_order')} className='dropdown-item'>Code Order</li>
-                  <li onClick={() => handleCategoryChange('nomer_active_order')} className='dropdown-item'>Active Order</li>
-                  <li onClick={() => handleCategoryChange('input_by')} className='dropdown-item'>Input By</li>
-                  <li onClick={() => handleCategoryChange('buyer_name')} className='dropdown-item'>Buyer Name</li>
-                </ul>
-              )}
-              {category !== 'all' && (
-                <input
-                  type="text"
-                  placeholder={`Enter ${category}`}
-                  value={filterValue}
-                  onChange={handleFilterChange}
-                  className='custom-input'
-                  onClick={handlePropagation}
-                />
-              )}
-              <div onClick={handlePropagation}>
-                <button
-                  onClick={filterMember}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: 'fit-content',
-                    marginRight: '0',
-                    marginLeft: '5px',
-                    color: '#491519',
-                    backgroundColor: 'white'
-                  }}
-                >
-                  <IoSearch size={15} />
-                </button>
+        <div className="marketing-header">
+            <div className="title" >
+              <h4>DATA MARKETING</h4>
+              <div className="date">
+                {/* <h4 style={{ margin: 0 }}>{monthName}</h4> */}
+                <p>Hari ini adalah hari {dayName}, {date} {monthName} {year}</p>
               </div>
             </div>
-
-              {/* <div className='createData'>
-                  <button onClick={handleFormMarketing}>
-                      CREATE DATA MARKETING
+            <div className="filter-form">
+              <div className="search">
+                <label htmlFor="category" style={{ padding:'0px', width:'60px', fontSize:'12px'}}>Search by:</label>
+                <div className="filter-category" onClick={() => setIsOpen(!isOpen)}>
+                  <button className='dropdown-search' >
+                      {category === 'all' ? 'All' : category}
                   </button>
-              </div> */}
-              <div className='createData'>
-                  <button onClick={()=> setCreateFormVisible(!createFormVisible)}>
-                      CREATE DATA MARKETING
+                  {isOpen && (
+                    <ul className='filter-dropdown-menu'>
+                      <li onClick={() => handleCategoryChange('all')} className="dropdown-item">All</li>
+                      <li onClick={() => handleCategoryChange('code_order')} className='dropdown-item'>Code Order</li>
+                      <li onClick={() => handleCategoryChange('nomer_active_order')} className='dropdown-item'>Active Order</li>
+                      <li onClick={() => handleCategoryChange('input_by')} className='dropdown-item'>Input By</li>
+                      <li onClick={() => handleCategoryChange('buyer_name')} className='dropdown-item'>Buyer Name</li>
+                    </ul>
+                  )}
+                    {category !== 'all' && (
+                    <input
+                      type="text"
+                      placeholder={`Enter ${category}`}
+                      value={filterValue}
+                      onChange={handleFilterChange}
+                      className='custom-input'
+                      onClick={handlePropagation}
+                    />
+                  )}
+
+                  <div onClick={handlePropagation}>
+                    <button
+                      onClick={filterMember}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: 'fit-content',
+                        color: '#491519',
+                        backgroundColor: 'white'
+                      }}
+                    >
+                      <IoSearch size={15} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="createData">
+                <button onClick={()=> setCreateFormVisible(!createFormVisible)}>
+                      NEW DATA
                   </button>
                   {createFormVisible && (
                     <div>
@@ -222,8 +215,15 @@ const Marketing = ({marketing_id}) => {
                     </div>
                   )}
               </div>
-          </div>
+            </div>
         </div>
+       
+        {/* <div className="dropdown-create" style={{border:'1px solid #eee'}}> 
+          <div className="date">
+            <h4 style={{ margin: 0 }}>{monthName}</h4>
+            <p style={{ margin: '0', fontSize: '13px' }}>Hari ini adalah hari {dayName}, {date} {monthName} {year}</p>
+          </div>
+        </div> */}
         <div className="tabel-container">
           {marketingDelete && (
               <div className="delete-confirmation-modal">

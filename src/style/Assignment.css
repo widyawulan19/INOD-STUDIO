@@ -1,0 +1,107 @@
+.assgn-container{
+    /* border: 1px solid #eee; */
+    /* padding: 10px; */
+    position: relative;
+}
+.assgn-form{
+    border-bottom: 0.5px solid #eee;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lc{
+    /* position: relative; */
+    position: absolute;
+    top: 100%; /* Letakkan di bawah sub1-body */
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    width: fit-content;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 0px;
+}
+
+.list-box{
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 12px;
+    /* width: 100%; */
+}
+.list-box:hover{
+    background-color: #eee;
+}
+.list-box .user-photo{
+    background-color: #97271C;
+    font-weight: normal;
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+
+
+/* end dropdown list  */
+
+.assgn-form input{
+    margin-left: 5px;
+    outline: none;
+    padding: 5px 5px;
+    font-size: 12px;
+    border: 1px solid white;
+}
+
+
+
+.assgn-list{
+    padding: 5px;
+    /* border: 1px solid #eee; */
+}
+.assgn-user-box{
+    /* border: 1px solid #eee; */
+    padding: 5px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.assgn-user-box:hover{
+    background-color: #eee;
+}
+.left{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.left p{
+    padding: 5px;
+    font-size: 12px;
+    box-shadow: none;
+    border: 0.1px solid white;
+}
+.left p:hover{
+    border: 0.1px solid #eee;
+}
+.user-photo{
+    background-color: #97271C;
+    font-weight: normal;
+    font-size: 12px;
+    margin-right: 5px;
+}
+.assgn-user-box button{
+    border: 0.5px solid rgba(255, 255, 255, 0);
+    color: #97271C;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0);
+}
+.assgn-user-box button:hover{
+    background-color: white;
+}

@@ -1,6 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { getMarketingDataById } from '../services/Api';
+import { IoSettingsOutline } from "react-icons/io5";
+import {FaRegEdit} from "react-icons/fa";
+import {HiPlus, } from "react-icons/hi";
+import {AiOutlineDelete } from "react-icons/ai";
+import { getDataMarketingByCardId, getMarketingDataById } from '../services/Api';
 import '../style/CardMarketingDetail.css'
 
 const CardMarketingDetail=({cardId, marketing_id})=> {
@@ -10,6 +14,11 @@ const CardMarketingDetail=({cardId, marketing_id})=> {
     const [marketing, setMarketing] = useState([]);
     const [showData, setSHowData] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
+    const [showAction, setShowAction] = useState(false);
+
+    const toggleShowAction = () =>{
+      setShowAction(!showAction);
+    }
 
     const handleShowData = () => {
       setSHowData(!showData);
@@ -37,17 +46,18 @@ const CardMarketingDetail=({cardId, marketing_id})=> {
         fetchCardMarketingData();
     },[cardId]);
 
+
     useEffect(()=>{
-      const fetchDataMarketingById = async () =>{
-        try{
-          const response = await getMarketingDataById(marketing_id);
+      const fetchDataMarketingByCardId = async () =>{
+        try {
+          const response = await getDataMarketingByCardId(cardId);
           setMarketing(response.data);
         }catch(error){
-          console.error('Error fetching data marketing by id', error);
+          console.error('Error fething data marketing by card_id', error);
         }
       }
-      fetchDataMarketingById()
-    },[marketing_id])
+      fetchDataMarketingByCardId()
+    },[cardId]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -61,45 +71,278 @@ const CardMarketingDetail=({cardId, marketing_id})=> {
         return <div>No data found</div>;
       }
 
-  return (
-    <div className='show-data-container'>
-      <button onClick={handleShowData}>Data Marketing</button>
-      {showData && (
-        <div>
-          <h1>{cardData.title}</h1>
-          {/* <p>{cardData.description}</p> */}
-          <h3>Marketing Data:</h3>
-          <ul>
-              {/* <li><strong>Marketing ID:</strong> {cardData.marketing_id}</li> */}
-              <li><strong>Input By:</strong> {cardData.input_by}</li>
-              <li><strong>Acc By:</strong> {cardData.acc_by}</li>
-              <li><strong>Buyer Name:</strong> {cardData.buyer_name}</li>
-              <li><strong>Code Order:</strong> {cardData.code_order}</li>
-              <li><strong>Jumlah Track:</strong> {cardData.jumlah_track}</li>
-              <li><strong>Order Number:</strong> {cardData.order}</li>
-              <li><strong>Account:</strong> {cardData.account}</li>
-              <li><strong>Deadline:</strong> {cardData.deadline}</li>
-              <li><strong>Jumlah Revisi:</strong> {cardData.jumlah_revisi}</li>
-              <li><strong>Order Type:</strong> {cardData.order_type}</li>
-              <li><strong>Offer Type:</strong> {cardData.offer_type}</li>
-              <li><strong>Jenis Track:</strong> {cardData.jenis_track}</li>
-              <li><strong>Genre:</strong> {cardData.genre}</li>
-              <li><strong>Price Normal:</strong> {cardData.price_normal}</li>
-              <li><strong>Price Discount:</strong> {cardData.price_discount}</li>
-              <li><strong>Discount :</strong> {cardData.discount}</li>
-              <li><strong>Basic Price:</strong> {cardData.basic_price}</li>
-              <li><strong>GIG Link:</strong> {cardData.gig_link}</li>
-              <li><strong>Required File:</strong> {cardData.required_files}</li>
-              <li><strong>Project Type:</strong> {cardData.project_type}</li>
-              <li><strong>Duration:</strong> {cardData.duration}</li>
-              <li><strong>Reference Link:</strong> {cardData.reference_link}</li>
-              <li><strong>File and Chat:</strong> {cardData.file_and_chat_link}</li>
-              <li><strong>Detail Project:</strong> {cardData.detail_project}</li>
-          {/* Tambahkan elemen lainnya sesuai dengan data yang diterima */}
-          </ul>
+  return(
+    <div className="show-data-container">
+      <div className="data-container">
+        <div className="data-header">
+          <h3>{cardData.title}</h3>
+          <IoSettingsOutline 
+            className='header-ikon' 
+            onClick={toggleShowAction}
+          />
+          {showAction && (
+          <div className='action-button'>
+            <button>
+              <FaRegEdit className='button-ikon'/>  
+              <p>Edit</p>
+            </button>
+            <button>
+              <HiPlus className='button-ikon'/>
+              <p>Duplicate</p>
+            </button>
+            <button className='delete'>
+              <AiOutlineDelete className='button-ikon'/>
+              <p>Delete</p>
+            </button>
+          </div>
+        )}
         </div>
-      )}
+        
+        <div className="data-body">
+          <div className="data-body2">
+            <h4>INFORMASI DASAR</h4>
+            <div className="data-content">
+              <div className="title">
+                Input by
+              </div>
+              <div className="body">
+                {cardData.input_by}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                Acc by
+              </div>
+              <div className="body">
+                {cardData.acc_by}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                Buyer Name
+              </div>
+              <div className="body">
+                {cardData.buyer_name}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                Order Number
+              </div>
+              <div className="body">
+                {cardData.order_number}
+              </div>
+            </div>
+
+            {/* periksa penampilan data deadline  */}
+            <div className="data-content">
+              <div className="title">
+                Deadline
+              </div>
+              <div className="body">
+                {cardData.deadline}
+              </div>
+            </div>
+
+          </div>
+
+          {/* DETAIL PESANAN  */}
+          <div className="data-body2" style={{marginTop:'10px'}}>
+            <h4>DETAIL PESANAN</h4>
+
+            <div className="data-content">
+              <div className="title">
+                Jumlah Track
+              </div>
+              <div className="body">
+                {cardData.jumlah_track}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                Code Order
+              </div>
+              <div className="body">
+                {cardData.code_order}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                Order Type
+              </div>
+              <div className="body">
+                {cardData.order_type}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                Offer Type
+              </div>
+              <div className="body">
+                {cardData.offer_type}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                Jenis Track
+              </div>
+              <div className="body">
+                {cardData.jenis_track}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                Genre
+              </div>
+              <div className="body">
+                {cardData.genre}
+              </div>
+            </div>
+
+          </div>
+
+          {/* END DETAIL PESANAN  */}
+
+          {/* INFORMASI HARGA  */}
+          <div className="data-body2" style={{marginTop:'10px'}}>
+            <h4>INFORMASI HARGA</h4>
+
+            <div className="data-content">
+              <div className="title">
+                Price Normal
+              </div>
+              <div className="body">
+                {cardData.price_normal}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                Discount 
+              </div>
+              <div className="body">
+                {cardData.discount}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                Price Discount
+              </div>
+              <div className="body">
+                {cardData.price_discount}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                Basic Price
+              </div>
+              <div className="body">
+                {cardData.basic_price}
+              </div>
+            </div>
+
+          </div>
+          {/* END INFORMASI HARGA  */}
+
+          {/* FILE DAN REFERENSI  */}
+          <div className="data-body2" style={{marginTop:'10px'}}>
+            <h4>FILE AND REFERENCE</h4>
+
+            <div className="data-content">
+              <div className="title">
+                Required File
+              </div>
+              <div className="body">
+                {cardData.required_files}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                GIG Link
+              </div>
+              <div className="body">
+                {cardData.gig_link}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                Reference File
+              </div>
+              <div className="body">
+                {cardData.reference_link}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                File and Chat
+              </div>
+              <div className="body">
+                {cardData.file_and_chat_link}
+              </div>
+            </div>
+
+          </div>  
+          {/* END FILE AND REFERENSI  */}
+
+          {/* RINCIAN PROJECT  */}
+          <div className="data-body2" style={{marginTop:'10px'}}>
+            <h4>RINCIAN PROJECT</h4>
+
+            <div className="data-content">
+              <div className="title">
+                Project Type
+              </div>
+              <div className="body">
+                {cardData.project_type}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                Duration
+              </div>
+              <div className="body">
+                {cardData.duration}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                Detail Project
+              </div>
+              <div className="body">
+                {cardData.detail_project}
+              </div>
+            </div>
+
+            <div className="data-content">
+              <div className="title">
+                Jumlah Revisi
+              </div>
+              <div className="body">
+                {cardData.jumlah_revisi}
+              </div>
+            </div>
+
+          </div>
+          {/* END RINCIHAN PROJECT  */}
+
+        </div>
       </div>
+    </div>
   )
 }
 

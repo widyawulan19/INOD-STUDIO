@@ -1,82 +1,94 @@
 .container-marketing{
     background-color: white;
-    padding: 10px;
+    /* padding: 10px; */
+    border-radius: 10px;
+}
+
+.marketing-header{
+  border-bottom: 1px solid #eee;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.marketing-header h4{
+  margin:0;
 }
 
 /* FILTER COMPONENT  */
 .filter-form{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0;
-  /* border: 1px solid #491519; */
-}
-
-.search option .pilihan{
-  padding: 5px;
-  background-color: white;
-}
-.filter-dropdown{
-  padding: 5px;
   border: 1px solid grey;
-  border-radius: 10px;
+  margin: 0px;
+}
+.filter-form .search{
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.filter-dropdown button{
-  background-color: white;
-  border: 1.5px solid white;
-  border-radius: 10px;
-  color: #491519;
-  width: fit-content;
-  height: 25px;
-  padding: 5px;
-  font-weight: bold;
-}
-.filter-dropdown button:hover{
-  /* color: white; */
+.filter-category {
+  position: relative;
+  display: inline-block;
+  /* border: 1px solid red; */
+  border: 1px solid #eee;
+  width: 23vw;
+  border-radius: 4px;
+  display: flex;
+  padding: 2px;
+  align-items: center;
+  justify-content: left;
 }
 
-.filter-dropdown .filter-dropdown-menu {
-  list-style-type: none;
-  margin: 0;
-  top: 120px;
-  right: 100x;
-  padding: 10px;
+.dropdown-search {
+  /* padding: 10px 15px; */
+  border: 1px solid white;
+  border-radius: 5px;
+  background-color: white;
+  cursor: pointer;
+  width: 10vw;
+  margin: 0px;
+}
+
+.filter-dropdown-menu {
   position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
   background-color: white;
-  border: 1px solid #491519;
+  border: 1px solid #ccc;
   border-radius: 5px;
-  width: fit-content;
-  text-align: left;
-}
-
-.add-data-marketing button{ 
-  padding: 3px;
-  border-radius: 5px;
-  background-color: #491519;
-  color: white;
-  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  list-style-type: none;
+  padding: 0;
+  margin-top: 5px;
 }
 
 .dropdown-item {
   padding: 10px;
   cursor: pointer;
-  border-radius: 5px;
+  border-bottom: 1px solid #eee;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
 }
 
 .dropdown-item:hover {
-  background-color: #6b1c14;
-  color: white;
+  background-color: #f0f0f0;
 }
 
-.custom-input{
+.custom-input {
+  margin: 0px;
   padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #491519;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 7vw;
 }
+
+
 
 /* END FILTER COMPONENT  */
 .container-marketing  .newData-btn{
@@ -104,12 +116,13 @@
   text-align: left;
 }
 .dropdown-create .search{
-  /* border: 1px solid grey; */
+  border: 1px solid blue;
   border-radius: 10px;
   padding: 10px;
   display: flex;
   /* padding-right: 0; */
   align-items: center;
+  justify-content: flex-start;
   margin-right: 5px;
   margin-left: 15px;
 } 
@@ -303,23 +316,7 @@
     z-index: 1000;
     border: 1px solid #491519;
   }
-  /* .add-data-content{
-    background-color: white;
-    color: black;
-    font-weight: 300;
-    padding: 20px;
-    border-radius: 10px;
-    width: 30vw;
-    border: 1px solid #491519;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3); 
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow-y: auto;
-  } */
+
 
   .add-data-content {
     background-color: #f9f9f9;

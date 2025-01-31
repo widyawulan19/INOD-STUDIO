@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getCardDescriptionById, getlabel,  getCardById, getAllCover, getCardDetails, getMarketingDataByCardId, getCards,updateCard } from '../services/Api';
@@ -553,4 +554,44 @@ const CardDetail = () => {
 
 export default CardDetail
 
+
+
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getAssignCountForBoard } from '../services/Api';
+
+// Buat Context
+const UserCountContext = createContext();
+
+export const UserCountProvider = ({ children, boardId }) => {
+    const [userCount, setUserCount] = useState({}); // Gunakan objek agar bisa menyimpan banyak board
+
+    useEffect(() => {
+        const fetchUserCount = async () => {
+            try {
+                const data = await getAssignCountForBoard(boardId);
+                setUserCount(prev => ({
+                    ...prev,
+                    [boardId]: data.user_count, // Simpan `userCount` berdasarkan `boardId`
+                }));
+            } catch (error) {
+                console.error('Failed to fetch user count:', error);
+            }
+        };
+
+        if (boardId) {
+            fetchUserCount();
+        }
+    }, [boardId]);
+
+    return (
+        <UserCountContext.Provider value={{ userCount }}>
+            {children}
+        </UserCountContext.Provider>
+    );
+};
+
+// Hook untuk mengambil data dari context
+export const useUserCount = () => {
+    return useContext(UserCountContext);
+};
 

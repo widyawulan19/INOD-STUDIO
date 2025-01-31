@@ -1,0 +1,312 @@
+/* .card-detail-container{
+    position: fixed;
+    padding-top: 50px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    border: 1px solid #2c1017;
+    font-family: "Lato", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .description-container{
+      background-color: white;
+      width: 50%;
+      height: 100%;
+      border-radius: 5px;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+  } */
+  /* .card-detail-container{
+    position: fixed;
+    padding-top: 60px;
+    padding-left: 60px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    border: 1px solid #2c1017;
+    font-family: "Lato", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+  }
+   */
+
+   .card-detail-container{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    width: 100%; /* Memastikan kontainer menggunakan seluruh lebar layar */
+    height: 100vh; /* Memastikan kontainer mengambil tinggi penuh layar */
+    overflow-y: auto; /* Mengizinkan pengguliran jika konten lebih tinggi dari viewport */
+    overflow-x: hidden;
+    /* padding: 10px; */
+    box-sizing: border-box;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    /* border: 1px solid green; */
+   }
+  .description-container{
+      background-color: white;
+      border: 1px solid #eee;
+      width: 80%;
+      height: 100%;
+      border-radius: 5px;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      /* align-items: center; */
+      justify-content: flex-start;
+  }
+ 
+  .header-icon{
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 95%;
+    height: 25px;
+    cursor: pointer;
+    color: #333;
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+    padding: 5px 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .button-nav{
+    /* border: 1px solid #eee; */
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    width: 48vw;
+    height: 20px;
+    padding: 10px;
+    font-size: 20px;
+    margin: 5px;
+  }
+
+  .button-nav button{
+    border: 1px solid white;
+    background-color: white;
+    border-radius: 4px;
+    padding: 7px;
+    margin: 0px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+  }
+  .button-nav button:hover{
+    background-color: #eee;
+  }
+  .button-nav .non-active{
+    border: 1px solid white;
+    background-color: white;
+    border-radius: 4px;
+    padding: 7px;
+    margin: 0px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+  }
+  .button-nav .non-active:hover{
+    background-color: white;
+  }
+  .button-nav .cover-btn{
+    padding: 2px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  .button-nav .cover-btn:hover{
+    background-color: #eee;
+    border: 1px solid #eee;
+  }
+
+  .card-list-container{
+    /* border: 1px solid #eee; */
+  }
+  .card-list-container .card-title{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    /* border: 1px solid #eee; */
+    width: 48vw;
+    /* margin: 0px 10px; */
+    padding: 0px 10px;
+  }
+  .card-title h3{
+    margin: 0;
+  }
+.card-require{
+    margin-top: 10px;
+    /* color:#FF5733; */
+}
+
+.description-container .cover-container{
+  /* border: 1px solid red; */
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: flex-start;
+  padding: 10px;
+  
+}
+/* .cover-container img{
+  border: 1px solid blue;
+  width: 48vw;
+} */
+
+.description{
+  /* border: 1px solid green; */
+  width: 48vw; 
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.description-container .sub-title{
+  /* border: 1px solid #eee; */
+  padding: 0px 20px;
+}
+.sub-title .sub1{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 70%;
+  padding: 5px;
+}
+.assignment-container{
+  position: absolute;
+  top: 100%;
+  right: 50;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  /* padding: 10px; */
+  z-index: 10;
+  width: 200px; /* Sesuaikan ukuran */
+}
+.sub-title .sub2,
+.sub-title .sub3
+{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 70%;
+  padding: 5px;
+  /* border: 1px solid #eee; */
+}
+.sub1 p{
+  margin:2px;
+  color: #333;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+.up-container{
+  /* border: 1px solid #eee; */
+  padding: 0px;
+  margin: 0px;
+}
+.up-user-photo{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 0px;
+  background-color: #731e17;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sub2 p,
+.sub3 p
+{
+  margin:2px;
+  color: #333;
+  font-size: 13px;
+}
+.sub1 .sub1-title,
+.sub2 .sub2-title,
+.sub3 .sub3-title
+{
+  /* border: 1px solid grey; */
+  width: 30%;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  cursor:default;
+}
+.sub-title .sub-ikon{
+  margin-right: 5px;
+  font-size: 13px;
+}
+.sub1 .sub1-body{
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  width: 70%;
+  border-radius: 4px;
+}
+
+.sub2 .sub2-body
+{
+  /* border: 1px solid grey; */
+  border-radius: 4px;
+  width: 70%;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.sub3 .sub3-body
+{
+  /* border: 1px solid grey; */
+  border-radius: 4px;
+  width: 70%;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.sub1 .sub1-body:hover,
+.sub2 .sub2-body:hover
+/* .sub3 .sub3-body:hover */
+{
+  background-color: #eee;
+}
+
+
+.discussion{
+  /* border: 1px solid green; */
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 92vh;
+  padding-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+

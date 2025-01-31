@@ -263,12 +263,16 @@ const BoardView=({listId, cardId, onClose})=> {
 
         try {
             const newPosition = lists.length + 1;
-            const newList = await createList({board_id: Number(boardId), name: newListName, position: newPosition});
-
-            //update the state to include the new list
-            setLists([...lists, newList.data]);
+            const newListData = {
+                board_id: Number(boardId),
+                name: newListName,
+                position: newPosition,
+            };
+            const newListResponse = await createList(newListData);
+            //add the new list to the state
+            setLists(prevLists => [...prevLists, newListResponse.data]);
             setNewListName('');
-            setIsFormVisible(false);
+            setIsFormVisible(false); 
         }catch(error){
             console.error('Failed to create list', error);
             alert('Failed to create lists')
@@ -351,13 +355,14 @@ const BoardView=({listId, cardId, onClose})=> {
             
         </div>
         
-        <div className="board-view-container">
+        <div className="board-view-container" >
             <div className="lists-container">
                 {lists.map((list) => (
                 //wrap list heigh
                     <div>
-                        <div key={list.id} className="list-wrapper">
+                        <div key={list.id} className="list-wrapper" >
                             <List  
+                                cardId={cardId}
                                 listId={list.id} 
                                 listName={list.name} 
                                 loadLists={loadLists}
@@ -395,10 +400,6 @@ const BoardView=({listId, cardId, onClose})=> {
                     </button>
                     {isFormVisible && (
                         <div className='visible-form'>
-                            {/* <div className="visible-header">
-                                <h5>New List</h5>
-                                <IoCloseOutline onClick={handleButtonCancle}/>
-                            </div> */}
                             <div className="visible-body">
                                 <form onSubmit={handleCreateList} >
                                     <input 
@@ -411,32 +412,12 @@ const BoardView=({listId, cardId, onClose})=> {
                                 </form>
                             </div>
                             <div className="visible-button">
-                                <button className=''>Add List</button>
+                                {/* <button className='' type='submit'>Add List</button> */}
                                 <button className='btn-form' type='button' onClick={handleButtonCancle}>Cancel</button>
                             </div>
                         </div>
                     )}
                 </div>
-                {/* <div className="create-list-container">
-                    <button className='btn-list' onClick={() => setIsFormVisible(true)}>
-                        {isFormVisible ? 'Add new list' : (<><HiPlus size={12} style={{ marginRight: '5px' }} />Create List</>)}
-                    </button>
-                    {isFormVisible && (
-                        <form onSubmit={handleCreateList} className='create-list-form'>
-                            <input
-                                type="text"
-                                value={newListName}
-                                onChange={(e) => setNewListName(e.target.value)}
-                                placeholder='Enter list name'
-                                required
-                            />
-                            <div className='form-btn'>
-                                <button className='btn-form' type='submit'>Add List</button>
-                                <button className='btn-form' type='button' onClick={handleButtonCancle}>Cancel</button>
-                            </div>
-                        </form>
-                    )}
-                </div> */}
             </div>
         </div>
     </div>

@@ -1,10 +1,12 @@
 .comment-container{
     max-width: 600px;
-    margin: 0 auto;
+    /* margin: 0 auto; */
+    /* margin-top: 55px; */
     padding: 10px;
-    /* border: 1px solid #e1e8ed; */
+    border: 1px solid red;
     border-radius: 10px;
-    /* background-color: #f7f9fa; */
+    height: 90%;
+    background-color: #f7f9fa;
 }
 .comment-container h1{
     font-size: 1.5rem;
@@ -60,6 +62,9 @@
   }
   
   /* Gaya formulir komentar */
+  /* .comment-form{
+    background-color: ;
+  } */
   .comment-form textarea {
     width: 100%;
     padding: 10px;

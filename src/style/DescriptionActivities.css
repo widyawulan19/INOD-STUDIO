@@ -1,6 +1,6 @@
 .desc-container{
     /* border: 1px solid red; */
-    margin-top: 3vh;
+    /* margin-top: 1vh; */
     margin-bottom: 10vh;
 }
 .desc-btn button{
@@ -18,3 +18,50 @@
     font-weight: bold;
     border-bottom: 1.5px solid black;
 }
+
+/* DESCRIPTION CONTAINER  */
+.dc{
+    /* border: 1px solid #eee; */
+    padding: 10px;
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: flex-start;
+}
+/* END DESCRIPTION CONTAINER  */
+
+/* Checklist  */
+.dc .checklist-container{
+    /* border: 1px solid #eee; */
+    margin: 0;
+}
+
+/* FILE UPLOAD  */
+.file-upload-container {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: left;
+    padding: 15px;
+}
+.file-upload-container h4{
+
+}
+.file-upload-content{
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.file-upload-content p{
+    margin: 0px;
+}
+.file-upload-content .input{
+    padding: 8px;
+    border-bottom: 1px soid #eee;
+}
+/* END FILE UPLOAD  */

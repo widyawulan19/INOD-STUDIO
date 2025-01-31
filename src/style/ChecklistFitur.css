@@ -1,0 +1,214 @@
+.checklist-container{
+    border: 0.2px solid #eee;
+    padding: 10px;
+}
+.checklist-title{
+    /* border: 1px solid #333; */
+}
+.checklist-title h4{
+    margin: 2px;
+}
+.checklist-title .input-checklist{
+    margin: 2px;
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* border: 1px solid #eee; */
+}
+.form-create{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.form-create input{
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 5px;
+    margin-right: 5px;
+    color: #333;
+}
+.form-create input:focus{
+    outline:none;
+    border: 1px solid #491519;
+}
+.form-create button{
+    padding: 6px;
+    border: 1px solid #333;
+    width: fit-content;
+    color: white;
+    background-color: #6c1f1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.form-create .add-btn{
+    margin-right: 5px;
+    /* font-size: 15px; */
+}
+.form-create button:hover{
+    background-color: #491519;
+}
+
+.input-checklist .show{
+    /* border: 1px solid #eee; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.show button{
+    border: 1px solid #491519;
+    color: #491519;
+    padding: 5px;
+    font-size: 10px;
+}
+
+/* SHOW CHECKLIST  */
+.show-checklist{
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    /* padding: 10px; */
+}
+.show-checklist .show-title{
+    border: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 5px 10px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background-color: #eee;
+    position: relative;
+}
+.show-title h4{
+    margin: 2px;
+    padding: 5px;
+    /* border: 1px solid red; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.show-title .show-ikon{
+    margin-left: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.show-title .show-action{
+    position: absolute; 
+    top: 0; 
+    left: 28%; 
+    z-index: 1; 
+    background: #fff; 
+    border: 1px solid #ccc; 
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); 
+    width: 130px; 
+    padding: 5px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: left;
+}
+.show-action .action-ikon{
+    font-size: 15px;
+    margin-right: 5px;
+}
+.show-action .action-edit{
+    /* width: fit-content; */
+    padding:3px;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.show-action .action-delete{
+    padding:3px;
+    margin: 0px;
+    color: red;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* PROGRESS BAR  */
+.progress-bar{
+    width: 90%;
+    /* border: 1px solid green; */
+    padding: 15px 5px;
+}
+.progress-bar p{
+    font-weight: bold;
+    font-size: 12px;
+    margin: 2px;
+}
+
+/* END PROGRESS BAR  */
+
+/* CHECKLIST ITEM  */
+.show-item{
+    padding: 5px 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    position: relative;
+}
+.show-item p{
+    margin: 0px 10px;
+}
+.show-item .show-ikon{
+    position: relative;
+    cursor: pointer;
+}
+/* ACTION ITEM  */
+.show-item .show-action-item{
+    position: absolute;
+    top: 0%; /* Menempatkan action di bawah elemen */
+    /* left: -20%; */
+    right: -40%;
+    transform: translateX(-50%); /* Menyelaraskan action di tengah ikon */
+    z-index: 1;
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 5px; /* Memberikan jarak sedikit dari ikon */
+    width: 150px; /* Lebar action box */
+}
+/* END ACTION ITEM  */
+/* END CHECKLIST ITEM  */
+
+/* ADD CHECKLIST ITEM  */
+.add-item{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border: 1px solid #eee;
+    padding: 3px;
+    background-color: #eee;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+.add-item input{
+    border: 1px solid #eee;
+    background-color: #eee;
+    border-radius: 4px;
+    padding: 5px;
+    margin-right: 5px;
+    color: #333;
+}
+.add-item input:focus{
+    outline: none;
+    /* border: 1px solid #491519; */
+}
+.add-item button{
+    border: 1px solid #333;
+    width: fit-content;
+    padding: 5px;
+    /* margin-left: 5px; */
+}
+/* END ADD CHECKLIST ITEM  */
+
+/* END SHOW CHECKLIST  */

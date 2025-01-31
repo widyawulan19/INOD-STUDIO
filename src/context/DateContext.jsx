@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import BoardView from '../component/BoardView';
-import { getCards } from '../services/Api';
+import { getAssignCountForBoard, getCards, getUsersInBoard } from '../services/Api';
 import { useNavigate, useParams } from 'react-router-dom';
 
 // Date context
@@ -8,15 +8,49 @@ const DateContext = createContext();
 
 export const DateProvider = ({ children }) => {
   const [cards, setCards] = useState([]);
+  const {boardId} = useParams();
   //fungsi date
   const [selectedDates, setSelectedDates] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredCards, setFilteredCards] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
-  // const navigate = useNavigate()
-  // const {workspaceId, boardId} = useParams();
-  // const [searchTerm, setSearchTerm] = useState('');
 
+  const [users, setUsers] = useState([]);
+  const [userCount, setUserCount] = useState({});
+
+  //get user in board
+  useEffect(()=>{
+    if(boardId){
+      const fetchUsers = async () => {
+        try{
+          const usersData = await getUsersInBoard(boardId);
+          setUsers(usersData);
+        }catch(error){
+          console.error('Error fetching users:', error);
+        }
+      };
+      const fetchUserCount = async () => {
+        try {
+            const data = await getAssignCountForBoard(boardId);
+            setUserCount((prev) => ({
+                ...prev,
+                [boardId]: data.user_count, // Simpan dalam objek dengan boardId sebagai key
+              }));
+          } catch (error) {
+              console.error('Failed to fetch user count:', error);
+          }
+      };
+
+      fetchUsers();
+      fetchUserCount();
+    }
+  },[boardId]);
+
+
+  
+  //cover
+  const [selectedCover, setSelectedCover] = useState(null);
+  const [covers, setCovers] = useState([]);
 
   const loadCards = useCallback(async () => {
     try{
@@ -62,6 +96,15 @@ export const DateProvider = ({ children }) => {
         setFilteredCards, 
         cards,
         setCards,
+        //cover
+        selectedCover,
+        setSelectedCover,
+        covers,
+        setCovers,
+        //assign
+        users,
+        userCount,
+        boardId
         }}>
       {children}
       {/* <BoardView cards={cards}/> */}

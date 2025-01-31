@@ -248,8 +248,9 @@ justify-content: space-between;
     display: inline-block;
     vertical-align: top;
     box-sizing: border-box;
-    /* overflow-x: auto; */
-    overflow: auto;
+    overflow-x:hidden;
+    /* overflow: auto; */
+    overflow-y: auto;
     white-space: nowrap;
     max-height: 100%;
     position: relative;

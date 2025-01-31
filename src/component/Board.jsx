@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { getBoard, createBoard,getListsCountByBoard, updateBoardBackground, duplicateBoard, getBoardByWorkspace, deleteBoard, archiveBoard} from '../services/Api'
+import { getBoard, createBoard,getListsCountByBoard, updateBoardBackground, duplicateBoard, getBoardByWorkspace, deleteBoard, archiveBoard, searchUsers, updateBoardAssignment, removeUserFromBoardAssignment, getBoardAssignCount, getAssignCountForBoard} from '../services/Api'
 import { useNavigate, useParams } from 'react-router-dom';
 import { HiArchive,HiPlus,HiOutlineX,HiDotsHorizontal, HiOutlineServer, HiOutlineCalendar,HiChevronRight,HiOutlineViewList,HiOutlineFire  } from "react-icons/hi";
 import { HiOutlineSquaresPlus,HiMiniCalendarDays } from "react-icons/hi2";
 import { MdOutlineImagesearchRoller } from "react-icons/md";
-import { LuLayoutDashboard } from "react-icons/lu";
+import { LuLayoutDashboard, LuSearch, LuUsers } from "react-icons/lu";
 import { IoCloseOutline } from "react-icons/io5";
 import { BsArchive } from "react-icons/bs";
 import '../style/BoardStyle.css'
@@ -17,6 +17,8 @@ import { FaEdit, FaRegEdit } from 'react-icons/fa';
 import DeleteCardPopup from '../popup/DeleteCardPopup';
 import ArchiveCardPopup from '../popup/ArchiveCardPopup';
 import BoardEdit from './BoardEdit';
+import Assignment from '../fiture/Assignment';
+import { useDate } from '../context/DateContext';
 
 const Board = () => {
     const {boardId, workspaceId} = useParams();
@@ -49,7 +51,168 @@ const Board = () => {
     //background
     const [selectedBackground, setSelectedBackground] = useState(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+    //add users
+    const [users, setUsers] = useState([]);
+    const [userQuery, setUserQuery] = useState('');
+    const [selectedUser, setSelectedUser] = useState(null);
+    // const [showAssign, setShowAssign] = useState(null);
+    const [showUser, setShowUser] = useState(null);
+    //count assign
+    const [userCount, setUserCount] = useState({});
+    const [assignCount, setAssignCount] = useState(0)
 
+    // console.log('check boardId from params', boardId);
+
+    //mendapatkan jumlah assign setiap board
+    useEffect(() => {
+      if (boards.length === 0) return; // Pastikan boards tidak kosong
+
+        const fetchAssignCounts = async () => {
+            const counts = {};
+            for (const board of boards) {
+                try {
+                    const data = await getBoardAssignCount(board.id);
+                    counts[board.id] = data.assignCount; // Simpan assign count berdasarkan board ID
+                } catch (error) {
+                    console.error("Failed to fetch assign count for board:", board.id, error);
+                    counts[board.id] = 0; // Default jika gagal
+                }
+            }
+            setAssignCount(counts); // Update state setelah semua fetch selesai
+        };
+
+        fetchAssignCounts();
+    }, [boards]); 
+
+
+    const handleShowUser = (id)=>{
+      setShowUser((prevId) => (prevId === id ? null : id));
+    }
+
+    //user and assignment 
+    //1. fetch users based on search query
+    const handleUserSearch = async (query)=>{
+      setUserQuery(query);
+      if(query){
+        try{
+          const usersResponse = await searchUsers(query);
+          setUsers(usersResponse);
+        }catch(error){
+          console.error('Error searching users:', error);
+        }
+      }else{
+        setUsers([]);
+      }
+    }
+
+    //2. add user to board
+    const handleAssignUser = async(boardId)=>{
+      if(!selectedUser){
+        setAlert({show:true, message:'successfuly add a new users', severity:'success'})
+ 
+      }
+      console.log('Assigning user:', selectedUser.id);
+      try{
+        const response = await updateBoardAssignment(boardId,[selectedUser.id]);
+        // alert(response.message);
+        setBoards(prevBoards =>
+          prevBoards.map(board =>
+            board.id === boardId
+            ? {...board, users:[...board.users, selectedUser]}
+              :board
+            
+          )
+        )
+
+        setAlert({show:true, message:'successfuly add a new users', severity:'success'});
+        setTimeout(() => {
+          setAlert({ ...alert, show: false });
+        }, 5000); 
+      }catch(error){
+        console.error('Error assigning user to board:', error);
+        setAlert({show:true, message:'error add a new user', severity:'error'})
+        setTimeout(() => {
+          setAlert({ ...alert, show: false });
+        }, 5000); 
+      }
+    }
+
+    //3. remove user from board
+// 3. remove user from board
+const handleRemoveUser = async (boardId, userId) => {
+  console.log('Attempting to remove user with boardId:', boardId, 'and userId:', userId);
+
+  // Periksa apakah userId valid
+  if (isNaN(userId) || userId === undefined || userId === null) {
+    console.error('Invalid userId, must be a valid integer:', userId);
+    setAlert({
+      show: true,
+      message: 'Failed to remove user: Invalid userId',
+      severity: 'error',
+    });
+    return;
+  }
+
+  try {
+    // Menghapus user dari board
+    await removeUserFromBoardAssignment(boardId, userId);
+
+    // Mendapatkan data boards yang diperbarui
+    const updatedBoards = await getBoard();
+    setBoards(updatedBoards.data);
+
+    // Menampilkan alert sukses
+    setAlert({
+      show: true,
+      message: 'Successfully removed user from the board',
+      severity: 'success',
+    });
+
+    // Menyembunyikan alert setelah 5 detik
+    setTimeout(() => {
+      setAlert({ ...alert, show: false });
+    }, 5000);
+
+  } catch (error) {
+    console.error('Error removing user from board:', error);
+
+    // Menampilkan alert error
+    // setAlert({
+    //   show: true,
+    //   message: 'Failed to remove user from board',
+    //   severity: 'error',
+    // });
+
+    // Menyembunyikan alert setelah 5 detik
+    // setTimeout(() => {
+    //   setAlert({ ...alert, show: false });
+    // }, 5000);
+  }
+};
+
+    //end user and assignment
+
+    //profile users
+    const generateProfileInitials = (name) => {
+      if (!name) return '';
+      const nameParts = name.split(' ');
+      const initials = nameParts.map((part) => part.charAt(0).toUpperCase()).join('');
+      return initials.slice(0, 2); // Ambil maksimal 2 inisial
+  };
+    
+
+    //generate random background for color profile
+    const generateColorFromName = (name) =>{
+      if(!name) return '#ccc';
+
+      let hash = 0;
+      for(let i = 0; i < name.length; i++){
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const color = `#${((hash >> 24) & 0xff).toString(16).padStart(2, '0')}${((hash >> 16) & 0xff).toString(16).padStart(2, '0')}${((hash >> 8) & 0xff).toString(16).padStart(2, '0')}`.slice(0, 7);
+        return color;
+    }
+    //end profile users
     //change background
     useEffect(()=>{
       const saveBg = localStorage.getItem('selectedBackground');
@@ -174,18 +337,6 @@ const Board = () => {
       setShowAction(showAction === boardId ? null : boardId)
       console.log('button berhasil di klik')
     }
-
-    const fetchBoards = useCallback(async () => {
-      try{
-        const response = await getBoardByWorkspace(workspaceId);
-        setBoards(response.data);
-      }catch(error){
-        console.error('Error fetching boards:', error);
-        setAlert({show:true, message:'Error fetching boards', severity:'error'});
-        setTimeout(()=> fetchBoards(), 3000)
-      }
-    }, [workspaceId]);
-
 
       const loadBoards = useCallback(async () => {
         if (!workspaceId) {
@@ -322,6 +473,40 @@ const Board = () => {
       }
   };
 
+  //COUNT TOTAL ASSIGNM BOARD
+  // useEffect(()=>{
+  //   const fetchUserCounts = async()=>{
+  //     console.log('board id diterima dengan baik', boardId);
+  //     try{
+  //       const data = await getAssignCountForBoard(boardId);
+  //       setUserCount(data.user_count);
+  //     }catch(error){
+  //       console.error('Failed to fetch user count:', error);
+  //     }
+  //   }
+  //   if(boardId){
+  //     fetchData();
+  //   } 
+  // },[boardId]);
+  useEffect(()=>{
+    const fetchUserCounts = async()=>{
+      try{
+        const counts = {};
+        for(const board of boards){
+          const data = await getAssignCountForBoard(board.id);
+          counts[board.id] = data.user_count;
+        }
+        setUserCount(counts);
+      }catch(error){
+        console.error('Failed to fetch user counts:', error);
+      }
+    };
+    if(boards.length > 0){
+      fetchUserCounts();
+    }
+  },[boards]);
+  //END COUNT TOTAL ASSIGNM BOARD
+
   const handleDuplicateClick = (boardId) => {
     setSelectedBoard(boardId);
     setIsPopupOpen(true)
@@ -339,6 +524,10 @@ const Board = () => {
 
     const handleBackToWorkspace = () =>{
         navigate('/')
+    }
+
+    const handleStopPropagation = (event) =>{
+      event.stopPropagation();
     }
 
 
@@ -444,16 +633,33 @@ const Board = () => {
                     <div className="boards-text">
                       <h4>{board.name}</h4>
                       <p>{board.description}</p>
+                      {/* <p>{board.assign}</p> */}
                     </div>
-                    <div className="boards-icons">
+                    <div className="boards-icons" >
                       <p><HiOutlineServer size={12} style={{marginRight:'2px', color:'black'}}/>{listCount[board.id] || 0} lists</p>
                       <p className='date'><HiOutlineCalendar size={12} style={{marginRight:'2px', color:'black'}}/>{moment(board.create_at).format(('D MMMM YYYY'))}</p>
+                      <p className='count' onClick={(event)=>{handleStopPropagation(event); handleShowUser(board.id)}}>
+                        <LuUsers /> 
+                        <div className='count-cont'> 
+                            {userCount[board.id] !== undefined ? (
+                              <p>{userCount[board.id]}</p>
+                            ):(
+                              <p>loading...</p>
+                            )}
+                        </div>
+                      </p>
+                      {showUser === board.id &&(
+                        <div className="dropdown-user-action" onClick={(event)=>{handleStopPropagation(event)}}>
+                          <Assignment boardId={board.id}/>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
               )
             })}
           </div>
+          
             
             {showForm && (
               <div className="popup-overlay-create-board">

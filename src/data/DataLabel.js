@@ -1,4 +1,4 @@
-export const Data_Lable = [
+export const Data_Lables = [
     {
         id:1,
         name: "NEW",

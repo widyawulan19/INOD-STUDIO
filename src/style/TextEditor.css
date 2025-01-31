@@ -1,4 +1,31 @@
 /* Container utama editor */
+.te-c h4{
+  margin-bottom: 5px;
+  /* border: 1px solid black; */
+}
+.te-button{
+  border: 1px solid #eee;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.te-c button{
+  background-color: white;
+  margin: 4px;
+  padding: 8px;
+  border: 1px solid white;
+  border-radius: 4px;
+  width: 98%;
+  display: flex;
+  align-items: center;
+  color: #333;
+  /* color: #3357FF; */
+  justify-content: flex-start;
+}
+.te-c button:hover{
+  background-color: #eee;
+}
+
 .editor-container {
     max-width: 800px;
     margin: 20px auto;

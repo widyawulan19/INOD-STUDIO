@@ -1,0 +1,258 @@
+.checklist-container{
+    /* border: 1px solid #eee; */
+    border-radius: 4px;
+    /* padding: 10px; */
+}
+.checklist-container h4{
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+.ch-c{
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.checklist-container button{
+    border: 1px solid white;
+    padding: 8px;
+    border-radius: 4px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    background-color: white;
+    width: 100%;
+    /* margin-bottom: 10px; */
+}
+.checklist-container button:hover{
+    background-color: #eee;
+    bottom: 1px solid #eee;
+    
+}
+
+.checklist-container .checklist-content{
+    /* border: 1px solid #eee; */
+    /* padding: 8px; */
+    border-radius: 8px;
+}
+.checklist-content .checklist-input{
+    display: flex;
+    align-items:center;
+    /* justify-content: center; */
+    margin: 0;
+    border: 1px solid #eee;
+    /* padding: 5px; */
+    border-radius: 8px;
+    background-color: #eee;
+    width: fit-content;
+}
+.checklist-input input{
+    padding: 5px;
+    border-radius: 4px;
+    border: 0.1px solid #eee;
+    background-color: #eee;
+}
+.checklist-input input::placeholder{
+    color: black;
+}
+.checklist-input input:focus{
+    outline: none;
+}
+.checklist-input button{
+    margin-left: 5px;
+    padding: 2px;
+    margin-top: 5px;
+    background-color: #eee;
+}
+.checklist-content ul{
+    border: 1px solid #eee;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 8px;
+}
+.checklist-content ul li{
+    border: 1px solid #eee;
+}
+.checklist-content .checklist-main{
+    padding: 5px;
+    /* border: 1px solid #333; */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.checklist-content .show-progres{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    /* border: 1px solid #eee; */
+    margin: 5px;
+    padding: 5px;
+}
+.show-progres h5{
+    margin:0px;
+    /* color: #7bb6b4; */
+}
+
+.checklist-list-container{
+    border: 1px solid #eee;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    padding-bottom: 10px;
+}
+.checklist-list-header{
+    border: 1px solid #eee;
+    /* border: 1px solid green; */
+    background-color: #eee;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    height: 40px;
+    
+}
+.checklist-list-header .span-header{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+
+.checklist-list-container-body .checklist-list-body{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    border-top: 0.2px solid #eee;
+    border-bottom: 0.2px solid #eee;
+    padding-left: 30px;
+
+}
+
+.checklist-list-body .span-body{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+
+/* ACTION HEADER  */
+.action-header .dot-action{
+    padding: 3px;
+    border: 0.3px solid #eee;
+    cursor: pointer;
+}
+.dot-action:hover{
+    border: 0.3px solid #e2e2e2;
+    border-radius: 4px;
+    background-color: #e2e2e2;
+}
+.action-header{
+    position: relative;
+}
+.action-header .action{
+    position: absolute; /* Makes the element positioned relative to .action-header */
+    top: 130%; /* Places it just below the .action-header */
+    left: 0; /* Aligns it to the left of .action-header */
+    z-index: 999; /* Ensures it appears above other elements */
+    background: #fff; /* Background color */
+    border: 1px solid #ccc; /* Optional: border for better visibility */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Optional: shadow for better visibility */
+    width: 150px; /* Adjust width as needed */
+    padding: 5px;
+    border-radius: 4px; /* Rounded corners */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: left;
+}
+.action-header button{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 2px;
+    border: 1px solid white;
+}
+.action-header p{
+    margin: 1px;
+}
+.action-header .action-ikon{
+    margin-right: 5px;
+    font-size: 15px;
+    color: #333;
+}
+.action .action-delete{
+    color: red;
+}
+.action-delete .action-ikon{
+    color: red;
+}
+/* END ACTION HEADER  */
+
+/* ACTION BODY  */
+
+.checklist-list-body{
+    /* border: 1px solid red; */
+    padding: 10px;
+}
+.action-body{
+    position: relative;
+    margin-left: 10px;
+}
+.action-body .body-action{
+    position: absolute;
+    top:100%;
+    left: 0;
+    z-index: 999;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Optional: shadow for better visibility */
+    width: 150px; /* Adjust width as needed */
+    padding: 5px;
+    border-radius: 4px; /* Rounded corners */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: left;
+}
+.action-body button{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 2px;
+    border: 1px solid white;
+}
+.action-body p{
+    margin: 1px;
+}
+.action-body .action-ikon{
+    margin-right: 5px;
+    font-size: 15px;
+    color: #333;
+}
+.action-body .action-delete{
+    color: red;
+}
+/* END ACTION BODY  */
+
+/* SUB CHECKLIST  */
+.checklist-subChecklis{
+    border: 1px silid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px;
+}
+.checklist-subChecklis input{
+    padding: 5px;
+    border: 0.5px solid white;
+}
+.checklist-subChecklis input:focus{
+    outline: none;
+}

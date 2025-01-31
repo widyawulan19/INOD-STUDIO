@@ -1,18 +1,15 @@
 import React, { useState } from 'react'
 import { uploadFile } from '../services/Api';
+import '../style/DescriptionActivities.css'
 
 const FileUpload=({cardId})=> {
     const [selectedFile, setSelectedFile] = useState(null);
-    // const [uploadMessage, setUploadMessage] = useState('');
 
-    // const handleFileChange = (event) => {
-    //     setSelectedFile(event.target.files[0]);
-    // }
     const handleFileChange = (event) => {
         if(event.target.files && event.target.files > 0){
             setSelectedFile(event.target.files[0]);
         }else{
-            console.warn('No file selected.')
+            console.warn('')
         }
     };
 
@@ -30,28 +27,13 @@ const FileUpload=({cardId})=> {
         }
     };
 
-    // const handleFileUpload = async (event) => {
-    //     event.preventDefault();
-    //     if(!selectedFile){
-    //         setUploadMessage('Please select a file to upload');
-    //         return;
-    //     }
-    //     const formData = new FormData();
-    //     formData.append('file', selectedFile);
-
-    //     try{
-    //         const response = await uploadFile(cardId, selectedFile);
-    //         setUploadMessage('file uploaded successfully');
-    //         console.log('Upload response:', response);
-    //     }catch(error){
-    //         setUploadMessage('Error uploading file');
-    //         console.error('Error uploading file', error);
-    //     }
-    // }
   return (
-    <div>
-        <input type="file" onChange={handleFileChange} />
-        <button onClick={handleSubmit}>Upload File</button>
+    <div className='file-upload-container'>
+        <h4>Attachments</h4>
+        <div className="file-upload-content">
+            <input type="file" className='input' onChange={handleFileChange} />
+            <button onClick={handleSubmit}>Upload File</button>
+        </div>
     </div>
   )
 }

@@ -1,0 +1,28 @@
+.comment-form{
+    border: 1px solid #eee;
+    height: 80vh;
+    margin: 0;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items:baseline;
+    justify-content: flex-start;
+    /* padding: 10px; */
+}
+.comment-form .chead{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+.comment-form h4{
+    margin: 2px;
+}
+
+
+/* COMMENT  */
+.comment{
+    border: 1px solid purple;
+}
+/* END COMMENT  */

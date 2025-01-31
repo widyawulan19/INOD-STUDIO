@@ -54,9 +54,9 @@ const Sidebar=()=> {
 
           {/* MARKETING  */}
           <div className={`sidebar-main ${itemActive === 'marketing' ? 'active' : ''}`}
-            onClick={()=> handleItemActive('marketing')}
+            onClick={()=> handleItemActive('new-marketing')}
           >
-            <Link to='/marketing'>
+            <Link to='/new-marketing'>
               <BsDatabaseCheck className='sidebar-icon'/>
               {sidebarVisible && <h5>Data Marketing</h5>}
               <span className='tooltip'>Data Marketing</span>
@@ -85,7 +85,7 @@ const Sidebar=()=> {
           <div className={`sidebar-main ${itemActive === 'faq' ? 'active' : ''}`}
             onClick={()=> handleItemActive('faq')}
           >
-            <Link to='/member'>
+            <Link to='/'>
               <BsQuestionSquare className='sidebar-icon'/>
               {sidebarVisible && <h5>FaQ</h5>}
               <span className='tooltip'>FaQ</span>

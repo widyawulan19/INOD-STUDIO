@@ -1,0 +1,106 @@
+.label-title{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 5px;
+    /* border: 1px solid #eee; */
+}
+.label-container{
+    /* border: 1px solid grey; */
+
+}
+.label-container .show-label{
+    /* border: 1px solid blue; */
+    grid-template-columns: repeat();
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px;
+    gap: 4px; /* Jarak antar item */
+    align-items: center;
+    justify-content: left;
+}
+.show-label .label-box{
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* LABEL RESULT  */
+.label-result{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: left;
+    gap: 5px;
+    margin-left: 5px;
+    /* border: 1px solid #eee; */
+}
+/* END LABEL RESULT  */
+
+.label-action{
+    padding: 10px;
+    border-top: 1px solid #eee;
+}
+.label-action h4{
+    margin: 2px;
+}
+.label-action button{
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 7px;
+    background-color: white;
+}
+.label-action button:hover{
+    background-color: #eee;
+}
+.label-action .button-save{
+    color: #491519;
+    /* color: white; */
+    font-weight: bold;
+    border: 1px solid #491519;
+}
+
+.label-action .create-form{
+    padding: 10px;
+    width: fit-content;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 5px;
+}
+.create-form input{
+    margin-right: 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 6px;
+}
+.create-form input:focus{
+    outline: olive;
+}
+.create-form button{
+    border: 1px solid #491519;
+    background-color: #491519;
+    color: white;
+}
+.create-form button:hover{
+    background-color: #491519;
+}
+
+
+
+/* DISPLAY LABEL  */
+.display-label-container{
+    /* border: 1px solid grey; */
+}
+
+.display-label{
+    /* border: 1px solid blue; */
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+/* END DISPLAY LABEL  */

@@ -29,6 +29,16 @@ import CardMarketingDetail from './component/CardMarketingDetail';
 import PopupMarketingDetail from './popup/PopupMarketingDetail';
 import PopupEditDataMarketing from './popup/PopupEditDataMarketing';
 import Home from './pages/Home';
+import LabelSelector from './fiture/LabelSelector';
+import Label from './fiture/Label';
+import TestingFitur from './fiture/TestingFitur';
+import CoverSelected from './fiture/CoverSelected';
+import TestingFiture2 from './fiture/TestingFiture2';
+import SelectorCover from './fiture/SelectorCover';
+import NewMarketing from './pages/NewMarketing';
+import ChecklistTest from './fiture/ChecklistTest';
+import Checklist from './fiture/Checlist';
+import Disscution from './fiture/Disscution';
 // import './style/SidebarStyle.css'
 
 function Layout({children}){
@@ -78,7 +88,17 @@ function App(){
                       <Route path='/example' element={<Example/>}/>
                       <Route path='/example-card' element={<ExampleCard/>}/>
                       <Route path='/description' element={<CardDescription/>}/>
+                      <Route path='/label-select' element={<LabelSelector/>}/>
+                      <Route path='/label2' element={<Label/>}/>
+                      <Route path='/testing-fitur' element={<TestingFitur/>}/>
+                      <Route path='/testing-fitur2' element={<TestingFiture2/>}/>
+                      <Route path='/cover-selector' element={<CoverSelected/>}/>
+                      <Route path='/selector-cover' element={<SelectorCover/>}/>
+                      <Route path='/new-marketing' element={<NewMarketing/>}/>
                       {/* <Route path='/navbar' element={<Navbar/>}/> */}
+                      <Route path='/test-checklist' element={<ChecklistTest/>}/>
+                      <Route path='/checlis' element={<Checklist/>}/>
+                      {/* <Route path='/discuss' element={<Disscution/>}/> */}
                     </Routes>
                   </Layout>
                 }

@@ -18,6 +18,7 @@
     height: 3vh;
     /* border: 1px solid grey; */
     margin: 5px;
+    cursor: pointer;
 }
 .logo img{
     width: 100%;

@@ -174,7 +174,9 @@
   overflow-wrap: break-word; /* Memastikan kata-kata yang terlalu panjang membungkus ke baris berikutnya (alternatif) */
   white-space: normal; /* Mengizinkan teks untuk membungkus secara otomatis */
   height: auto; /* Mengatur tinggi secara otomatis sesuai dengan konten */
+  margin: 2px;
 }
+
 
 .label-container{
   padding: 5px;

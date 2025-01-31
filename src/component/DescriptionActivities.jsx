@@ -7,6 +7,8 @@ import FileUpload from '../fiture/FileUpload';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import CardMarketingDetail from './CardMarketingDetail';
+import Checlist from '../fiture/Checlist';
+import ChecklistTest from '../fiture/ChecklistTest';
 
 const DescriptionActivities=({cardId})=> {
     const [descriptionActivities, setDescriptionActivities] = useState('description');
@@ -45,8 +47,14 @@ const DescriptionActivities=({cardId})=> {
     const renderContent = () => {
         switch(descriptionActivities){
             case 'description':
-                return <div>
-                            <TextEditor cardId={cardId}/>
+                return <div className='dc'>
+                            <div className="description-content">
+                                <TextEditor cardId={cardId}/>
+                            </div>
+                           <div className="checklist-container">
+                                {/* <Checlist cardId={cardId}/> */}
+                                <ChecklistTest cardId={cardId}/>
+                           </div>
                         </div>
             case 'comment':
                 return <div>
@@ -58,7 +66,11 @@ const DescriptionActivities=({cardId})=> {
                 </div>
             case 'data_marketing':
                 return <div>
-                    {/* <CardMarketingDetail cardId={cardId}/> */}
+                    <CardMarketingDetail cardId={cardId}/>
+                </div>
+            case 'checklist':
+                return <div>
+                    <Checlist cardId={cardId}/>
                 </div>
             default:
                 return null;
@@ -92,6 +104,12 @@ const DescriptionActivities=({cardId})=> {
                 onClick={()=> {handleCategoryClick('data_marketing'); handleClick('data_marketing');}}   
             >
                 Data Marketing
+            </button>
+            <button 
+                className={activeButton === 'checklist' ? 'active': ''}
+                onClick={()=> {handleCategoryClick('checklist'); handleClick('checklist');}}   
+            >
+                Checklist
             </button>
         </div>
         <hr  style={{width:'450px', border:'0.5px solid grey', marginLeft:'0', marginTop:'0'}}/>

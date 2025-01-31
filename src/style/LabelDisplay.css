@@ -1,0 +1,12 @@
+.selected-labels-display{
+    /* border: 1px solid #eee; */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    padding: 5px;
+}
+.selected-labels-display p{
+    margin: 0px;
+}

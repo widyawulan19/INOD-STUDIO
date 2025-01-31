@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import CommentForm from './CommentForm';
+import '../style/Commentar.css'
 // import { HiOutlineUserCircle } from "react-icons/hi2";
 
 const Comment=({comment, addReply})=> {

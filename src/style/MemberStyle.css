@@ -1,115 +1,248 @@
 .member-container {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    background-color: white;
-    height: 100%;
-}
-.member-navbar{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* border: 1px solid grey; */
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 4px 8px rgba(63, 19, 19, 0.3);
-}
-
-.filter-form {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    /* border: 1px solid grey; */
-    width: fit-content;
-    padding: 10px;
-}
-
-.filter-form label {
-    margin-right: 10px;
-    width: 100px;
-    /* border: 1px solid blue; */
-}
-.filter-dropdown button{
-  padding: 10px;
-  color:#491510;
+  background-color: white;
+  height: 100vh;
   border-radius: 10px;
 }
-
-.filter-select {
-    padding: 10px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    font-size: 13px;
-    color: #333;
-    outline: none;
-    transition: border 0.3s, box-shadow 0.3s;
-  }
-  
-  .filter-select:focus {
-    border-color: #4A90E2; /* Warna saat focus */
-    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5); /* Efek shadow saat focus */
-  }
-  
-  .filter-select:hover {
-    border-color: #bbb; /* Warna saat hover */
-  }
-  
-  .filter-select option {
-    padding: 10px;
-    background-color: #fff;
-    color: #333;
-  }
-
-.filter-form select, 
-.filter-form input, 
-.filter-form button {
-    padding: 8px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.member-container .member-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  padding:10px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
-/*button new member*/
+.member-date h4{
+  margin: 0;
+}
+.member-date p{
+  margin: 0px;
+  font-size: 13px;
+  /* border: 1px solid red; */
+}
+
+/* Filter  */
+.member-filter-container{
+  /* border: 1px solid #eee; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.member-filter-container h4{
+  font-weight: normal;
+  margin-right: 5px;
+  font-size: 15px;
+}
+.member-filter-container .filter-dropdown{
+  border: 1px solid #eee;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 250px;
+  padding: 4px;
+}
+.filter-dropdown .btn-category{
+  border-right: 1px solid #491510;
+  border-bottom: 1px solid white;
+  color: #491510;
+  font-weight: bold;
+  background-color: #fff;
+  padding: 4px;
+  margin-right: 0;
+  width: 60px;
+}
+.filter-dropdown .custom-input{
+  /* border: 1px solid grey; */
+  width: 150px;
+}
+.member-filter-container .btn-filter{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin-left:5px;
+  color:#fff;
+  font-weight: bold;
+  background-color: #491519;
+  border-radius: 4px;
+  padding: 8px;
+  border: 1px solid #491519;
+}
+.btn-filter:hover{
+  background-color: #22090b;
+  color: white;
+  /* font-weight: bold; */
+}
+
+/* dropdwon menu  */
+.filter-dropdown .filter-dropdown-menu-container {
+  position: absolute;
+  top: 0;
+  right: 440px;
+  z-index: 1000;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.filter-dropdown-menu-container .dropdown-item{
+  border-bottom: 1px solid #eee;
+  width: 70px;
+  padding: 4px;
+  font-size: 10px;
+  color: #333;
+}
+
+/* end dropdown menu  */
+/* End Filter  */
+
+/* CREATE DATA NEW MEMBER  */
 .create-new-member{
-    display: flex;
-    align-items: center;
-    justify-content: right;
+  border-left: 1px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 10px;
 }
-.create-new-member button{
-    width: 10vw;
-    height: 30px;
-    margin-top: 1vh;
-    border: 1px solid #6b1c14;
-    border-radius: 5px;
+.create-new-member .add-member{
+  border: 1px solid #491519;
+  color: #491519;
+  background-color: #fff;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.add-member a{
+  text-decoration: none;
+  color: #491519;
+}
+.add-member:hover,
+.add-member a:hover
+{
+  background-color: #491519;
+  color: #fff;
+}
+
+/* MODAL CREATE MEMBER  */
+
+.modal{
+  position: fixed;
+    width: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: white;
-    color: #6b1c14;
+    padding: 0px 15px;
+    box-shadow: 0 0 10px rgba(96, 28, 28, 0.5);
+    border-radius: 8px;
+    border: 1px solid #491519;
+    z-index: 1000;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
 }
-.create-new-member button:hover{
-    background-color: #491510;
-    color: white;
+.modal-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  padding:  0px 10px;
+  margin: 5px;
+  /* border-radius: 8px; */
+  width: 90%;
 }
-
-.add-member a{
-    text-decoration: none;
-    color: #6b1c14;
+.modal-header h5{
+  margin: 0px;
 }
-.add-member a:hover{
-  color: white;
-}
-/* .add-member a:visited{
-    color: rgb(211, 208, 208);
+/* .modal-header .header-ikon{
+  cursor: pointer;
 } */
 
+/* Informasi personal  */
+.modal .personal,
+.modal .kontak,
+.modal .kepegawaian
+{
+  /* border: 1px solid green; */
+  width: 90%;
+  margin-top: 10px;
+}
 
-/*style tabel*/
+.personal h5,
+.kontak h5,
+.kepegawaian h5
+{
+  margin: 0px 25px ;
+  font-weight: normal;
+  color: #333;
+}
+.personal .body,
+.kontak .body,
+.kepegawaian .body
+{
+  display: flex;
+  /* flex-direction: column; */
+  align-items: center;
+  justify-content: flex-start;
+}
+
+
+.modal input {
+  display: block;
+  margin: 10px 5px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 0.3px solid grey;
+  width: 90%;
+  box-shadow: 0 0 10px rgba(96, 28, 28, 0.2);
+}
+.modal input:focus{
+  outline: none;
+  border: 1px solid #491519;
+}
+
+.modal .button-add-member{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0px;
+}
+.button-add-member button{
+  border: 1px solid #491519;
+  color: #491519;
+  background-color: white;
+  padding: 5px;
+  border-radius: 4px;
+}
+.button-add-member button:hover{
+  background-color: #491519;
+  color: white;
+}
+.button-add-member .cancle-btn{
+  background-color: #491519;
+  color: white;
+}
+.button-add-member .cancle-btn:hover{
+  background-color: #22090b;
+}
+/* END MODAL CREATE MEMBER  */
+/* END CREATE DATA NEW MEMBER  */
+
+/* DATA TABEL  */
 .tabel-data-container{
+  padding: 10px;
+}
+.tabel-data-container .tabel-data{
   overflow-x: auto;
-  width: 100%;
+  height: 75vh;
 }
 
 .tabel-data table{
@@ -117,9 +250,17 @@
   min-width:1200px;
   border-collapse: collapse;
   table-layout: fixed;
-  height: fit-content;
+  /* height: fit-content; */
 }
-
+.tabel-data thead{
+  position: sticky;
+  /* position: relative; */
+  top: 0; /* Pastikan tetap di atas saat di-scroll */
+  z-index: 99;
+  padding: 5px;
+  height: 10px;
+  background-color: #d7c9ca; 
+}
 
 .tabel-data th, .tabel-data td{
   /* border: 1px solid #491510; */
@@ -137,12 +278,15 @@
   background-color: #d7c9ca;
   color: #333;
   font-weight: bold;
+  font-size: 15px;
 }
 .tabel-data td{
   height: 20px;
-  padding: 12px 15px;
+  font-size: 12px;
+  padding: 10px;
   text-align: left;
 }
+
 .tabel-data tr:nth-child(even){
   transition: transform 0.2s, box-shadow 0.2s;
   background-color: #f7f7f7;
@@ -169,7 +313,7 @@
 }
 
 .tabel-data th:nth-child(2), .tabel-data td:nth-child(2) {
-  width: 120px; /* Username */
+  width: 100px; /* nickname */
 }
 
 .tabel-data th:nth-child(3), .tabel-data td:nth-child(3) {
@@ -185,121 +329,54 @@
 }
 
 .tabel-data th:nth-child(6), .tabel-data td:nth-child(6) {
-  width: 80px; /* Shift */
+  width: 50px; /* Shift */
 }
 
 .tabel-data th:nth-child(7), .tabel-data td:nth-child(7) {
-  width: 100px; /* Jabatan */
+  width:70px; /* Jabatan */
 }
 
 .tabel-data th:nth-child(8), .tabel-data td:nth-child(8) {
-  width: 110px; /* Action */
+  width: 120px; /* Action */
+  text-align: center;
 }
+/* END DATA TABEL  */
 
-.pagination{
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
+/* button  */
+td .button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border: 1px solid green; */
 }
-.pagination button{
-    margin: 0 50px;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #f0f0f0;
-    cursor: pointer;
+.button .edit-btn{
+  border: 1px solid #491519;
+  border-radius: 4px;
+  padding: 5px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.pagination button.active{
-    background-color: #6b1c14;
-    color: white;
+.button .hapus-btn{
+  border: 1px solid #491519;
+  border-radius: 4px;
+  padding: 5px;
+  background-color: white;
+  color: #491519;
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.pagination button:hover{
-    background-color: #491510;
-    color: white;
+.icon-td{
+  margin-right: 5px;
+  font-size: 15px;
 }
-
-/* Gaya untuk tombol Edit dan Hapus */
-.edit-btn, .hapus-btn {
-    height: 25px;
-    padding: 5px 8px;
-    font-size: 10px;
-    margin-right: 0.2vw;
-    margin-left: 0.2vw;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    
-  }
-  
-  .edit-btn {
-    background-color:  rgb(187, 152, 187); /* Biru untuk Edit */
-    color: rgb(109, 54, 109);
-    border: 1px solid  rgb(109, 54, 109);
-  }
-  
-  .hapus-btn {
-    background-color: #f1d2cf;
-    border: 1px solid #491510;
-    color: #d3291a;
-  }
-  
-  .edit-btn:hover {
-    background-color: rgb(78, 40, 78);
-    color: white;
-  }
-  
-  .hapus-btn:hover {
-    background-color: #491510;
-    color: white;
-  }
-
-.modal {
-    position: fixed;
-    width: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(96, 28, 28, 0.5);
-    border-radius: 10px;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .modal input {
-    display: block;
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 5px;
-    border: 0.3px solid grey;
-    width: 90%;
-    box-shadow: 0 0 10px rgba(96, 28, 28, 0.2);
-  }
-  
-  .modal .btn-member{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-
-  }
-  .btn-member button{
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    background-color: #6b1c14;
-    color: white;
-    border: 1px solid #491510;
-    border-radius: 5px;
-    margin-right: 2vw;
-    width: 70px;
-    height: 25px;
-    font-weight: bold;
-  }
-  .btn-member button:hover{
-    background-color: #491510;
-    color: white;
-  }
+.edit-btn:hover,
+.hapus-btn:hover
+{
+  color: white;
+  background-color: #491519;
+}
+/* end button  */

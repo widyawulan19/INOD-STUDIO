@@ -1,72 +1,140 @@
 /* Container styling */
 .show-data-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen','nunito',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
     margin: 20px auto;
     padding: 20px;
-    max-width: 800px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Button styling */
-  .show-data-container button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
-    font-size: 16px;
+    max-width: 100%;
+    background-color: #fff;
+    /* border: 1px solid #ddd; */
     border-radius: 4px;
+    position: relative;
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+  }
+  .data-container{
+    position: relative;
+  }
+
+  .data-container .data-header{
+    /* border: 1px solid grey; */
+    padding: 10px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .data-header .header-ikon{
+    font-size: 15px;
     cursor: pointer;
-    margin-bottom: 15px;
-    transition: background-color 0.3s ease;
   }
-  
-  .show-data-container button:hover {
-    background-color: #0056b3;
+  .header-ikon:hover{
+    font-size: 20px;
   }
-  
-  /* Title styling */
-  .show-data-container h1 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 10px;
+
+  /* ACTION MENU  */
+  .data-header .action-button{
+    position: absolute; /* Menimpa elemen lain */
+    top: 60px; /* Menyesuaikan jarak dari data-header */
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
   }
-  
-  /* Description styling */
-  .show-data-container p {
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 20px;
-  }
-  
-  /* List styling */
-   .show-data-container ul {
-    list-style-type: none;
-    padding: 0;
+  .action-button p{
     margin: 0;
   }
-  
-  ul li {
-    padding: 8px 0;
-    border-bottom: 1px solid #ddd;
+  .button-ikon{
+    margin-right: 5px;
+  }
+  .action-button button
+  {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    margin: 0px;
+    width: 10vw;
+    padding: 10px;
+    background-color: transparent;
+    border: none;
+    text-align: left;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
   
-  ul li:last-child {
-    border-bottom: none;
+  .action-button button:hover {
+    background-color: #f0f0f0;
+    color: #000;
+  }
+ 
+  .action-button .delete
+  {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    margin: 0px;
+    width: 10vw;
+    padding: 10px;
+    background-color: transparent;
+    border-top: 1px solid #eee;
+    text-align: left;
+    font-size: 14px;
+    color: red;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .action-button .delete:hover{
+    color:red;
   }
   
-  ul li strong {
-    /* border: 1px solid #333; */
-    margin-left: 10px;
-    color: #007bff;
-  }
+  /* END ACTION MENU  */
   
-  /* Heading for subsections */
-  .show-data-container h3 {
-    font-size: 20px;
-    color: #444;
-    margin-top: 20px;
-    margin-bottom: 10px;
+  .data-body{
+    /* border: 1px solid #eee; */
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    z-index: 1;
   }
-  
+ .data-body .data-body2{
+    border: 1px solid #eee;
+    border-radius: 8px;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: flex-start;
+
+  }
+  .data-body2 h4{
+    margin: 7px 0px;
+    color: #616060;
+  }
+  .data-body2 .data-content{
+    /* margin-top: px; */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .data-body2 .title{
+    font-weight: bold;
+    font-size: 13px;
+    width: 20%;
+  }
+  .data-body2 .body{
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 13px;
+    margin:7px 0px;
+    width: 80%;
+  }

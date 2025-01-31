@@ -1,12 +1,4 @@
-/* .card-detail-container{
-    background-color: rgba(255, 255, 255, 0.075);
-    width: 100%;
-    height: 200vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px 0;
-} */
+
 .card-detail-container{
   position: fixed;
   padding-top: 50px;
@@ -14,7 +6,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,16 +15,16 @@
   font-family: "Lato", sans-serif;
 }
 
-.description-container{
-    background-color: white;
-    width: 50%;
-    height: 100%;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow-y: auto;
 
+.description-container{
+  background-color: white;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
 }
 .cover {
     background-image: linear-gradient(to right top, #721111, #841414, #971717, #aa1a1a, #be1d1d, #b51922, #ac1627, #a3152a, #7a1429, #521422, #2c1017, #000000);

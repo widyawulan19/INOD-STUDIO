@@ -279,35 +279,64 @@
   align-items: center;
   justify-content: space-between;
   font-size: 10px;
-  padding: 5px;
+  padding: 0px;
+  position: relative;
+  /* border: 1px solid green; */
 }
-.boards-icons p{
-  margin: 5px 5px;
-  padding: 2px;
+.boards-icons .count{
+  margin: 3px;
+  padding: 4px;
   border-radius: 4px;
+  font-size: 8px;
   display: flex;
   align-items: center;
   justify-content: left;
-  border: 0.3px solid #491510;
+  /* border: 0.3px solid #eee; */
 }
-/*
-.board-list-container .board-card{
-  border: 1px solid #491510;
-  height: fit-content;
-  padding: 10px;
+.boards-icons .count-cont p{
+  box-shadow: none;
+  border: 1px solid white;
+  margin: 0px;
+  padding: 0px;
 }
-
-.board-container h3{
-  text-align: left;
+.boards-icons p{
+  margin: 3px;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 8px;
   display: flex;
   align-items: center;
+  justify-content: left;
+  border: 0.3px solid #eee;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+/* .board-icons .date {
+  margin-right: 10px;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 5px;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #491510;
+  border-radius: 5px;
+  background-color: white;
+} */
+
+.dropdown-user-action{
+  position: absolute;
+  top: 100%;
+  right: 50;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  /* padding: 10px; */
+  z-index: 10;
+  width: 200px; /* Sesuaikan ukuran */
 }
 
-
-.board-list .board-card2{
-  height: 100%;
-  border-radius: 8px;
-} */
 
 .create-board-button .newBoard{
   background-color: #731e17;
@@ -353,6 +382,139 @@
   white-space: normal;
   height: auto;
 }
+
+/* assignment  */
+
+.user-container{
+  position: relative;
+  display: inline-block;
+}
+.user-toggle {
+  cursor: pointer;
+  position: relative; /* Memungkinkan elemen turun tanpa mengubah struktur */
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.assign-container {
+  position: absolute;
+  top: 100%; /* Muncul tepat di bawah .user-toggle */
+  left: 0;
+  /* padding: 8px; */
+  border-radius: 6px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  z-index: 10;
+}
+/* form search  */
+.search-form{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border: 1px solid grey; */
+  padding: 5px;
+}
+.search-form input{
+  outline: none;
+  padding: 3px;
+  border-radius: 4px;
+  border: 0.5px solid #fff;
+  font-size: 10px;
+  width: 60%;
+}
+
+.search-form .user-list{
+  position: absolute;
+  top: 10px; /* Adjust this value to control how far above the .board-box the list appears */
+  left: 100px;
+  /* right: 0; */
+  width: fit-content; /* Ensure the user list takes up the full width of the board */
+  margin-top: 10px;
+  max-height: 150px;
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #eee;
+  padding: 5px;
+  z-index: 10; 
+}
+.user-list div {
+  padding: 5px;
+  cursor: pointer;
+  /* background-color: #ddd; */
+  margin: 2px;
+  border-radius: 4px;
+}
+.user-list div:hover {
+  background-color: #ddd;
+}
+.user-list div.selected {
+  background-color: #ddd;
+}
+
+.search-form button{
+  padding: 3px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  background-color: #491510;
+  color: white;
+  font-size: 8px;
+  margin-left: 3px;
+}
+
+/* end form search  */
+.assign-container p{
+  margin: 0px;
+}
+.user-assignment{
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  background-color: white;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 10px;
+  padding: 5px;
+  /* border: 0.5px solid #eee; */
+  border-radius: 4px;
+  /* margin: 0px 2px; */
+}
+.user-item:hover{
+  background-color: #eee;
+}
+.user-item button{
+  padding: 5px;
+  border-radius: 4px;
+  border: 0.4px solid #eee;
+  background-color: #fff;
+}
+
+
+.user-photo {
+  width: 20px;
+  height: 20px;
+  background-color: #97271C;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+.user-name{
+  font-size: 10px;
+  flex-grow: 1;
+  color: #333;
+}
+/* end user assignment  */
+
 .board-card h4{
   display: flex;
   font-size: 15px;
@@ -363,16 +525,8 @@
   /* background-color: #ddcccc; */
 }
 
-.board-card .board-icons {
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  margin-bottom: 5px;
-  /* padding-left: 5px;
-  padding-right: 5px; */
-}
 
-.board-icons p {
+/* .board-icons p {
   margin-right: 10px;
   font-size: 10px;
   font-weight: bold;
@@ -385,20 +539,8 @@
   border-radius: 5px;
   background-color: #6b1d1455;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-}
-.board-icons .date {
-  margin-right: 10px;
-  font-size: 10px;
-  font-weight: bold;
-  padding: 5px;
-  color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #491510;
-  border-radius: 5px;
-  background-color: white;
-}
+} */
+
 .board-form {
   margin-top: 20px;
   display: flex;
