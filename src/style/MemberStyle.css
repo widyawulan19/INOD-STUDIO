@@ -169,7 +169,8 @@
 /* Informasi personal  */
 .modal .personal,
 .modal .kontak,
-.modal .kepegawaian
+.modal .kepegawaian,
+.modal .jadwal
 {
   /* border: 1px solid green; */
   width: 90%;
@@ -178,7 +179,8 @@
 
 .personal h5,
 .kontak h5,
-.kepegawaian h5
+.kepegawaian h5,
+.jadwal h5
 {
   margin: 0px 25px ;
   font-weight: normal;
@@ -186,14 +188,65 @@
 }
 .personal .body,
 .kontak .body,
-.kepegawaian .body
+.kepegawaian .body,
+.jadwal .body
 {
   display: flex;
   /* flex-direction: column; */
   align-items: center;
   justify-content: flex-start;
 }
+.bj{
+  /* border: 1px solid grey; */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: flex-start;
+}
+.works,
+.off
+{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 5px;
+  border: 0.3px solid grey;
+  box-shadow: 0 0 10px rgba(96, 28, 28, 0.2);
+  margin: 5px 0px;
+}
+.works label,
+.off label
+{
+  /* border: 1px solid #eee; */
+  padding: 5px;
+  width: 100px;
+  /* margin-right: 10px; */
+  font-size: 12px;
+}
+.day-select{
+  /* border: 1px solid #22090b; */
+  display: flex;
+  width: 100%;
+  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+}
 
+.dc{
+  /* border: 1px solid blue; */
+  margin: 5px 0px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* .dc input{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid red;
+} */
 
 .modal input {
   display: block;

@@ -1,0 +1,464 @@
+.nmc{
+    background-color: white;
+    height: 100vh;
+    border-radius: 10px;
+  }
+  .nmc .marketing-header{
+    border-bottom: 1px solid #eee;
+    padding: 5px 10px;
+  }
+  .title{
+    margin: 0;
+    /* border: 1px solid #eee; */
+  }
+  .title p{
+    margin: 0;
+    font-weight: normal;
+  }
+  .filter-container{
+    /* border: 1px solid #eee; */
+    padding: 5px;
+  }
+  .filter-container .filter-box{
+    display: flex;
+    align-items: center;
+  }
+  .filter-box p{
+    font-size: 12px;
+    margin-right: 5px;
+  }
+  
+  .filter-category {
+    position: relative;
+    display: flex;  /* Menggunakan flexbox */
+    align-items: center;
+    justify-content: center;
+    width: 23vw;
+    height: fit-content;
+    border-radius: 8px;
+    padding: 4px;
+    align-items: center;
+    justify-content: left;
+    border: 1px solid #eee;
+  }
+  
+  
+  .dropdown-search {
+    padding: 0px 3px !important;
+    border-radius: 0px;
+    border-right: 1px solid #333;
+    background-color: white;
+    cursor: pointer;
+    width: fit-content;
+  }
+  
+  .filter-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    list-style-type: none;
+    padding: 0;
+    margin-top: 5px;
+  }
+  
+  .dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .dropdown-item:last-child {
+    border-bottom: none;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .custom-input {
+    /* margin-top: 10px; */
+    margin: 0px 5px;
+    padding: 5px;
+    border: 1px solid white;
+    border-radius: 2px;
+    width: 100%;
+  }
+  .custom-input:focus{
+    outline: none;
+  }
+  
+  
+  /* Data Marketing body  */
+  .marketing-body{
+    max-height: 80%;
+    padding: 10px;
+    overflow-y: auto;
+  }
+  .tabel-data-marketing{
+    margin: 5px;
+    /* overflow-y:auto ; */
+  }
+  
+  .tabel-data-marketing table{
+    width: 100%;
+    min-width: 1600px;
+    height: fit-content;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-left: 10px;
+  }
+   .tabel-data-marketing th, .tabel-data-marketing td {
+    /* border: 1px solid #6b1c14; */
+     /* padding: 2px; */
+     font-size: 10px;
+     text-align: left;
+     overflow: hidden; /* Prevent text overflow */
+    text-overflow: ellipsis; /* Show ellipsis if text is too long */
+    white-space: nowrap; /* Prevent text wrapping */
+    }
+    .tabel-data-marketing thead{
+      position: sticky;
+      top: 0; /* Pastikan tetap di atas saat di-scroll */
+      z-index: 1;
+      background-color: #d7c9ca; 
+    }
+      
+   .tabel-data-marketing th {
+      padding: 5px;
+      text-align: left;
+      height: 20px;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 10px;
+      background-color: #d7c9ca;
+      color: #333;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    .tabel-data-marketing td{
+        /* height: 10px; */
+        padding: 5px;
+        text-align: left;
+        width: fit-content;
+    }
+  
+  .tabel-data-marketing tr:nth-child(even) {
+    transition: transform 0.2s, box-shadow 0.2s;
+    background-color: #f7f7f7;
+    }
+  
+  .tabel-data-marketing tr:nth-child(even):hover{
+    background-color: #d7c9ca;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    /* transform: translateY(-5px); */
+  }
+  
+    .tabel-data-marketing tr{
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .tabel-data-marketing tr:hover{
+      background-color: #d7c9ca;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      /* transform: translateY(-5px); */
+      color: black;
+    }
+  
+  /*CUSTOM WIDTH*/
+  .tabel-data-marketing th{
+    font-size: 12px;
+  }
+  .tabel-data-marketing th:nth-child(1){
+  width: 30px;/*no*/
+  }
+  .tabel-data-marketing th:nth-child(2)
+  {
+    width: 80px; /* input by */
+  }
+  
+  .tabel-data-marketing th:nth-child(3) {
+    width: 120px; /* buyer name */
+  }
+  
+  .tabel-data-marketing th:nth-child(4) {
+    width: 120px; /* code order */
+  }
+  
+  .tabel-data-marketing th:nth-child(5) {
+    width: 50px; /* jumlah design */
+    text-align: center;
+  }
+  
+  .tabel-data-marketing th:nth-child(6) {
+    width: 70px; /* order number */
+    text-align: center;
+    font-size: 10px;
+    /* color: #e7d9d7f7; */
+  }
+  
+  .tabel-data-marketing th:nth-child(7) {
+    width: 100px; /* account */
+    text-align: center;
+  }
+  
+  .tabel-data-marketing th:nth-child(8) {
+    width:90px; /* deadline */
+    text-align: center;
+  }
+  
+  .tabel-data-marketing th:nth-child(9) {
+    width:50px; /* jumlah revisi */
+    text-align: center;
+  }
+  
+  .tabel-data-marketing th:nth-child(10) {
+    width: 100px; /* order Type */
+  }
+  
+  .tabel-data-marketing th:nth-child(11) {
+    width: 100px; /* offer type */
+  }
+  
+  .tabel-data-marketing th:nth-child(12) {
+    width: 130px; /*style*/
+  }
+  
+  .tabel-data-marketing th:nth-child(13) {
+    width: 100px; /* resolution */
+  }
+  
+  .tabel-data-marketing th:nth-child(14) {
+    width: 100px; /* price normal */
+  }
+  
+  .tabel-data-marketing th:nth-child(15) {
+    width: 100px; /* price discount */
+  }
+  
+  .tabel-data-marketing th:nth-child(16) {
+    width: 80px; /* discount precentage */
+  }
+  
+  .tabel-data-marketing th:nth-child(17) {
+    width: 100px; /* required files */
+  }
+  
+  .tabel-data-marketing th:nth-child(18) {
+    width: 120px; /* project type */
+  }
+  
+  .tabel-data-marketing th:nth-child(19) {
+    width: 150px; /* GIG LINK*/
+  }
+  
+  .tabel-data-marketing th:nth-child(20) {
+    width: 100px; /* Required file*/
+  }
+  
+  .tabel-data-marketing th:nth-child(21) {
+    width: 70px; /* Project */
+  }
+  .tabel-data-marketing th:nth-child(22){
+    width: 200px; /*Duration*/
+  }
+  
+  .btn-action{
+    margin-left:2px;
+    padding: 6px;
+    border: 1px solid #491519;
+    background-color: white;
+    border-radius: 5px;
+    width: 30px;
+    /* display: flex; */
+  }
+  .btn-action:hover{
+    background-color: #6b1c14;
+    /* background-color: #ecd1cd; */
+    color: white;
+  }
+  
+  
+  /* ADD DATA MARKETING POPUP */
+  .add-data-marketing {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    border: 1px solid #491519;
+  }
+  
+  
+  .add-data-content {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    max-height: 93%; /* Atur tinggi maksimum */
+    overflow-y: auto; /* Tambahkan scroll vertikal */
+    margin: 20px auto;
+    margin-right: 10px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+  }
+  
+  .add-data-content::-webkit-scrollbar {
+    width: 8px; /* Lebar scrollbar */
+  }
+  
+  .add-data-content::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Warna background track */
+    border-radius: 10px;
+  }
+  
+  .add-data-content::-webkit-scrollbar-thumb {
+    background-color: #888; /* Warna scrollbar */
+    border-radius: 10px;
+  }
+  
+  .add-data-content::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Warna scrollbar saat hover */
+  }
+  
+  .add-data-content .close-icon{
+    position: absolute;
+    /* border: 1px solid #491519; */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    right: 40px;
+  }
+  
+  .add-data-content form{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  
+  .add-data-content input[type="text"],
+  .add-data-content input[type="date"],
+  .add-data-content input[type="file"],
+  .add-data-content input[type="url"],
+  .add-data-content textarea{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #6b1c14;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    margin-top: 1vh;
+  }
+  
+  .add-data-content textarea{
+    resize: none;
+    height: 100px;
+  }
+  
+  .add-data-content .form-btn{
+    margin-top: 5vh;
+    margin-bottom: 2vh;
+    padding: 10px;
+    /* border: 1px solid  #6b1c14; */
+  }
+  
+  .add-data-content button{
+    padding: 10px 15px;
+    background-color: #98252f;
+    color:white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    /* font-weight: bold; */
+    box-shadow: rgba(0,0,0,1);
+  }
+  .add-data-content button:hover{
+    background-color: #491519;
+  
+  }
+  .add-data-content button[type="submit"]{
+    margin-right: 10px;
+  }
+  .add-data-content button[type="button"]{
+    background-color: #6c757d;
+  }
+  .add-data-content button[type="button"]:hover{
+    background-color: #5a6268;
+  }
+  .add-data-content h2{
+    font-size: 24px;
+    color: #333;
+    text-align:left;
+    margin-bottom: 2px;
+    /* border: 1px solid red; */
+    display: flex;
+    align-items: center;
+    justify-content: left;
+  }
+  
+  .add-data-content .form{
+    text-align: left;
+    color: grey;
+    font-weight: normal;
+  }
+  
+  /* END DATA MARKETING POPUP  */
+  
+  /* POPUP DELETE  */
+  
+  .delete-confirmation-modal{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border: 0.1px solid #491519;
+  z-index: 1000;
+  }
+  .delete-confirmation-modal button{
+  margin: 0 10px;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  border: 1px solid #491519;
+  }
+  
+  .delete-confirmation-modal .confirmDelete{
+  background-color: #491519;
+  color: white;
+  font-weight: bold;
+  }
+  .delete-confirmation-modal .cancelDelete:hover{
+  background-color: #98252f;
+  }
+  .delete-confirmation-modal .cancleDelete{
+  background-color: white;
+  color: #491519;
+  font-weight: bold;
+  }
+  .delete-confirmation-modal .cancelDelete:hover{
+  background-color: #491519;
+  color: white;
+  }
+  
+  /* END POPUP DELETE  */
+  /* End Data marketing  */

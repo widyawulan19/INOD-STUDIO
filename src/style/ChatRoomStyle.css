@@ -1,0 +1,231 @@
+.chat-container{
+    background-color: white;
+    border-radius: 8px;
+}
+.chat-header{
+    padding: 14px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    /* margin-bottom: 10px; */
+    position: sticky;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+.chat-header h4{
+    margin: 0px;
+}
+
+/* body  */
+.chat-body-container{
+    /* border: 1px solid #eee; */
+    padding: 10px;
+    height: 70vh;
+    overflow-y: auto;
+    background-color: #eee;
+    overflow-y: auto;
+}
+.chat-box{
+    /* border: 1px solid blue; */
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: flex-start;
+}
+.profile-container{
+    display: flex;
+    /* align-items: center; */
+    justify-content: space-between;
+    /* border: 1px solid #731e17; */
+    margin-bottom: 0px;
+}
+.chat-box .profile{
+    width: 5px;
+    height: 5px;
+    padding: 7px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 10px;
+    margin: 2px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+.ikon-message{
+    font-size: 12px;
+    margin-left: 5px;
+}
+.chat-body{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 5px;
+}
+.chat-body a{
+    color: #731e17;
+    text-decoration: none;
+    position: relative;
+}
+.chat-body a:hover{
+    text-decoration: underline;
+}
+
+.chat-body p{
+    font-size: 12px;
+    margin: 0px;
+}
+
+.chat-content{
+    margin-top: 10px;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    /* border-radius: 8px; */
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top-right-radius: 8px;
+    border: 0.5px solid #eee;
+    background-color: white;
+    padding: 10px;
+    position: relative;
+}
+
+.date-chat{
+    font-size: 8px;
+}
+/* REPLY  */
+.reply-container{
+    margin-top: 0px;
+    border-left: none !important;
+}
+.reply-content{
+    /* border-left:  0.5px solid grey; */
+    /* padding-left: 5px; */
+    margin-left: 15px;
+}
+.reply-box{
+    display: flex;
+    /* align-items: center; */
+    justify-content: left;
+}
+.reply-profile{
+    display: flex;
+    /* align-items: center; */
+    justify-content: flex-start;
+}
+.reply-date{
+    margin-left: 5px;
+    font-size: 8px;
+}
+.reply-body{
+    margin:  4px 0px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top-right-radius: 8px;
+    border: 0.5px solid #eee;
+    background-color: white;
+    padding: 10px;
+}
+.reply-body p{
+    margin: 0px;
+}
+
+
+
+/* END REPLY  */
+.form-message{
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* margin-bottom: 20px; */
+    /* margin: 10px 0px; */
+    padding: 5px;
+    /* background-color: #eee; */
+    /* border: 1px solid #eee; */
+    box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.1);
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+}
+.form-message textarea{
+    border: 1px solid #eee;
+    outline: none;
+    margin-right: 10px;
+}
+.form-message button{
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    width: fit-content;
+}
+
+/* Link preview styling */
+.link-preview {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background: #f0f0f0;
+    transition: 0.3s;
+    position: absolute;
+    z-index: 100;
+}
+/* Saat tautan dihover, tampilkan preview */
+.chat-body a:hover + .link-preview {
+    display: block;
+  }
+
+.link-preview a {
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+}
+
+
+/* Gaya untuk preview card */
+.preview-card {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .preview-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  
+  .preview-info {
+    padding: 5px 0;
+  }
+  
+  .preview-info strong {
+    font-size: 14px;
+  }
+  
+  .preview-info p {
+    font-size: 12px;
+    color: #555;
+  }
+  
+  .preview-info a {
+    font-size: 12px;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .preview-info a:hover {
+    text-decoration: underline;
+  }

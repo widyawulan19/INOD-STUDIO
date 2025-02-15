@@ -585,6 +585,7 @@ const List=({listId,
                 listId={selectedList}
                 isOpen={isPopupOpen}
                 onClose={handleClosePopupList}
+                workspaceId={workspaceId}
               />
             )}
             {isEditListOpen && (
@@ -606,6 +607,7 @@ const List=({listId,
                 onCloseCard={handleClosePopupCard}
                 loadCards={loadCards}
                 onCardDuplicated = {handleCardDuplicated}
+                card
               />
             )}
             {isEditCardOpen && (

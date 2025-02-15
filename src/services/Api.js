@@ -81,10 +81,18 @@ export const updateBoardBackground = (boardId, imageId) => {
 
 // Board APIs
 export const getBoard = (workspaceId) => axios.get(`${API_URL}/boards?workspace_id=${workspaceId}`);
+// export const getBoard = (workspaceId) => {
+//     if (!workspaceId) {
+//         console.error("workspaceId is required but not provided");
+//         return Promise.reject(new Error("workspaceId is required"));
+//     }
+//     return axios.get(`${API_URL}/boards?workspace_id=${workspaceId}`);
+// };
 export const createBoard = (data) => axios.post(`${API_URL}/boards`, data);
 export const updateBoard = (id, data) => axios.put(`${API_URL}/boards/${id}`, data);
 export const deleteBoard = (id) => axios.delete(`${API_URL}/boards/${id}`);
-export const getBoardById = (id) => axios.get(`${API_URL}/boards/${id}`);
+// export const getBoardById = (id) => axios.get(`${API_URL}/boards/${id}`);
+export const getBoardById = (boardId) => axios.get(`${API_URL}/boards/${boardId}`);
 export const getBoardCountByWorkspace = (workspaceId) => {
     return axios.get(`${API_URL}/board-count`,{
         params:{
@@ -370,35 +378,6 @@ export const getCardById = async (id) => {
 };
 
 //Duplicate card
-// export const duplicateCard = async (cardId, {list_id}) =>{
-//     try{
-//         const response = await axios.post(`${API_URL}/cards/duplicate/${cardId}`,{
-//             list_id,
-//         })
-//         // return response.data;
-//         return response;
-//     }catch(error){
-//         console.error('Failed to duplicate card:', error);
-//         throw error;
-//     }
-// }
-
-// export const duplicateCard = async (cardId, {list_id, date, label, cover}) =>{
-//     try{
-//         const response = await axios.post(`${API_URL}/cards/duplicate/${cardId}`,{
-//             list_id,
-//             date,
-//             label,
-//             cover,
-//         })
-//         // return response.data;
-//         return response;
-//     }catch(error){
-//         console.error('Failed to duplicate card:', error);
-//         throw error;
-//     }
-// }
-///api/cards/duplicate/:id
 //new card duplicate
 export const duplicateCard = async (cardId, listId) => {
     try {
@@ -425,6 +404,26 @@ export const duplicateCard = async (cardId, listId) => {
         throw new Error(error.response?.data?.message || 'Failed to duplicate card');
     }
 };
+
+//update due_date berdasarkan custom Date
+export const updateDueDate = async(cardId, due_date)=>{
+    try{
+        const response = await fetch(`${API_URL}/cards/${cardId}/due-date`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ due_date }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to update due date: ${response.statusText}`);
+        }
+
+        return await response.json();
+    }catch(error){
+        console.error('Error updating due date:', error);
+        throw error;
+    }
+}
 
 //menambahkan cover id yang dipilih ke database menggunakan id
 // api/cards.js
@@ -475,6 +474,85 @@ export const getCardDescription = async (cardId) => {
         throw error;
     }
 }
+
+//CARD_USERS
+// 1. assign user to card 
+export const assignUserToCard = async(cardId, userId) => {
+    try{
+        const response = await axios.post(`${API_URL}/card-users`, {card_id: cardId, user_id:userId});
+        return response.data;
+    }catch(error){
+        console.error('Error assigning user to card');
+        throw error;
+    }
+}
+
+// 2. remove user form card
+export const removeUserFromCard = async (card_Id, user_Id) =>{
+    try{
+        const response = await axios.delete(`${API_URL}/card-users/${Number(card_Id)}/${user_Id}`);
+        return response.data;
+    }catch(error){
+        console.error('Error removing user from card');
+        throw error;
+    }
+}
+
+// 3. get assigned users for a card 
+export const getAssignedUsersForCard = async(cardId) =>{
+    try{
+        const response = await axios.get(`${API_URL}/assign-card/${cardId}`)
+        return response.data;
+    }catch(error){
+        console.error('Error fetching assigned users');
+        throw error;
+    }
+}
+
+//4. get cards assigned to a user 
+export const getCardsAssignedToUser = async(userId) =>{
+    try{
+        const response = await axios.get(`${API_URL}/assign-user/${userId}`);
+        return response.data;
+    }catch(error){
+        console.error('Error fetching cards for users')
+        throw error;
+    }
+}
+
+// 5.get total all assigned users for each card 
+export const getTotalUsersPerCard = async()=>{
+    try{
+        const response = await axios.get(`${API_URL}/total-assign-card`);
+        return response.data;
+    }catch(error){
+        console.error('Error fetching total users per card');
+        throw error;
+    }
+}
+
+//6. fungsi untuk mendapatkan jumlah pengguna pada kartu tertentu
+export const getUserCountByCard = async(card_id) =>{
+    try{
+        const response = await axios.get(`${API_URL}/total-assign-card/${card_id}`);
+        return response.data;
+    }catch(error){
+        console.error('Error fetching user count');
+        throw error;
+    }
+}
+//7. menampilkan user bedasarkan card id
+export const getUsersByCardId = async(cardId) =>{
+    try{
+        const response = await axios.get(`${API_URL}/card-users/${Number(cardId)}`);
+        return response.data;
+    }catch(error){
+        console.error('Error fetching user for card:', error);
+        throw error;
+    }
+}
+
+//END_CARD_USERS
 
 
 // Card Description APIs
@@ -601,7 +679,7 @@ export const getDataMarketingById = (id) => axios.get(`${API_URL}/marketing_data
 export const getDataMarketingByCardId = (id) => axios.get(`${API_URL}/marketing/card/${id}`);
 
 //data marketing
-
+export const getMarketingDataJoinCard = async(cardId) => await axios.get(`${API_URL}/cards-marketing/${cardId}`);
 export const getAllDataMarketing = () => axios.get(`${API_URL}/marketing`);
 export const createCardFromMarketing = async (marketing_id,listId)=>{
     const response = await axios.post(`${API_URL}/create-card-from-marketing`,{
@@ -637,12 +715,35 @@ export const archiveMarketing = async (marketing_id) =>{
     }
 }
 
+//marketing design
+export const getAllMarketingDesign = async() => await axios.get(`${API_URL}/marketing-design`);
+export const getMarketingDesignById = async(id) => await axios.get(`${API_URL}/marketing-design/${id}`);
+export const createMarketingDesign = async(data) => await axios.post(`${API_URL}/marketing-design`, data);
+export const updateMarketingDesign = async(id, data) => await axios.put(`${API_URL}/marketing-design/${id}`,data);
+export const deleteMarketingDesign = async(id) => await axios.delete(`${API_URL}/marketing-design/${id}`);
+export const archiveMarketingDesign = async(id, archiveData) => await axios.post(`${API_URL}/marketing-design/${id}/archive`, archiveData);
+export const createCardFromMarketingDesign = async(marketingDesignId, listId)=> await axios.post(`${API_URL}/marketing-design/create-card-marketing-design`,{
+    marketing_design_id: marketingDesignId,
+    listId
+})
+export const getMarketingDesignJoinCard = async(cardId) => await axios.get(`${API_URL}/cards-marketing-design/${cardId}`);
+
+
+//end marketing design
+
 //employees
 export const getAllDataEmployee = () => axios.get(`${API_URL}/employees`);
 export const getDataEmployeeById = (id) => axios.get(`${API_URL}/employees/${id}`);
 export const updateDataEmployee = (id, data) => axios.put(`${API_URL}/employees/${id}`, data);
 export const createDataEmployee = (data) => axios.post(`${API_URL}/employees`, data);
 export const deleteDataEmployee = (id) => axios.delete(`${API_URL}/employees/${id}`); 
+
+//data_employees
+export const getAllEmployeeData = () => axios.get(`${API_URL}/data-employees`);
+export const getEmployeDataById = (userId) => axios.get(`${API_URL}/data-employees/${userId}`);
+export const createEmployeeData = (employeeData) => axios.post(`${API_URL}/data-employees`, employeeData);
+export const updateEmployeeData = (userId, employeeData) => axios.put(`${API_URL}/data-employees/${userId}`, employeeData);
+export const deleteEmployeeData = (userId) => axios.delete(`${API_URL}/data-employees/${userId}`);
 
 //work schedule
 export const getEmployeeScheduleById = (id) => axios.get(`${API_URL}/employees/${id}/schedule`);
@@ -747,12 +848,16 @@ export const getSelectedCoverForCard = async(cardId)=>{
 
 // API TETX EDITOR DESCRIPTION 
 export const createCardDescriptions = async (card_id, description) =>{
-    try{
-        const response = await axios.post(`${API_URL}/card-descriptions/${card_id}`, {description});
+    try {
+        const response = await axios.post(
+            `${API_URL}/card-descriptions/${card_id}`,
+            { description: encodeURIComponent(description) }, // Pastikan teks aman dikirim
+            { headers: { 'Content-Type': 'application/json' } } // Pastikan JSON format dikirim
+        );
         return response.data;
-    }catch(error){
+    } catch (error) {
         console.error('Error adding description:', error);
-        throw error
+        throw error;
     }
 }
 
@@ -884,7 +989,7 @@ export const deleteChecklist = async (checklistId) => {
 //END ENDPOIN CHECKLIST & CHECKLIST ITEM
 
 //ENDPOIN tim disscus
-
+//tabel message
 //mendapatkan pesan untuk tim tertentu
 export const getMessages = async(id)=>{
     try{
@@ -897,38 +1002,40 @@ export const getMessages = async(id)=>{
 }
 
 //mengirim pesan
-// export const sendMessage = async (messageData) =>{
-//     try{
-//         const response = await axios.post(`${API_URL}/messages`, messageData);
-//         return response.data;
-//     }catch(error){
-//         console.error('Error sending message:', error);
-//         throw error;
-//     }
-// }
-export const sendMessage = async (messageData) => {
-    try {
-      // Make the POST request with the messageData as the body
-      const response = await axios.post(`${API_URL}/messages`, messageData);
-  
-      // Return the response data (the inserted message)
-      return response.data;
-    } catch (error) {
-      // Handle errors properly
-      if (error.response) {
-        // Server responded with an error (e.g., validation failed)
-        console.error('Error sending message:', error.response.data);
-        throw new Error(error.response.data.error || 'Unknown error occurred');
-      } else if (error.request) {
-        // No response received from the server
-        console.error('No response from server:', error.request);
-        throw new Error('No response from server');
-      } else {
-        // Other errors (e.g., incorrect setup)
-        console.error('Error sending message:', error.message);
-        throw new Error(error.message);
-      }
+export const sendMessage = async ({content, user_id, card_id}) =>{
+    try{
+        const response = await axios.post(`${API_URL}/messages`,{
+            content,
+            user_id,
+            card_id
+        })
+        return response.data;
+    }catch(error){
+        console.error('Error sending message:', error.respons?.data || error.message);
+        throw error.respons?.data || error.message;
     }
-  };
+}
+//end tabel message
 
+// Fungsi untuk mendapatkan pesan dan balasannya berdasarkan cardId
+export const getMessagesWithReplies = async(cardId)=>{
+    try {
+        const response = await axios.get(`${API_URL}/cards/${cardId}/messages`);
+        return response.data; // Mengembalikan data pesan dan balasan dalam format JSON
+      } catch (error) {
+        console.error("Error fetching messages:", error.response?.data || error.message);
+        throw error.response?.data || error.message; // Melempar error untuk ditangani di frontend
+      }
+}
+
+//preview pesan
+export const fetchLinkPreview = async (url) =>{
+    try{
+        const response = await axios.post(`${API_URL}/preview`, {url});
+        return response.data;
+    }catch(error){
+        console.error('Error fetching link preview', error);
+        throw error;
+    }
+}
 //ENDPOIN tim disscus

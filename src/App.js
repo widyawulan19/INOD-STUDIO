@@ -1,6 +1,5 @@
 import './App.css';
 import './style/HomeStyle.css';
-//import CardModal from './component/CardModal';
 import Navbar from './component/Navbar';
 import Sidebar from './component/Sidebar';
 import AppRoutes from './routes/Routes';
@@ -39,7 +38,11 @@ import NewMarketing from './pages/NewMarketing';
 import ChecklistTest from './fiture/ChecklistTest';
 import Checklist from './fiture/Checlist';
 import Disscution from './fiture/Disscution';
-// import './style/SidebarStyle.css'
+import DesignMarketing from './pages/DesignMarketing';
+import MarketingDesignForm from './pages/MarketingDesignForm';
+import PopupMarketingDesign from './popup/PopupMarketingDesign';
+import PopupEditingMarketingDesign from './popup/PopupEditingMarketingDesign';
+import DataUser from './pages/DataUser';
 
 function Layout({children}){
   return(
@@ -72,12 +75,19 @@ function App(){
                       <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId/modal' element={<CardModal/>}/>
                       <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId/other-page' element={<OtherPage/>}/>
                       <Route path='/member' element={<Member/>}/>
+                      <Route path='/data-employee' element={<DataUser/>}/>
                       <Route path='/marketing' element={<Marketing/>}/>
                       <Route path='/marketing2' element={<Marketing2/>}/>
                       <Route path='/marketingForm' element={<MarketingForm/>}/>
                       <Route path='/marketing-detail' element={<CardMarketingDetail/>}/>
                       <Route path='/popup-detail-marketing/:marketing_id' element={<PopupMarketingDetail/>}/>
                       <Route path="/popup-detail-marketing/:marketing_id/edit-data-marketing" element={<PopupEditDataMarketing />} />
+                      
+                      {/* Route to data marketing desgin */}
+                      <Route path='/marketing-design' element={<DesignMarketing/>}/>
+                      <Route path='/marketing-design-form' element={<MarketingDesignForm/>}/>
+                      <Route path='/popup-detail-marketing-design/:marketing_design_id' element={<PopupMarketingDesign/>}/>
+                      <Route path='/popup-detail-marketing-design/:marketing_design_id/edit-data-design' element={<PopupEditingMarketingDesign/>}/>
 
                       <Route path='/archive' element={<Archive/>}/>
                       <Route path='/archive-marketing' element={<ArchiveMarketing/>}/>
@@ -109,48 +119,3 @@ function App(){
   )
 }
 export default App;
-
-
-/*
-
-function App(){
-  return(
-    <Router>
-      <div className='App'>
-        <div className='App2'>
-            <Routes>
-              <Route path='/home' element={<Home/>}/>
-              <Route path='/' element={<Workspace/>}/>
-              <Route path='/workspaces/:workspaceId/boards' element={<Board/>}/>
-              <Route path='/workspaces/:workspaceId/boards/:boardId' element={<BoardView/>}/>
-              <Route path='/workspaces/:workspaceId/boards/:boardId/lists' element={<List/>}/>
-              <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards' element={<Card/>}/>
-              <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId' element={<CardDetail/>}/>
-              <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId/modal' element={<CardModal/>}/>
-              <Route path='/workspaces/:workspaceId/boards/:boardId/lists/:listId/cards/:cardId/other-page' element={<OtherPage/>}/>
-              <Route path='/member' element={<Member/>}/>
-              <Route path='/marketing' element={<Marketing/>}/>
-              <Route path='/marketing2' element={<Marketing2/>}/>
-              <Route path='/marketingForm' element={<MarketingForm/>}/>
-              <Route path='/marketing-detail' element={<CardMarketingDetail/>}/>
-              <Route path='/popup-detail-marketing/:marketing_id' element={<PopupMarketingDetail/>}/>
-              <Route path="/popup-detail-marketing/:marketing_id/edit-data-marketing" element={<PopupEditDataMarketing />} />
-
-              <Route path='/archive' element={<Archive/>}/>
-              <Route path='/archive-marketing' element={<ArchiveMarketing/>}/>
-              <Route path='/setting' element={<Setting/>}/>
-              <Route path='/faq' element={<Faq/>}/>
-              <Route path='/schedule' element={<Schedule/>}/>
-              {/* <Route path='other-page' element={<OtherPage/>}/> 
-              <Route path='/example' element={<Example/>}/>
-              <Route path='/example-card' element={<ExampleCard/>}/>
-              <Route path='/description' element={<CardDescription/>}/>
-              // {/* <Route path='/navbar' element={<Navbar/>}/> 
-            </Routes>
-          </div>
-        </div>
-      {/* </div>
-    </Router>
-  )
-
-*/

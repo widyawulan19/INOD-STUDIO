@@ -3,11 +3,13 @@ import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
 import '../style/TextEditor.css'
 import { CiFileOn } from "react-icons/ci";
-import { getCardDescriptions, updateCardDescriptions } from '../services/Api';
+import { getCardDescriptions, updateCardDescriptions , createCardDescriptions} from '../services/Api';
 
 const TextEditor=({cardId})=> {
+    console.log('text editor menerima cardId dengan baik', cardId);
     const [editorContent, setEditorContent] = useState('')
     const [showEditor, setShowEditor] = useState(false);
+    const [isNewDescription, setIsNewDescription] = useState(false);
 
     const handleShowEditor = () => {
         setShowEditor(!showEditor);
@@ -18,9 +20,16 @@ const TextEditor=({cardId})=> {
         const fetchDescription = async() =>{
             try{
                 const data = await getCardDescriptions(cardId);
-                setEditorContent(data.description);
+                if(!data || !data.description){
+                    setIsNewDescription(true);
+                }else{
+                    setEditorContent(data.description);
+                    setIsNewDescription(false);
+                }
+                
             }catch(error){
                 console.error('Failed to load description:', error);
+                setIsNewDescription(true);
             }
         };
         fetchDescription();
@@ -33,8 +42,13 @@ const TextEditor=({cardId})=> {
     //menyimpan deskripsi menggunakan api services
     const handleSaveDescription = async () =>{
         try{
-            await updateCardDescriptions(cardId, editorContent);
-            alert('Description saved successfully');
+            if(isNewDescription){
+                await createCardDescriptions(cardId,editorContent);
+                setIsNewDescription(false);
+            }else{
+                await updateCardDescriptions(cardId, editorContent);
+            }
+            alert('Description saved successfully!');
         }catch(error){
             alert('Failed to save description');
         }

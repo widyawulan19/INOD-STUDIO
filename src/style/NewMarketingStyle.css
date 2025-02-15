@@ -177,11 +177,11 @@ width: 30px;/*no*/
 }
 .tabel-data-marketing th:nth-child(2)
 {
-  width: 80px; /* input by */
+  width: 150px; /* input by */
 }
 
 .tabel-data-marketing th:nth-child(3) {
-  width: 80px; /* acc by */
+  width: 60px; /* acc by */
 }
 
 .tabel-data-marketing th:nth-child(4) {

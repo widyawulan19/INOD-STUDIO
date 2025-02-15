@@ -1,109 +1,56 @@
-.assgn-container{
-  /* border: 1px solid #eee; */
-  /* padding: 10px; */
-  position: relative;
+/* Style untuk link */
+.chat-body span {
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
 }
-.assgn-form{
-  border-bottom: 0.5px solid #eee;
-  padding: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+/* Style untuk kontainer preview */
+.link-preview {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  padding: 10px;
+  z-index: 100;
+  border-radius: 5px;
+  display: block;
 }
-.user-list{
-  /* border: 1px solid #eee; */
-  background-color: white;
-  position: relative;
-  top: 50%;
-  /* padding: 10px; */
-}
-.list-cont{
+
+/* Gaya untuk preview card */
+.preview-card {
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
-  justify-content: flex-start;
-}
-.list-cont:hover
-{
-  background-color: white;
 }
 
-/* Dropdown list  */
-.list{
-  border: 1px solid grey;
-
-}
-.list-box{
-  cursor: pointer;
-  border: 1px solid #eee;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.list-box .user-photo{
-  background-color: #97271C;
-  font-weight: normal;
-  font-size: 12px;
-  margin-right: 5px;
-  color: white;
-}
-
-/* end dropdown list  */
-
-.assgn-form input{
-  margin-left: 5px;
-  outline: none;
-  padding: 5px 5px;
-  font-size: 12px;
-  border: 1px solid white;
-}
-
-.user-list{
-  position: absolute;
-  top: 100%;
-  left: 0;
+.preview-image {
   width: 100%;
-  background-color: white;
-  border: 1px solid #ccc;
+  height: auto;
   border-radius: 5px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  max-height: 200px; 
-  overflow-y: auto; 
-  z-index: 1000;
 }
 
-.assgn-list{
-  padding: 5px;
-  /* border: 1px solid #eee; */
+.preview-info {
+  padding: 5px 0;
 }
-.assgn-user-box{
-  /* border: 1px solid #eee; */
-  padding: 5px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+
+.preview-info strong {
+  font-size: 14px;
 }
-.assgn-user-box:hover{
-  background-color: #eee;
-}
-.left{
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-.user-photo{
-  background-color: #97271C;
-  font-weight: normal;
+
+.preview-info p {
   font-size: 12px;
-  margin-right: 5px;
+  color: #555;
 }
-.assgn-user-box button{
-  border: 0.5px solid rgba(255, 255, 255, 0);
-  color: #97271C;
-  border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0);
+
+.preview-info a {
+  font-size: 12px;
+  color: #007bff;
+  text-decoration: none;
 }
-.assgn-user-box button:hover{
-  background-color: white;
+
+.preview-info a:hover {
+  text-decoration: underline;
 }

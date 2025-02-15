@@ -45,7 +45,8 @@
     padding: 4px;
   }
   .workspace-title-navigation button:hover{
-    background-color: rgb(226, 225, 225);
+    /* background-color: rgb(226, 225, 225); */
+    background-color: #ece1fa;
     padding: 4px;
     border-radius: 4px;
   }
@@ -67,7 +68,8 @@
     margin-left: 5px;
   }
   .gretting-setting button:hover{
-    background-color: rgb(226, 225, 225);
+    /* background-color: rgb(226, 225, 225); */
+    background-color: #ece1fa;
     padding: 4px;
     border-radius: 4px;
   }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import '../style/NewCardDetail.css';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getAssignCountForBoard, getCardById, getCards, getUsersInBoard } from '../services/Api';
+import { getUserCountByCard, getAssignedUsersForCard, getCardById, getCards, getUsersInBoard } from '../services/Api';
 import { HiOutlineX } from 'react-icons/hi';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { IoListSharp,IoCalendarClearOutline, IoPricetagsOutline } from 'react-icons/io5';
@@ -16,6 +16,8 @@ import CustomeDate from './CustomeDate';
 import SelectorCover from '../fiture/SelectorCover';
 import DisplayCover from '../fiture/DisplayCover';
 import Assignment from '../fiture/Assignment';
+import AssignmentCard from '../fiture/AssignmentCard';
+import ChatRoom from '../fiture/ChatRoom';
 
 
 const CardDetail=()=> {
@@ -31,36 +33,45 @@ const CardDetail=()=> {
   const [showAssign, setShowAssign] = useState(false);
 
   //user assign 
-  const [users, setUsers] = useState([]);
+  const [usersCard, setUsersCard] = useState([]);
   const [userCount, setUserCount] = useState(null);
 
   //function user assign
   useEffect(()=>{
-    const fetchUserBoard = async()=>{
+    const fetchUserCard = async()=>{
       try{
-        const usersData = await getUsersInBoard(boardId);
-        setUsers(usersData);
+        const usersDataCard = await getAssignedUsersForCard(cardId);
+        setUsersCard(usersDataCard.assignedUsers);
       }catch(error){
         console.error('Error fetching users:', error);
       }
     };
-    fetchUserBoard();
-  },[boardId]);
+    fetchUserCard();
+  },[cardId]);
 
   //count users
-  useEffect(()=>{
-    const fetchDataCount = async()=>{
-      try{
-        const data = await getAssignCountForBoard(boardId);
-        setUserCount(data.user_count);
-      }catch(error){
-        console.error('Failed to fetch user count:', error);
-      }
-    };
-    if(boardId){
-      fetchDataCount();
-    }
-  },[boardId]);
+     useEffect(() => {
+         const fetchTotalData = async () => {
+             try {
+                 const data = await getUserCountByCard(cardId);
+                 console.log("User count response:", data);
+     
+                 // Pastikan array tidak kosong sebelum mengakses user_count
+                 if (data.cardUserCounts && data.cardUserCounts.length > 0) {
+                     const userCountValue = parseInt(data.cardUserCounts[0].user_count, 10); // Konversi ke angka
+                     setUserCount(userCountValue);
+                 } else {
+                     console.error("User count data is missing or empty:", data);
+                 }
+             } catch (error) {
+                 console.error("Failed to fetch user count:", error);
+             }
+         };
+     
+         if (boardId && cardId) { 
+             fetchTotalData();
+         }
+     }, [cardId, boardId]);
 
   //end function user assign
 
@@ -158,7 +169,7 @@ const CardDetail=()=> {
               <div className="sub1-body" onClick={handleShowAssign}>
                 {/* <p>Assign to  </p> */}
                 <p>
-                  {users.map(user =>(
+                  {usersCard.map(user =>(
                     <div className='up-container'>
                       <div className="up-user-photo">
                           <span>{generateProfileInitials(user.username)}</span>
@@ -175,7 +186,8 @@ const CardDetail=()=> {
                 </p>
                 {showAssign && (
                   <div className="assignment-container" onClick={(event)=> handleStopPropagation(event)}>
-                    <Assignment boardId={boardId} />
+                    {/* <Assignment boardId={boardId} /> */}
+                    <AssignmentCard boardId={boardId} cardId={cardId}/>
                   </div>
                 )}
                 {/* <Assignment boardId={boardId}/> */}
@@ -210,7 +222,8 @@ const CardDetail=()=> {
        </div>
       </div>
       <div className="discussion">
-        <PostComment/>
+        {/* <PostComment/> */}
+        <ChatRoom cardId={cardId} usersCard={usersCard}/>
       </div>
     </div>
   )

@@ -1,0 +1,48 @@
+
+
+.layout-container{
+    position: sticky;
+    display: flex;
+    height: 100vh;
+    padding-top: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+  }
+  .sidebar-container{
+    position: relative;
+    transition: width 0.3s ease-in-out;
+    z-index: 10;
+  }
+.sidebar-main {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    transition: all 0.3s ease;
+  }
+  
+  .sidebar-main.collapsed {
+    justify-content: center;
+  }
+  
+  .sidebar-main.expanded {
+    justify-content: flex-start;
+  }
+  
+  .sidebar-icon {
+    font-size: 24px;
+  }
+  
+  .sidebar-label {
+    margin-left: 10px;
+  }
+  .show-sidebar{
+    border: 1px solid white;
+  }
+
+  .sidebar-menu .icon{
+    /* border: 1px solid blue; */
+    font-size: 15px;
+  }
+  

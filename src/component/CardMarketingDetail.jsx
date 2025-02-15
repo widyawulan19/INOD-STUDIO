@@ -4,7 +4,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import {FaRegEdit} from "react-icons/fa";
 import {HiPlus, } from "react-icons/hi";
 import {AiOutlineDelete } from "react-icons/ai";
-import { getDataMarketingByCardId, getMarketingDataById } from '../services/Api';
+import { getDataMarketingByCardId, getMarketingDataById, getMarketingDataJoinCard } from '../services/Api';
 import '../style/CardMarketingDetail.css'
 
 const CardMarketingDetail=({cardId, marketing_id})=> {
@@ -33,7 +33,8 @@ const CardMarketingDetail=({cardId, marketing_id})=> {
             console.log('fetching data from cardID', cardId)
             try{
                 setLoading(true);
-                const response = await axios.get(`http://localhost:3002/api/cards-marketing/${cardId}`);
+                const response = await getMarketingDataJoinCard(cardId);
+                // const response = await axios.get(`http://localhost:3002/api/cards-marketing/${cardId}`);
                 console.log('Respon data', response.data);
                 setCardData(response.data);
             }catch(err){
@@ -70,6 +71,14 @@ const CardMarketingDetail=({cardId, marketing_id})=> {
       if (!cardData) {
         return <div>No data found</div>;
       }
+
+      //parse link
+      const parseLinks = (text) =>{
+        if(!text) return "";
+
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        return text.replace(urlRegex, (url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`);
+      };
 
   return(
     <div className="show-data-container">
@@ -271,26 +280,58 @@ const CardMarketingDetail=({cardId, marketing_id})=> {
               <div className="title">
                 GIG Link
               </div>
-              <div className="body">
+              <div 
+                className="body"
+                style={{
+                  wordWrap:'break-word',
+                  overflowWrap:'break-word',
+                  whiteSpace:'pre-wrap',
+                  maxWidth:'100%',
+                  overflowX:'auto'
+                }}
+                dangerouslySetInnerHTML={{ __html: parseLinks(cardData.gig_link) }}
+              />
+              {/* <div className="body">
                 {cardData.gig_link}
-              </div>
+              </div> */}
             </div>
 
             <div className="data-content">
               <div className="title">
                 Reference File
               </div>
-              <div className="body">
+              <div 
+                className="body"
+                style={{
+                  wordWrap:'break-word',
+                  overflowWrap:'break-word',
+                  whiteSpace:'pre-wrap',
+                  maxWidth:'100%',
+                  overflowX:'auto'
+                }}
+                dangerouslySetInnerHTML={{ __html: parseLinks(cardData.reference_link) }}
+              />
+              {/* <div className="body">
                 {cardData.reference_link}
-              </div>
+              </div> */}
             </div>
 
             <div className="data-content">
               <div className="title">
                 File and Chat
               </div>
-              <div className="body">
-                {cardData.file_and_chat_link}
+              <div 
+                className="body"
+                style={{
+                  wordWrap:'break-word',
+                  overflowWrap:'break-word',
+                  whiteSpace:'pre-wrap',
+                  maxWidth:'100%',
+                  overflowX:'auto'
+                }}
+                dangerouslySetInnerHTML={{ __html: parseLinks(cardData.file_and_chat_link) }}
+              >
+                {/* {cardData.file_and_chat_link} */}
               </div>
             </div>
 
@@ -323,9 +364,20 @@ const CardMarketingDetail=({cardId, marketing_id})=> {
               <div className="title">
                 Detail Project
               </div>
-              <div className="body">
+              <div 
+                className="body"
+                style={{
+                  wordWrap:'break-word',
+                  overflowWrap:'break-word',
+                  whiteSpace:'pre-wrap',
+                  maxWidth:'100%',
+                  overflowX:'auto'
+                }}
+                dangerouslySetInnerHTML={{ __html: parseLinks(cardData.detail_project) }}
+              />
+              {/* <div className="body">
                 {cardData.detail_project}
-              </div>
+              </div> */}
             </div>
 
             <div className="data-content">

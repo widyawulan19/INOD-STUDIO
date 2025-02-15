@@ -23,7 +23,7 @@ const BoardView=({listId, cardId, onClose})=> {
     const [isFormVisible, setIsFormVisible] = useState(false)
     const navigasi = useNavigate()
     const currentDate = new Date();
-    const [boardName, setBoardName] = useState('');
+    const [boardName, setBoardName] = useState([]);
     //delete list
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [listToDelete, setListToDelete] = useState(null);
@@ -155,26 +155,54 @@ const BoardView=({listId, cardId, onClose})=> {
     }
  //end background function
 
+ useEffect(() =>{
+    const fetchBoardName = async () =>{
+        try{
+            console.log(`fetching board data using board ID: ${boardId}`);
+            const response = await getBoardById(boardId);
+
+            if(Array.isArray(response.data) && response.data.length > 0){
+                setBoardName(response.data[0]);
+            }else{
+                setBoardName(response.data);
+            }
+
+            console.log('Board name:', response.data);
+        }catch(error){
+            console.error('Error fetching board name:', error);
+        }
+    };
+    if(boardId){
+        fetchBoardName();
+    }
+ },[boardId]);
+
 
     //boards
-    const loadBoards = useCallback(async () => {
-        try{
-            const response = await getBoardById(boardId) //memanggil api berdasar id nya
-            console.log('Receive data:', response.data);
-            if(response.data){
-                setBoardName(response.data.name)
+    // const loadBoards = useCallback(async () => {
+    //     try{
+    //         const response = await getBoardById(boardId) //memanggil api berdasar id nya
+    //         console.log('Receive data:', response.data);
+    //         if(Array.isArray(response.data) && response.data.length > 0){
+    //             setBoardName(response.data[0]);
+    //         }else{
+    //             setBoardName(response.data);
+    //         }
+    //         console.log('board data:', response.data);
+    //         // if(response.data){
+    //         //     setBoardName(response.data.name)
 
-            }else{
-                console.error('Data not found')
-            }
-        }catch(error){
-            console.error('Failed to load Boards', error)
-        }
-    }, [boardId])
+    //         // }else{
+    //         //     console.error('Data not found')
+    //         // }
+    //     }catch(error){
+    //         console.error('Failed to load Boards', error)
+    //     }
+    // }, [boardId]);
 
-    useEffect(()=>{
-        loadBoards();
-    }, [loadBoards])
+    // useEffect(()=>{
+    //     loadBoards();
+    // }, [loadBoards])
 
 
     //date
@@ -314,9 +342,9 @@ const BoardView=({listId, cardId, onClose})=> {
                         Workspace
                     </button>
                     /
-                    <button onClick={handleBackToBoard}>
+                    <button onClick={handleBackToBoard} style={{fontWeight:'bold'}}>
                         <TbLayoutKanban style={{marginRight:'4px'}}/>
-                        Boards
+                        Board || {boardName?.name ? boardName.name: 'Loading Board...'}
                     </button>
                     /
                     <button className='non-active'>

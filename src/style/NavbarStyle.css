@@ -92,7 +92,6 @@
 .icon-wrapper::after {
     content: attr(data-tooltip); /* Ambil teks tooltip dari atribut data-tooltip */
     visibility: hidden;
-    background-color: #281b37; /* Warna latar belakang tooltip */
     color: #fff; /* Warna teks tooltip */
     text-align: center;
     border-radius: 5px;
@@ -129,4 +128,37 @@
     opacity: 1;
   }
   
+  .icon{
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+  }
   
+  .icon .dropdown-menu {
+    position: absolute;
+    top: 100%; /* Muncul tepat di bawah ikon */
+    left: 0%; /* Posisi di tengah ikon */
+    transform: translateX(-50%); /* Menyesuaikan agar tepat di bawah */
+    background-color: white;
+    padding: 10px;
+    border-radius: 8px;
+    border: 0.5px solid #783fbf;
+    box-shadow: 0 4px 8px rgba(120, 63, 191, 0.2), 0 0 20px rgba(120, 63, 191, 0.1); /* Kombinasi warna #783fbf */
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
+    width: 300px;
+    margin-right: 10px;
+    z-index: 100;
+    text-align: left;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.dropdown-menu h4 {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.dropdown-menu p {
+    font-size: 12px;
+    color: gray;
+}

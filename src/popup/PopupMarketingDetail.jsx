@@ -7,6 +7,7 @@ import '../style/PopupMarketingDetail.css';
 
 const PopupMarketingDetail = () => {
   const { marketing_id,workspaceId,boardId } = useParams();
+  console.log('workspace id:',workspaceId , 'boardId:', boardId, );
   const [marketing, setMarketing] = useState(null); // Initialize as null instead of array
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,6 +19,17 @@ const PopupMarketingDetail = () => {
   const [isCardCreated, setIsCardCreated] = useState(false)
   const [cardId,setCardId] = useState(null);
   const [openFormCreate, setOpenFormCreate] = useState(false)
+  //mencari list berdasarkan keywoard
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  //fungsi daftar list filter 
+  const filteredLists = lists.filter(list =>
+    list.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  //mengambil nama list yang dipilih
+
 
   const handleOpenFormCreate = () => {
     setOpenFormCreate(!openFormCreate);
@@ -96,6 +108,15 @@ const PopupMarketingDetail = () => {
 const handleEdit = () => {
     navigate(`/popup-detail-marketing/${marketing_id}/edit-data-marketing`);
   };
+
+//   const [gigLink, setGigLink] = useState(marketing.gigLink || "");
+    //parse link
+    const parseLinks = (text) =>{
+        if(!text) return "";
+    
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        return text.replace(urlRegex, (url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`);
+    };
 
 
   return (
@@ -284,14 +305,20 @@ const handleEdit = () => {
                                     required
                                     />
                                 </div>
-                                <div>
+                                {/* <div>
                                     <label>Gig Link:</label>
                                     <input
                                     type="url"
                                     name="gig_link"
                                     value={marketing.gig_link}
-                                    // onChange={handleChange}
                                     required
+                                    />
+                                </div> */}
+                                <div>
+                                    <label>Gig Link:</label>
+                                    <div
+                                        className='link'
+                                        dangerouslySetInnerHTML={{ __html: parseLinks(marketing.gig_link) }}
                                     />
                                 </div>
                                 <div>
@@ -326,6 +353,13 @@ const handleEdit = () => {
                                 </div>
                                 <div>
                                     <label>Reference Link:</label>
+                                    <div
+                                        className='link'
+                                        dangerouslySetInnerHTML={{ __html: parseLinks(marketing.reference_link) }}
+                                    />
+                                </div>
+                                {/* <div>
+                                    <label>Reference Link:</label>
                                     <input
                                     type="url"
                                     name="reference_link"
@@ -333,8 +367,15 @@ const handleEdit = () => {
                                     // onChange={handleChange}
                                     required
                                     />
-                                </div>
+                                </div> */}
                                 <div>
+                                    <label>File & Chat Link:</label>
+                                    <div
+                                        className='link'
+                                        dangerouslySetInnerHTML={{ __html: parseLinks(marketing.file_and_chat_link) }}
+                                    />
+                                </div>
+                                {/* <div>
                                     <label>File & Chat Link:</label>
                                     <input
                                     type="url"
@@ -343,21 +384,23 @@ const handleEdit = () => {
                                     // onChange={handleChange}
                                     required
                                     /> 
-                                </div>
+                                </div> */}
                             </form>
+
                             <div className='detail-project'>
                                 <label>Detail Project:</label>
                                 <textarea
                                     name="detail_project"
                                     value={marketing.detail_project}
                                     // onChange={handleChange}
+                                    //  dangerouslySetInnerHTML={{ __html: parseLinks(marketing.file_and_chat_link) }}
                                     required
                                 />
                             </div>
                         </div>
 
                         {/* Render form create card  */}
-                        <div className="form-create-card">
+                        {/* <div className="form-create-card">
                             {
                                 openFormCreate && (
                                     <div className="create-card-fiture">
@@ -381,6 +424,53 @@ const handleEdit = () => {
                                     </div>
                                 )
                             }
+                        </div> */}
+                        <div className="form-create-card">
+                            {openFormCreate && (
+                                <div className="create-card-fiture">
+                                    <input 
+                                        type="text" 
+                                        placeholder='Search List here...'
+                                        value={searchTerm}
+                                        onChange={(e)=> setSearchTerm(e.target.value)}
+                                        className='search-input'
+                                        onClick={()=> setIsDropdownOpen(!isDropdownOpen)}
+                                    />
+                                    <div className="button">
+                                        {isCardCreated ? (
+                                          <button onClick={handleViewCard}>View Card</button>
+                                        ):(
+                                          <button onClick={handleCreateCard} disabled={isCreating}>
+                                            {isCreating ? 'Creating' : <><IoIosAdd/> Create Card</>}
+                                          </button>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                            <div className="custom-dropdown">
+                            {isDropdownOpen && (
+                                <div className="dropdown-menu">
+                                <div 
+                                    className="dropdown-item disabled"
+                                    onClick={()=> setIsDropdownOpen(false)}
+                                >
+                                    {lists.length === 0 ? 'Loading lists...':'Select a list'}
+                                </div>
+                                {filteredLists.map((list)=>(
+                                    <div
+                                    className='dropdown-item'
+                                    key={list.id}
+                                    onClick={()=>{
+                                        setListId(list.id);
+                                        setIsDropdownOpen(false);
+                                    }}
+                                    >
+                                    {list.name}
+                                    </div>
+                                ))}
+                                </div>
+                            )}
+                            </div>
                         </div>
                         {/* End form creare card  */}
                         <div className='popup-button'>           

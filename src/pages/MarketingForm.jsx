@@ -7,6 +7,7 @@ import '../style/MarketingForm.css'
 import '../style/PopupMarketingDetail.css'
 
 const MarketingForm = ({ existingData, handleCancle }) => {
+    console.log("data exiting:",existingData);
   const [formData, setFormData] = useState({
     // marketing_id: '',
     // card_id: '',

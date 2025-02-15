@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { getBoard, createBoard,getListsCountByBoard, updateBoardBackground, duplicateBoard, getBoardByWorkspace, deleteBoard, archiveBoard, searchUsers, updateBoardAssignment, removeUserFromBoardAssignment, getBoardAssignCount, getAssignCountForBoard} from '../services/Api'
+import { getBoard, createBoard,getListsCountByBoard,getWorkspaceById, updateBoardBackground, duplicateBoard, getBoardByWorkspace, deleteBoard, archiveBoard, searchUsers, updateBoardAssignment, removeUserFromBoardAssignment, getBoardAssignCount, getAssignCountForBoard} from '../services/Api'
 import { useNavigate, useParams } from 'react-router-dom';
 import { HiArchive,HiPlus,HiOutlineX,HiDotsHorizontal, HiOutlineServer, HiOutlineCalendar,HiChevronRight,HiOutlineViewList,HiOutlineFire  } from "react-icons/hi";
 import { HiOutlineSquaresPlus,HiMiniCalendarDays } from "react-icons/hi2";
@@ -22,7 +22,8 @@ import { useDate } from '../context/DateContext';
 
 const Board = () => {
     const {boardId, workspaceId} = useParams();
-    // const [workspaces, setWorkspaces] = useState([]);
+    // console.log('workspace di terima dengan baik', workspaceId);
+    const [workspaces, setWorkspaces] = useState([]);
     const [boards, setBoards] = useState([]);
     const [newBoard, setNewBoard] = useState({name:'', description:''});
     const navigate = useNavigate();
@@ -61,7 +62,29 @@ const Board = () => {
     const [userCount, setUserCount] = useState({});
     const [assignCount, setAssignCount] = useState(0)
 
-    // console.log('check boardId from params', boardId);
+    //fetch workspace
+    useEffect(()=>{
+      const fetchWorkspace = async () =>{
+        try {
+          console.log(`Fetching workspace with ID: ${workspaceId}`);
+          const response = await getWorkspaceById(workspaceId);
+    
+          // Ambil objek workspace
+          if (Array.isArray(response.data) && response.data.length > 0) {
+            setWorkspaces(response.data[0]);
+          } else {
+            setWorkspaces(response.data);
+          }
+    
+          console.log("Workspace data:", response.data);
+        } catch (error) {
+          console.error("Error fetching workspace", error);
+        }
+      };
+      if (workspaceId) {
+        fetchWorkspace();
+      }
+    },[workspaceId]);
 
     //mendapatkan jumlah assign setiap board
     useEffect(() => {
@@ -543,11 +566,12 @@ const handleRemoveUser = async (boardId, userId) => {
           transition:'background-image 0.3s ease-in-out'
         }}
       >
+        
         <div className="board-title">
           <div className="board-title-navigation">
             <button onClick={handleBackToWorkspace} className='back-button'>
                 <HiOutlineSquaresPlus style={{marginRight:'4px'}}/>
-                Workspace
+                {workspaces?.name ? workspaces.name : "Loading..."}
             </button>
             /
             <button>
@@ -644,7 +668,7 @@ const handleRemoveUser = async (boardId, userId) => {
                             {userCount[board.id] !== undefined ? (
                               <p>{userCount[board.id]}</p>
                             ):(
-                              <p>loading...</p>
+                              <p>0</p>
                             )}
                         </div>
                       </p>

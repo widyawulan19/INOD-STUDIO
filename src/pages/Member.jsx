@@ -7,6 +7,8 @@ import { CiEdit } from "react-icons/ci";
 import { AiOutlineDelete,AiOutlineUserAdd, AiOutlineClose } from 'react-icons/ai';
 import { GrSchedules } from "react-icons/gr";
 import { Link } from 'react-router-dom';
+import { IoCheckbox } from 'react-icons/io5';
+import { RiCheckboxBlankFill, RiCheckboxBlankLine } from 'react-icons/ri';
 
 function Member() {
   const [member, setMember] = useState([]);
@@ -27,7 +29,9 @@ function Member() {
     email:'',
     nomor_wa:'',
     shift:'',
-    jabatan:''
+    jabatan:'',
+    work_days:'',
+    off_days:''
   });
   //create member
   const [showForm, setShowForm] = useState(false)
@@ -38,7 +42,9 @@ function Member() {
     nomor_wa:'',
     divisi:'',
     shift:'',
-    jabatan:''
+    jabatan:'',
+    work_days:[],
+    off_days:[]
   })
 
   //show form for create new member
@@ -46,19 +52,44 @@ function Member() {
     setShowForm(!showForm)
   }
 
-  const handleAddNewMember = async () =>{
-    if(!newMember.name || !newMember.username || !newMember.email){
-      alert('Please fill out all required fields');
-      return;
+  // const handleAddNewMember = async () =>{
+  //   if(!newMember.name || !newMember.username || !newMember.email){
+  //     alert('Please fill out all required fields');
+  //     return;
+  //   }
+  //   try{
+  //     await createDataEmployee(newMember);
+  //     loadMemberData();
+  //     setShowForm(false);
+  //   }catch(error){
+  //     console.error('Failed to add new member', error)
+  //   }
+  // }
+  const handleAddNewMember = async () => {
+    if (!newMember.name || !newMember.username || !newMember.email) {
+        alert("Please fill out all required fields");
+        return;
     }
-    try{
-      await createDataEmployee(newMember);
-      loadMemberData();
-      setShowForm(false);
-    }catch(error){
-      console.error('Failed to add new member', error)
+
+    if (newMember.work_days.length > 4) {
+        alert("You can only select up to 4 work days");
+        return;
     }
-  }
+
+    if (newMember.off_days.length > 2) {
+        alert("You can only select up to 2 off days");
+        return;
+    }
+
+    try {
+        await createDataEmployee(newMember);
+        loadMemberData();
+        setShowForm(false);
+    } catch (error) {
+        console.error("Failed to add new member", error);
+    }
+};
+
 
   const loadMemberData = useCallback(async ()=> {
     try{
@@ -102,10 +133,38 @@ function Member() {
     }
   };
 
+  // const handleInputChange = (e) => {
+  //   const {name, value} = e.target;
+  //   setFormData((prevData)=> ({...prevData, [name]: value}))
+  // }
+
   const handleInputChange = (e) => {
-    const {name, value} = e.target;
-    setFormData((prevData)=> ({...prevData, [name]: value}))
-  }
+    const { name, value } = e.target;
+    setFormData((prevData) => {
+        if (name === "work_days") {
+            const updatedWorkDays = prevData.work_days.includes(value)
+                ? prevData.work_days.filter((day) => day !== value)
+                : [...prevData.work_days, value].slice(-5); // Max 4 selections
+            return { ...prevData, work_days: updatedWorkDays };
+        }
+        if (name === "off_days") {
+            const updatedOffDays = prevData.off_days.includes(value)
+                ? prevData.off_days.filter((day) => day !== value)
+                : [...prevData.off_days, value].slice(-2); // Max 2 selections
+            return { ...prevData, off_days: updatedOffDays };
+        }
+        return { ...prevData, [name]: value };
+    });
+};
+
+
+  const handleArrayChange = (e, field) => {
+    const options = Array.from(e.target.selectedOptions, option => option.value);
+    setFormData({
+        ...formData,
+        [field]: options
+    });
+};
 
   //fungsi untuk mengubah halaman
   const handlePageChange = (pageNumber) => {
@@ -296,6 +355,52 @@ function Member() {
                   onChange={(e)=>setNewMember({...newMember, jabatan:e.target.value})}
                   placeholder='Jabatan'
                 />
+              </div>
+            </div>
+            <div className="jadwal">
+              <h5>Informasi Jadwal</h5>
+              <div className="body">
+                <div className="bj">
+                  <div className="works">
+                    <label>Work Days <br />(max 5)</label>
+                    <div className="day-select">
+                      {['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat','Sabtu', 'Minggu'].map(day => (
+                          // <div key={day} className='dc'>
+                          //     <input 
+                          //         type="radio" 
+                          //         name="work_days" 
+                          //         value={day} 
+                          //         checked={formData.work_days === day} 
+                          //         onChange={handleInputChange} 
+                          //     /> {day}
+                          // </div>
+                          <div key={day} onClick={() => handleInputChange({ target: { name: "work_days", value: day } })} className='dc'>
+                              {formData.work_days.includes(day) ? <IoCheckbox  size={15}/> : <RiCheckboxBlankLine size={15}/>} {day}
+                          </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="off">
+                    <label>Off Days <br />(max 2)</label>
+                    <div className="day-select">
+                      {['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat','Sabtu', 'Minggu'].map(day => (
+                          // <div key={day} className='dc'>
+                          //     <input 
+                          //         type="radio" 
+                          //         name="off_days" 
+                          //         value={day} 
+                          //         checked={formData.off_days === day} 
+                          //         onChange={handleInputChange} 
+                          //     /> {day}
+                          // </div>
+                          <div key={day} onClick={() => handleInputChange({ target: { name: "off_days", value: day } })} className='dc'>
+                              {formData.off_days.includes(day) ? <IoCheckbox size={15}/> : <RiCheckboxBlankLine size={15}/>} {day}
+                          </div>
+                      ))}
+                    </div>
+                  </div>
+      
+                </div>
               </div>
             </div>
               

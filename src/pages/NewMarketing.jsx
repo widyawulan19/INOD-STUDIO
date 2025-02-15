@@ -7,6 +7,7 @@ import MarketingForm from './MarketingForm';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import PopupMarketingDetail from '../popup/PopupMarketingDetail';
+import { GiStarSkull } from 'react-icons/gi';
 
 const NewMarketing=()=> {
     //navigate 
@@ -154,11 +155,18 @@ const NewMarketing=()=> {
     //     navigate(`/popup-detail-marketing/${marketing_id}`);
     //   }
     const handleToMarketingPopup = (marketing_id) => {
+      console.log('Makering id diterima :', marketing_id);
       navigate(`/popup-detail-marketing/${marketing_id}`);
     };
-    
-    
     //end navigate
+
+  //parse link
+  const parseLinks = (text) =>{
+    if(!text) return "";
+
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(urlRegex, (url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`);
+  };
 
   return (
     <div className='nmc'>
@@ -220,7 +228,7 @@ const NewMarketing=()=> {
                         </button>
                         {createFormVisible && (
                         <div>
-                            <MarketingForm  handleCancle={handleCancleCreateForm}/>
+                            <MarketingForm existingData={marketingData} handleCancle={handleCancleCreateForm}/>
                         </div>
                         )}
                     </div>
@@ -253,14 +261,14 @@ const NewMarketing=()=> {
                     <thead>
                       <tr>
                         <th style={{ borderTopLeftRadius: '2px', borderBottomLeftRadius: '2px' }}>No.</th>
-                        <th>Input By</th>
-                        <th>Acc by</th>
+                        <th style={{width:'120px'}}>Input By</th>
+                        <th style={{width:'70px'}}>Acc by</th>
                         <th>Buyer Name</th>
-                        <th>Code Order</th>
+                        <th style={{width:'100px'}}>Code Order</th>
                         <th>Jumlah <br />Track</th>
                         <th>Order <br /> Number</th>
                         <th>Account</th>
-                        <th>Deadline</th>
+                        <th style={{width:'100px'}}>Deadline</th>
                         <th>Jumlah <br /> Revisi</th>
                         <th>Order Type</th>
                         <th>Offer Type</th>
@@ -268,9 +276,9 @@ const NewMarketing=()=> {
                         <th>Genre</th>
                         <th>Price Normal</th>
                         <th>Price Discount</th>
-                        <th>Discount</th>
-                        <th>Basic Price</th>
-                        <th>GIG Link</th>
+                        <th style={{width:'50px'}}>Discount</th>
+                        <th style={{width:'70px'}}>Basic Price</th>
+                        <th style={{width:'120px'}}>GIG Link</th>
                         <th>Required Files</th>
                         <th>Project Type</th>
                         {/* <th>Duration</th> */}
@@ -284,7 +292,22 @@ const NewMarketing=()=> {
                       {filteredMember.map((item) => (
                         <tr key={item.marketing_id}>
                           <td style={{borderTopLeftRadius:'8px', borderBottomLeftRadius:'8px', textAlign:'center'}}>{filteredMember.indexOf(item)+1}</td>
-                          <td>{item.input_by}</td>
+                          {/* <td>{item.input_by}</td> */}
+                          <td>
+                            <div style={{padding:'3px', fontSize:'12px', fontWeight:'bold'}}>
+                                {item.card_id?(
+                                  <div>
+                                    {item.input_by}
+                                    <GiStarSkull style={{color:'red'}} size={10}/>
+                                  </div>
+                                ):(
+                                  <>
+                                      {item.input_by}
+                                      {/* <GiStarSkull size={10}/> */}
+                                  </>
+                                )}
+                            </div>
+                          </td>
                           <td>{item.acc_by}</td>
                           <td>{item.buyer_name}</td>
                           <td>{item.code_order}</td>
@@ -317,7 +340,17 @@ const NewMarketing=()=> {
                           <td>{item.price_discount}</td>
                           <td>{item.discount}</td>
                           <td>{item.basic_price}</td>
-                          <td>{item.gig_link}</td>
+                          <td
+                            style={{
+                              wordWrap:'break-word',
+                              overflowWrap:'break-word',
+                              whiteSpace:'pre-wrap',
+                              maxWidth:'100%',
+                              overflowX:'auto'
+                            }}
+                            dangerouslySetInnerHTML={{ __html: parseLinks(item.gig_link) }}
+                          ></td>
+                          {/* <td>{item.gig_link}</td> */}
                           <td>{item.required_files}</td>
                           <td>{item.project_type}</td>
                           {/* <td>{item.duration}</td> */}

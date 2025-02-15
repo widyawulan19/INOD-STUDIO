@@ -1,0 +1,68 @@
+.detail-project {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  
+  .detail-project label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .detail-project textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    resize: vertical;
+  }
+  
+  .preview-detail-project {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+    word-wrap: break-word;
+    display: none; /* Disembunyikan secara default */
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: max-content;
+    max-width: 300px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .preview-detail-project a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    position: relative;
+  }
+  
+  .preview-detail-project a:hover + .preview-detail-project {
+    display: block; /* Tampilkan preview ketika link di-hover */
+  }
+  
+  .preview-detail-project a:hover {
+    text-decoration: underline;
+  }
+  
+  .reference-link {
+    margin-top: 5px;
+  }
+  
+  .reference-link a {
+    color: #007bff;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .reference-link a:hover {
+    text-decoration: underline;
+  }
+
+ 

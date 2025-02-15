@@ -5,7 +5,8 @@ import { AlertTitle } from '@mui/material';
 // import duplicate from '../assets/duplication.png'
 import { IoCloseOutline } from 'react-icons/io5'
 
-const DuplicateListPopup=({listId, isOpen, onClose})=> {
+
+const DuplicateListPopup=({listId, isOpen, onClose,workspaceId})=> {
     const [boards, setBoards] = useState([]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [selectedBoardId, setSelectedBoardId] = useState('');
@@ -18,9 +19,17 @@ const DuplicateListPopup=({listId, isOpen, onClose})=> {
     useEffect(()=>{
         const fetchBoards = async () => {
             try{
-                const response = await getBoard();
-                setBoards(response.data);
-                console.log('data berhasil diambil')
+                console.log("Fetching boards for workspace:", workspaceId);
+                const response = await getBoard(workspaceId);
+                // setBoards(response.data);
+                // console.log('data berhasil diambil')
+                console.log('Response from getBoard:', response); // Debugging API response
+                
+                // Periksa apakah data board berada di response.data atau response langsung
+                const boardData = response.data?.boards || response.data || [];
+                
+                setBoards(boardData);
+                console.log('Boards:', boardData);
             }catch(error){
                 console.error('Failed to fetch board:', error);
             }

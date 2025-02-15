@@ -60,7 +60,7 @@
   .description-container{
       background-color: white;
       border: 1px solid #eee;
-      width: 80%;
+      width: 60%;
       height: 100%;
       border-radius: 5px;
       overflow-y: auto;
@@ -228,8 +228,8 @@
   margin: 0px;
 }
 .up-user-photo{
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   margin: 0px;
   background-color: #731e17;
@@ -299,14 +299,9 @@
 
 
 .discussion{
-  /* border: 1px solid green; */
-  padding-left: 10px;
-  padding-right: 10px;
-  height: 92vh;
-  padding-bottom: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+  height: 100vh;
+  margin: 0;
+  width: 40%;
+  background-color: white;
 }
 

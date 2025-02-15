@@ -140,8 +140,10 @@
 }
 .form-create-card{
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    /* border: 1px solid red; */
 }
 .create-card-fiture{
     background-color: white;
@@ -149,6 +151,9 @@
     padding: 10px;
     border-radius: 4px;
     width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 .create-card-fiture button{
@@ -181,8 +186,77 @@
     border: 1px solid #491519;
 }
 
+.create-card-fiture input{
+    border: 1px solid #333;
+    padding: 6px;
+    border-radius: 4px;
+    /* color: #ccc; */
+}
 
+.custom-dropdown {
+    /* border: 1px solid blue; */
+    position: relative;
+    width: 30%;
+  }
+  
+  .dropdown-selected {
+    /* padding: 10px; */
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    left: 0px;
+    width: 280px;
+    background: #fff;
+    border: 1px solid grey;
+    top: 0px;
+    border-radius: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 10;
+  }
+  
+  .dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+    /* border: 1px solid red; */
+  }
+  
+  .dropdown-item:hover {
+    background: #f0f0f0;
+  }
+  
+  .dropdown-item.disabled {
+    color: gray;
+    pointer-events: none;
+  }
+  
+  .detail-popup .link{
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    text-align: left;
+    color: #333;
+    background: #fff;
+    transition: border-color 0.3s;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
 
+  .detail-popup .link:hover{
+    border-color: #491519;
+    outline:#491519;
+  }
+  
 /* const [openFormCreate, setOpenFormCreate] = useState(false)
 
 const handleOpenFormCreate = () => {

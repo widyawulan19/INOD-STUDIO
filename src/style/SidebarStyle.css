@@ -3,6 +3,9 @@
   position: sticky;
   display: flex;
   height: 100vh;
+  padding-top: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
   overflow: hidden;
   transition: all 0.3s ease-in-out;
 }
@@ -13,25 +16,19 @@
 }
 
 .show-sidebar{
-  /* border: 1px solid green; */
+  border: 1px solid green;
   padding-top: 10px;
   width: 10vw;
   height:100vh;
   font-family: "Nunito", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
-  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
 }
 .close-sidebar{
   height: 100vh;
   width: 5vw;
-  /* margin-right: 10px; */
-  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
-  /* border: 1px solid #281b37; */
   display: flex;
-  /* align-items: center;s */
   justify-content: center;
-  /* transform: translateX(-100%); */
 }
 .show-sidebar button{
   box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
@@ -45,15 +42,15 @@
   border: 0.1px solid white;
   background-color: white;
 }
+
 .sidebar-menu .sidebar-main{
   position: relative;
   display: flex;
   align-items: center;
   justify-content: start;
   padding: 4px;
-  /* border: 1px solid grey; */
   height: 20px;
-  margin: 5px;
+  margin: 10px 0px;
   border-radius: 4px;
   cursor: pointer;
 }
@@ -63,9 +60,7 @@ background-color: #ece1fa;
 .sidebar-main:hover .sidebar-icon,
 .sidebar-main:hover h5 {
 color: #783fbf;
-/* background-color: #ece1fa; */
 }
-/* Active  */
 .sidebar-menu .sidebar-main.active{
 background-color: #ece1fa;
 }
@@ -73,6 +68,12 @@ background-color: #ece1fa;
 .sidebar-main.active h5 {
 color: #783fbf;
 font-weight: bolder;
+}
+
+.sidebar-main{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sidebar-main h5{
@@ -100,7 +101,7 @@ font-weight: bolder;
   font-weight: normal;
   border-radius: 5px;
   padding: 3px;
-  bottom: 50%; /* Memindahkan tooltip ke atas elemen */
+  bottom: 50%; 
   left: 50%; /* Menyelaraskan tooltip secara horizontal */
   transform: translateX(-50%); /* Menyesuaikan agar berada di tengah */
   white-space: nowrap;

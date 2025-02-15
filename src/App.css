@@ -11,8 +11,10 @@
 
 .sidebar {
   position: relative;
-  width: 250px;
-  background-color: #f4f4f4;
+  width: 300px;
+  background-color: green;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
   z-index: 10;
 }
 
@@ -28,7 +30,7 @@
 
 .navbar {
   height: 60px;
-  background-color: #007bff;
+  /* background-color: #007bff; */
   color: white;
   display: flex;
   align-items: center;

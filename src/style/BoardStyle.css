@@ -32,9 +32,11 @@
   border: 1px solid white;
   padding: 5px;
   font-size: 15px;
+  font-weight: bold;
 }
 .back-button:hover{
-  background-color: #eee;
+  /* background-color: #eee; */
+  background-color: #ece1fa;
   border-radius: 4px;
 }
 .board-title-navigation button{
@@ -682,7 +684,8 @@
 }
 .dropdown-right .btn-bg:hover{
   /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); */
-  background-color: #eee;
+  /* background-color: #eee; */
+  background-color: #ece1fa;
   border-radius: 4px;
   padding: 8px;
   border: 1px solid #eee;
